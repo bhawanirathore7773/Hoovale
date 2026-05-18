@@ -30,7 +30,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -103,28 +102,34 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
 # ============================================================
 # 4. SECURITY HEADERS (also helps SEO trust)
 # ============================================================
-SECURE_SSL_REDIRECT = True  # Force HTTPS in production
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool) # Force HTTPS in production
 SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=False, cast=bool)
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=False, cast=bool)
+SECURE_CONTENT_TYPE_NOSNIFF = config('SECURE_CONTENT_TYPE_NOSNIFF', default=False, cast=bool)
+SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', default=False, cast=bool)
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SECURE_REFERRER_POLICY = 'same-origin'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Database
+#DATABASES = {
+ #   'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+ #       'NAME': BASE_DIR / 'db.sqlite3',
+  #      'CONN_MAX_AGE': 600,  # 10 minutes
+   #     'CONN_HEALTH_CHECKS': True,
+    #}
+#}
+
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'CONN_MAX_AGE': 600,  # 10 minutes
-        'CONN_HEALTH_CHECKS': True,
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
-
-
 # For PostgreSQL (uncomment for production)
 # DATABASES = {
 #     'default': {
