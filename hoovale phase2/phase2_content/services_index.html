@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static seo_tags %}
+
+{% block meta_title %}Wall Clock Services — Bulk, OEM, Custom Logo, Distribution | HOOVALE{% endblock %}
+{% block meta_description %}HOOVALE wall clock services — bulk wholesale supply, custom logo printing, OEM private label manufacturing, promotional clocks, and distributor partnerships.{% endml_description %}
+{% block meta_keywords %}wall clock services, bulk wall clock supply, oem wall clock, custom logo wall clocks, wall clock distributor{% endblock %}
+
+{% block content %}
+
+<section style="padding:80px 0; background:linear-gradient(135deg,#0051A3,#0066cc); color:white; text-align:center;">
+    <div class="container-lg">
+        <h1 style="font-family:'Montserrat',sans-serif; font-size:3rem; font-weight:900; margin-bottom:16px;">
+            <i class="fas fa-cogs"></i> Our Services
+        </h1>
+        <p style="font-size:1.2rem; opacity:0.95; max-width:800px; margin:0 auto;">
+            Complete wall clock solutions for B2B buyers — wholesale supply, custom branding, OEM manufacturing, promotional campaigns, and distributor partnerships.
+        </p>
+    </div>
+</section>
+
+<section style="padding:60px 0;">
+    <div class="container-lg">
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ service.get_absolute_url }}" style="text-decoration:none; color:inherit;">
+                    <div style="background:white; border:1px solid #eee; padding:34px; border-radius:12px; height:100%; transition:all 0.3s;"
+                         onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 35px rgba(0,81,163,0.15)'; this.style.borderColor='#0051A3';"
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'; this.style.borderColor='#eee';">
+                        <div style="width:64px; height:64px; background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin-bottom:18px;">
+                            <i class="{{ service.icon_class|default:'fas fa-cog' }}"></i>
+                        </div>
+                        <h2 style="font-size:1.3rem; font-weight:800; color:#1a1a1a; margin-bottom:10px;">{{ service.name }}</h2>
+                        <p style="color:#555; font-size:0.95rem; line-height:1.6; margin-bottom:16px;">{{ service.short_description|truncatewords:20 }}</p>
+                        <span style="color:#0051A3; font-weight:700; font-size:0.9rem;">Explore Service <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

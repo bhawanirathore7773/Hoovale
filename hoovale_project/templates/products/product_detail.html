@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static seo_tags %}
+
+{% block meta_title %}{{ product.meta_title|default:product.name }}{% endblock %}
+{% block meta_description %}{{ product.meta_description|default:product.short_description }}{% endblock %}
+{% block meta_keywords %}{{ product.meta_keywords|default:"wall clock, " }}{{ product.name|lower }}, {{ product.category.name|lower }}, wall clock manufacturer{% endblock %}
+
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.og_title|default:product.name }}{% endblock %}
+{% block og_description %}{{ product.og_description|default:product.meta_description }}{% endblock %}
+{% block og_image %}https://hoovale.com{% if product.og_image %}{{ product.og_image.url }}{% else %}{{ product.image.url }}{% endif %}{% endblock %}
+
+{% block page_schema %}
+    {% product_schema product %}
+    {% breadcrumb_schema breadcrumb_items %}
+    {% if faqs %}{% faq_schema faqs %}{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{# BREADCRUMBS #}
+<div style="background:#f8f9fa; padding:14px 0; font-size:0.9rem;">
+    <div class="container-lg">
+        {% for name, url in breadcrumb_items %}
+            {% if url %}
+                <a href="{{ url }}" style="color:#666; text-decoration:none;">{{ name }}</a>
+                <span style="color:#999;"> › </span>
+            {% else %}
+                <span style="color:#0051A3; font-weight:600;">{{ name }}</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{# PRODUCT MAIN SECTION #}
+<section style="padding:40px 0;">
+    <div class="container-lg">
+        <div class="row g-5">
+            {# Left: Image gallery #}
+            <div class="col-lg-6">
+                <div style="background:white; border:1px solid #eee; border-radius:12px; overflow:hidden; position:sticky; top:90px;">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }} — Wall clock manufacturer Jaipur" itemprop="image" style="width:100%; height:auto; display:block;">
+
+                    {# Badges #}
+                    <div style="position:absolute; top:14px; left:14px; display:flex; gap:6px; flex-direction:column;">
+                        {% if product.is_bestseller %}<span style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">🔥 BESTSELLER</span>{% endif %}
+                        {% if product.is_new_arrival %}<span style="background:#3b82f6; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">🆕 NEW</span>{% endif %}
+                        {% if product.is_featured %}<span style="background:#FFA500; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">⭐ FEATURED</span>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Right: Product info #}
+            <div class="col-lg-6">
+                <p style="font-size:0.85rem; color:#FFA500; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
+                    {{ product.category.name }}
+                </p>
+                <h1 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; font-size:2.2rem; line-height:1.2; margin-bottom:14px;">
+                    {{ product.name }}
+                </h1>
+
+                {# SKU + Brand #}
+                <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:18px; font-size:0.9rem; color:#666;">
+                    {% if product.sku %}<span><strong style="color:#1a1a1a;">SKU:</strong> {{ product.sku }}</span>{% endif %}
+                    <span><strong style="color:#1a1a1a;">Brand:</strong> {{ product.brand }}</span>
+                    <span><strong style="color:#1a1a1a;">Status:</strong> <span style="color:#10b981;">✓ {{ product.get_availability_display }}</span></span>
+                </div>
+
+                {# Pricing #}
+                {% if product.price %}
+                <div style="background:linear-gradient(135deg,#0051A3,#0066cc); color:white; padding:24px; border-radius:12px; margin-bottom:20px;">
+                    <p style="font-size:0.9rem; opacity:0.9; margin:0 0 4px;">Wholesale Price</p>
+                    <div style="display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;">
+                        <span style="font-size:2.4rem; font-weight:900;">₹{{ product.price }}</span>
+                        {% if product.bulk_price %}<span style="font-size:1rem; opacity:0.9;">Bulk: ₹{{ product.bulk_price }}/piece</span>{% endif %}
+                    </div>
+                    <p style="margin:8px 0 0; font-size:0.9rem; opacity:0.95;">
+                        <i class="fas fa-box"></i> Minimum Order: <strong>{{ product.moq }} pieces</strong>
+                    </p>
+                </div>
+                {% endif %}
+
+                {# Short description #}
+                {% if product.short_description %}
+                <p style="font-size:1.05rem; color:#444; line-height:1.7; margin-bottom:20px;">{{ product.short_description }}</p>
+                {% endif %}
+
+                {# CTAs #}
+                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
+                    <a href="{% whatsapp_link 'Hi, I want pricing for: ' %}{{ product.name }} (SKU {{ product.sku }})"
+                       target="_blank"
+                       style="flex:1; min-width:200px; background:#25D366; color:white; padding:14px 24px; border-radius:8px; text-align:center; font-weight:700; text-decoration:none;">
+                        <i class="fab fa-whatsapp"></i> WhatsApp for Best Price
+                    </a>
+                    <a href="{% call_link %}"
+                       style="flex:1; min-width:200px; background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; padding:14px 24px; border-radius:8px; text-align:center; font-weight:700; text-decoration:none;">
+                        <i class="fas fa-phone-alt"></i> Call Now
+                    </a>
+                </div>
+
+                {# Trust badges #}
+                <div style="background:#f8f9fa; padding:18px; border-radius:8px; margin-bottom:24px;">
+                    <div class="row g-3" style="font-size:0.9rem;">
+                        <div class="col-6"><i class="fas fa-shield-alt" style="color:#10b981;"></i> <strong>1 Year Warranty</strong></div>
+                        <div class="col-6"><i class="fas fa-truck-fast" style="color:#FFA500;"></i> <strong>PAN India Delivery</strong></div>
+                        <div class="col-6"><i class="fas fa-paint-brush" style="color:#0051A3;"></i> <strong>Custom Logo Available</strong></div>
+                        <div class="col-6"><i class="fas fa-file-invoice" style="color:#6f42c1;"></i> <strong>GST Invoice</strong></div>
+                    </div>
+                </div>
+
+                {# Description #}
+                {% if product.description %}
+                <h2 style="font-family:'Montserrat',sans-serif; font-size:1.3rem; font-weight:800; color:#1a1a1a; margin-bottom:14px;">Product Details</h2>
+                <div style="font-size:1rem; color:#444; line-height:1.7; margin-bottom:24px;">{{ product.description|linebreaks }}</div>
+                {% endif %}
+
+                {# Specifications #}
+                {% if product.specifications %}
+                <h2 style="font-family:'Montserrat',sans-serif; font-size:1.3rem; font-weight:800; color:#1a1a1a; margin-bottom:14px;">Specifications</h2>
+                <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
+                    {% for spec in specifications %}
+                        
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:10px 12px; background:#f8f9fa; font-weight:600; color:#1a1a1a; width:40%;">{{ spec.key }}</td>
+                            <td style="padding:10px 12px; color:#444;">{{ spec.value }}</td>
+                        </tr>
+                    
+                    {% endfor %}
+                </table>
+                {% endif %}
+
+                {# Customisation options #}
+                {% if product.size_options or product.material_options or product.color_options %}
+                <h2 style="font-family:'Montserrat',sans-serif; font-size:1.3rem; font-weight:800; color:#1a1a1a; margin-bottom:14px;">Customisation Available</h2>
+                <div style="margin-bottom:24px;">
+                    {% if product.size_options %}<p><strong>Sizes:</strong> {{ product.size_options|join:", " }}</p>{% endif %}
+                    {% if product.material_options %}<p><strong>Materials:</strong> {{ product.material_options|join:", " }}</p>{% endif %}
+                    {% if product.color_options %}<p><strong>Colours:</strong> {{ product.color_options|join:", " }}</p>{% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# RELATED PRODUCTS #}
+{% if related_products %}
+<section style="padding:60px 0; background:#f8f9fa;">
+    <div class="container-lg">
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:800; color:#1a1a1a; margin-bottom:30px; text-align:center;">You May Also Like</h2>
+        <div class="row g-4">
+            {% for p in related_products %}
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ p.get_absolute_url }}" style="text-decoration:none; color:inherit;">
+                    <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:all 0.3s; height:100%;"
+                         onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 30px rgba(0,81,163,0.15)';"
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.06)';">
+                        <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy" style="width:100%; height:200px; object-fit:cover;">
+                        <div style="padding:18px;">
+                            <h3 style="font-size:0.95rem; font-weight:700; color:#1a1a1a; margin:0 0 8px;">{{ p.name }}</h3>
+                            {% if p.price %}<p style="color:#0051A3; font-weight:800; margin:0;">₹{{ p.price }} <small style="color:#999; font-weight:400;">MOQ {{ p.moq }}</small></p>{% endif %}
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# FAQ #}
+{% if faqs %}
+<section style="padding:60px 0;">
+    <div class="container-lg">
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:800; color:#1a1a1a; margin-bottom:30px; text-align:center;">FAQs</h2>
+        <div class="row">
+            <div class="col-lg-9 mx-auto">
+                <div class="accordion" id="prodFaq">
+                    {% for faq in faqs %}
+                    <div class="accordion-item" style="border:1px solid #eee; border-radius:8px; margin-bottom:12px; overflow:hidden;">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#pf{{ forloop.counter }}" style="font-weight:600;">{{ faq.question }}</button>
+                        </h3>
+                        <div id="pf{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#prodFaq">
+                            <div class="accordion-body" style="color:#555;">{{ faq.answer|linebreaks }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# CTA #}
+<section style="padding:60px 0; background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; text-align:center;">
+    <div class="container-lg">
+        <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:2.4rem; margin-bottom:14px;">Need Bulk Quantity of {{ product.name }}?</h2>
+        <p style="font-size:1.1rem; max-width:700px; margin:0 auto 30px; opacity:0.95;">Get factory-direct wholesale pricing for orders of 50+ pieces. Custom logo printing available.</p>
+        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+            <a href="{% whatsapp_link 'Hi, I need bulk pricing for: ' %}{{ product.name }}" target="_blank" style="background:#25D366; color:white; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;"><i class="fab fa-whatsapp"></i> WhatsApp for Bulk Quote</a>
+            <a href="{% call_link %}" style="background:white; color:#FF8C00; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;"><i class="fas fa-phone-alt"></i> Call Now</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

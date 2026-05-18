@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+{% include 'components/catalogue_download.html' %}
+{% block content %}
+<section class="products-page py-5">
+    <div class="container-lg">
+        <!-- Page Header -->
+        <div class="row mb-5" data-aos="fade-up">
+            <div class="col-lg-8">
+                <h1 class="page-title">Our Products</h1>
+                <p class="text-muted">Browse our premium collection of customized wall clocks</p>
+            </div>
+            <div class="col-lg-4">
+                <form class="search-form" method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" name="q" placeholder="Search products..." 
+                               value="{{ search_query }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 mb-4" data-aos="fade-right">
+                <div class="filter-card">
+                    <h5 class="filter-title mb-4">
+                        <i class="fas fa-filter"></i> Filters
+                    </h5>
+                    
+                    <!-- Category Filter -->
+                    <div class="filter-group mb-4">
+                        <h6 class="filter-subtitle">Categories</h6>
+                        <div class="filter-options">
+                            <a href="{% url 'products_list' %}" 
+                               class="filter-option {% if not selected_category %}active{% endif %}">
+                       a         All Categories
+                            </a>
+                            {% for category in categories %}
+                            <a href="?category={{ category.slug }}" 
+                               class="filter-option {% if selected_category == category.slug %}active{% endif %}">
+                                {{ category.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Clear Filters -->
+                    <div class="text-center">
+                        <a href="{% url 'products_list' %}" class="btn btn-sm btn-outline-primary w-100">
+                            Clear All Filters
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="col-lg-9" data-aos="fade-left">
+                {% if products %}
+                <div class="row g-4 mb-5">
+                    {% for product in products %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="product-card h-100">
+                            <div class="product-image-container">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                     class="product-image" loading="lazy">
+                                {% if product.is_featured %}
+                                <span class="badge bg-danger position-absolute top-0 end-0 m-3">Featured</span>
+                                {% endif %}
+                                <div class="product-overlay">
+                                    <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h5 class="product-name">{{ product.name }}</h5>
+                                <p class="product-description">{{ product.description|truncatewords:12 }}</p>
+                                {% if product.price %}
+                                <div class="product-price mb-3">
+                                    <span class="price-tag">₹{{ product.price }}</span>
+                                </div>
+                                {% endif %}
+                                <div class="product-actions d-grid gap-2">
+                                    <a href="#" class="btn btn-sm btn-outline-primary enquiry-btn" 
+                                       data-product-id="{{ product.id }}" data-product-name="{{ product.name }}">
+                                        <i class="fas fa-envelope"></i> Enquiry
+                                    </a>
+                                    <a href="https://wa.me/919462207356?text=Hello%20Hoovale%20Team%2C%20I%20am%20interested%20in%20{{ product.name }}." 
+                                       class="btn btn-sm btn-success" target="_blank">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if total_pages > 1 %}
+                <nav aria-label="Page navigation" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if current_page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">
+                                First
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ current_page|add:'-1' }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">
+                                Previous
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for page_num in "x"|rjust:total_pages %}
+                        {% if forloop.counter == current_page %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ forloop.counter }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ forloop.counter }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">
+                                {{ forloop.counter }}
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if current_page < total_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ current_page|add:'1' }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">
+                                Next
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ total_pages }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">
+                                Last
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                {% else %}
+                <div class="alert alert-info text-center py-5">
+                    <i class="fas fa-search fa-3x mb-3 d-block"></i>
+                    <h5>No products found</h5>
+                    <p class="mb-0">Try adjusting your search or filters</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enquiry Modal -->
+<div class="modal fade" id="enquiryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Enquiry Form</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="enquiryForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" id="productId">
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone *</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City *</label>
+                        <input type="text" class="form-control" id="city" name="city" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message *</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-send"></i> Send Enquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const enquiryButtons = document.querySelectorAll('.enquiry-btn');
+    const enquiryModal = new bootstrap.Modal(document.getElementById('enquiryModal'));
+    
+    enquiryButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            const productName = this.dataset.productName;
+            
+            document.getElementById('productId').value = productId;
+            document.getElementById('message').value = `I am interested in ${productName}.`;
+            enquiryModal.show();
+        });
+    });
+    
+    const enquiryForm = document.getElementById('enquiryForm');
+    enquiryForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        btn.disabled = true;
+        
+        fetch('{% url "submit_enquiry" %}', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                enquiryForm.reset();
+                enquiryModal.hide();
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        })
+        .finally(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+    });
+});
+</script>
+
+{% endblock %}

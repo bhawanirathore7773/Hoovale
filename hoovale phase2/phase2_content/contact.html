@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static seo_tags %}
+
+{% block meta_title %}Contact HOOVALE — Wall Clock Manufacturer in Jaipur | Call/WhatsApp{% endblock %}
+{% block meta_description %}Contact HOOVALE for wall clock bulk orders, custom logo printing, OEM manufacturing. WhatsApp {{ site.whatsapp_number }} or call {{ site.primary_phone }}. Jaipur, Rajasthan.{% endblock %}
+{% block meta_keywords %}contact hoovale, wall clock manufacturer contact jaipur, hoovale phone whatsapp, wall clock supplier contact{% endblock %}
+
+{% block page_schema %}
+    {% breadcrumb_schema breadcrumb_items %}
+    {% if faqs %}{% faq_schema faqs %}{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{# HERO #}
+<section style="padding:70px 0; background:linear-gradient(135deg,#1a1a1a,#0051A3); color:white;">
+    <div class="container-lg">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div style="display:inline-block; background:rgba(255,165,0,0.2); color:#FFA500; padding:6px 16px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:16px; border:1px solid #FFA500;">
+                    <i class="fas fa-headset"></i> WE'RE HERE TO HELP
+                </div>
+                <h1 style="font-family:'Montserrat',sans-serif; font-size:3rem; font-weight:900; margin-bottom:14px;">Contact HOOVALE</h1>
+                <p style="font-size:1.15rem; opacity:0.95; line-height:1.6;">Wholesale wall clock enquiries, custom orders, OEM partnerships, distributor opportunities — talk to us directly.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# CONTACT METHODS — 4 CARDS #}
+<section style="padding:50px 0;">
+    <div class="container-lg">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <a href="{% whatsapp_link 'Hi HOOVALE, I have a wall clock enquiry.' %}" target="_blank" style="text-decoration:none;">
+                    <div style="background:linear-gradient(135deg,#25D366,#1da851); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:transform 0.3s;"
+                         onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
+                        <i class="fab fa-whatsapp" style="font-size:2.5rem; margin-bottom:14px;"></i>
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">WhatsApp</h3>
+                        <p style="margin:0; font-weight:700;">Fastest Response</p>
+                        <small style="opacity:0.9;">Chat now</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="{% call_link %}" style="text-decoration:none;">
+                    <div style="background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:transform 0.3s;"
+                         onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
+                        <i class="fas fa-phone-alt" style="font-size:2.5rem; margin-bottom:14px;"></i>
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Call</h3>
+                        <p style="margin:0; font-weight:700; font-size:0.9rem;">{{ site.primary_phone }}</p>
+                        <small style="opacity:0.9;">Mon-Sat 9 AM - 7 PM</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="mailto:{{ site.email }}" style="text-decoration:none;">
+                    <div style="background:linear-gradient(135deg,#0051A3,#0066cc); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:transform 0.3s;"
+                         onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
+                        <i class="fas fa-envelope" style="font-size:2.5rem; margin-bottom:14px;"></i>
+                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Email</h3>
+                        <p style="margin:0; font-weight:700; font-size:0.85rem; word-break:break-all;">{{ site.email }}</p>
+                        <small style="opacity:0.9;">For detailed enquiries</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%;">
+                    <i class="fas fa-map-marker-alt" style="font-size:2.5rem; margin-bottom:14px; color:#FFA500;"></i>
+                    <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Visit Us</h3>
+                    <p style="margin:0; font-weight:700; font-size:0.9rem;">{{ site.locality }}, {{ site.region }}</p>
+                    <small style="opacity:0.9;">By appointment</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# CONTACT FORM + ADDRESS #}
+<section style="padding:50px 0; background:#f8f9fa;">
+    <div class="container-lg">
+        <div class="row g-5">
+            {# Contact Form #}
+            <div class="col-lg-7">
+                <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:8px;">Send Us a Bulk Enquiry</h2>
+                <p style="color:#666; margin-bottom:24px;">Fill in your requirement — we'll respond within 2 hours during business hours.</p>
+
+                <form id="contactForm" method="POST" action="{% url 'submit_enquiry' %}" style="background:white; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.06);">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label style="font-weight:600; color:#1a1a1a; font-size:0.9rem; margin-bottom:6px; display:block;">Full Name *</label>
+                            <input type="text" name="name" required class="form-control" placeholder="Your name" style="padding:12px; border-radius:8px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label style="font-weight:600; color:#1a1a1a; font-size:0.9rem; margin-bottom:6px; display:block;">Phone / WhatsApp *</label>
+                            <input type="tel" name="phone" required class="form-control" placeholder="+91 XXXXX XXXXX" style="padding:12px; border-radius:8px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label style="font-weight:600; color:#1a1a1a; font-size:0.9rem; margin-bottom:6px; display:block;">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="your@email.com" style="padding:12px; border-radius:8px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label style="font-weight:600; color:#1a1a1a; font-size:0.9rem; margin-bottom:6px; display:block;">City *</label>
+                            <input type="text" name="city" required class="form-control" placeholder="Your city" style="padding:12px; border-radius:8px;">
+                        </div>
+                        <div class="col-12">
+                            <label style="font-weight:600; color:#1a1a1a; font-size:0.9rem; margin-bottom:6px; display:block;">Requirement Details *</label>
+                            <textarea name="message" required rows="5" class="form-control" placeholder="Quantity, designs, customisation needs, delivery location..." style="padding:12px; border-radius:8px;"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" style="background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; border:none; padding:14px 36px; border-radius:8px; font-weight:800; font-size:1rem; width:100%;">
+                                <i class="fas fa-paper-plane"></i> Send Enquiry
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="formResponse" style="margin-top:16px;"></div>
+            </div>
+
+            {# Address + Map #}
+            <div class="col-lg-5">
+                <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:20px;">Office Address</h2>
+                <div style="background:white; padding:24px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.06); margin-bottom:20px;">
+                    <p style="font-size:1rem; line-height:1.8; color:#444; margin:0;">
+                        <strong style="color:#1a1a1a; font-size:1.1rem; display:block; margin-bottom:8px;">{{ site.business_name }}</strong>
+                        <i class="fas fa-map-marker-alt" style="color:#FFA500;"></i> {{ site.street_address }}<br>
+                        {{ site.locality }}, {{ site.region }} {{ site.postal_code }}<br>
+                        India
+                    </p>
+                    {% if site.gst_number %}
+                    <p style="margin-top:12px; padding-top:12px; border-top:1px solid #eee; margin-bottom:0;">
+                        <strong style="color:#FFA500;">GST:</strong> <span style="color:#444;">{{ site.gst_number }}</span>
+                    </p>
+                    {% endif %}
+                </div>
+
+                {# Map embed #}
+                <div style="border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06);">
+                    <iframe src="https://maps.google.com/maps?q={{ site.latitude }},{{ site.longitude }}&hl=en&z=14&output=embed"
+                            width="100%" height="280" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="HOOVALE Location"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# BUSINESS HOURS #}
+<section style="padding:50px 0; text-align:center;">
+    <div class="container-lg">
+        <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:20px;">
+            <i class="fas fa-clock" style="color:#FFA500;"></i> Business Hours
+        </h2>
+        <div style="display:inline-block; background:#f8f9fa; padding:24px 40px; border-radius:12px; border-top:4px solid #FFA500;">
+            <p style="margin:0; font-size:1.1rem; color:#1a1a1a; font-weight:600;">Monday – Saturday: <strong style="color:#FFA500;">9:00 AM – 7:00 PM</strong></p>
+            <p style="margin:6px 0 0; color:#666;">Sunday: Closed</p>
+            <p style="margin-top:12px; font-size:0.9rem; color:#666;"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp messages: <strong>24×7</strong> (we reply on next business day)</p>
+        </div>
+    </div>
+</section>
+
+{# FAQ #}
+{% if faqs %}
+<section style="padding:60px 0; background:#f8f9fa;">
+    <div class="container-lg">
+        <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:30px; text-align:center;">Common Questions</h2>
+        <div class="row">
+            <div class="col-lg-9 mx-auto">
+                <div class="accordion" id="contactFaq">
+                    {% for faq in faqs %}
+                    <div class="accordion-item" style="border:1px solid #eee; border-radius:8px; margin-bottom:12px; overflow:hidden;">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#cf{{ forloop.counter }}" style="font-weight:600;">{{ faq.question }}</button>
+                        </h3>
+                        <div id="cf{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#contactFaq">
+                            <div class="accordion-body" style="color:#555;">{{ faq.answer|linebreaks }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const responseDiv = document.getElementById('formResponse');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+    try {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, { method: 'POST', body: formData });
+        const data = await response.json();
+        if (data.success) {
+            responseDiv.innerHTML = '<div style="background:#d4edda; color:#155724; padding:14px; border-radius:8px;"><i class="fas fa-check-circle"></i> ' + (data.message || 'Enquiry sent successfully!') + ' We will contact you soon.</div>';
+            form.reset();
+        } else {
+            responseDiv.innerHTML = '<div style="background:#f8d7da; color:#721c24; padding:14px; border-radius:8px;"><i class="fas fa-exclamation-circle"></i> ' + (data.error || 'Something went wrong.') + '</div>';
+        }
+    } catch (err) {
+        responseDiv.innerHTML = '<div style="background:#f8d7da; color:#721c24; padding:14px; border-radius:8px;"><i class="fas fa-exclamation-circle"></i> Network error. Please WhatsApp us directly.</div>';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+});
+</script>
+{% endblock %}

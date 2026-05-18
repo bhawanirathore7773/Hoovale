@@ -1,0 +1,189 @@
+{% load seo_tags %}
+{% get_site_settings as site %}
+
+{# ================================================== #}
+{# STICKY CTAs — WhatsApp + Call + Quote               #}
+{# Always visible. Mobile + desktop optimized.         #}
+{# ================================================== #}
+
+<style>
+.sticky-ctas {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* WhatsApp — bottom right */
+.sticky-whatsapp {
+    bottom: 24px;
+    right: 24px;
+    pointer-events: auto;
+}
+
+.sticky-whatsapp a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    color: white;
+    border-radius: 50%;
+    font-size: 28px;
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    animation: wa-pulse 2s infinite;
+}
+
+.sticky-whatsapp a:hover {
+    transform: scale(1.1);
+    background: #1da851;
+    color: white;
+}
+
+@keyframes wa-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6), 0 8px 25px rgba(37, 211, 102, 0.5); }
+    70% { box-shadow: 0 0 0 18px rgba(37, 211, 102, 0), 0 8px 25px rgba(37, 211, 102, 0.5); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 8px 25px rgba(37, 211, 102, 0.5); }
+}
+
+/* Call button — bottom right above WhatsApp */
+.sticky-call {
+    bottom: 96px;
+    right: 24px;
+    pointer-events: auto;
+}
+
+.sticky-call a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    color: white;
+    border-radius: 50%;
+    font-size: 24px;
+    box-shadow: 0 8px 25px rgba(255, 140, 0, 0.5);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.sticky-call a:hover {
+    transform: scale(1.1);
+    color: white;
+}
+
+/* Mobile bottom bar (only shows < 768px) */
+.mobile-cta-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #eee;
+    padding: 10px;
+    z-index: 9998;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+}
+
+.mobile-cta-bar a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 12px 8px;
+    margin: 0 4px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.mobile-cta-call {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    color: white;
+}
+
+.mobile-cta-whatsapp {
+    background: #25D366;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .mobile-cta-bar { display: flex; }
+    /* Push site content up so it's not hidden behind bar */
+    body { padding-bottom: 80px; }
+    /* Move sticky buttons up on mobile to not overlap bar */
+    .sticky-whatsapp { bottom: 90px; right: 16px; }
+    .sticky-whatsapp a { width: 52px; height: 52px; font-size: 24px; }
+    .sticky-call { display: none; }  /* Hidden — already in bottom bar */
+}
+
+/* Tooltip on hover (desktop only) */
+.sticky-tooltip {
+    position: absolute;
+    right: 75px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1a1a1a;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sticky-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 6px solid #1a1a1a;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+}
+
+.sticky-whatsapp:hover .sticky-tooltip,
+.sticky-call:hover .sticky-tooltip {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .sticky-tooltip { display: none; }
+}
+</style>
+
+{# Desktop sticky buttons #}
+<div class="sticky-ctas sticky-call">
+    <a href="{% call_link %}" aria-label="Call HOOVALE">
+        <i class="fas fa-phone-alt"></i>
+        <span class="sticky-tooltip">Call Now</span>
+    </a>
+</div>
+
+<div class="sticky-ctas sticky-whatsapp">
+    <a href="{% whatsapp_link 'Hi HOOVALE, I want wall clock wholesale pricing.' %}" target="_blank" rel="noopener" aria-label="WhatsApp HOOVALE">
+        <i class="fab fa-whatsapp"></i>
+        <span class="sticky-tooltip">Chat on WhatsApp</span>
+    </a>
+</div>
+
+{# Mobile bottom bar #}
+<div class="mobile-cta-bar">
+    <a href="{% call_link %}" class="mobile-cta-call" aria-label="Call HOOVALE">
+        <i class="fas fa-phone-alt"></i> Call Now
+    </a>
+    <a href="{% whatsapp_link 'Hi HOOVALE, I want wall clock wholesale pricing.' %}" target="_blank" rel="noopener" class="mobile-cta-whatsapp" aria-label="WhatsApp HOOVALE">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+</div>
