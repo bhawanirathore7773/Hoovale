@@ -19,8 +19,11 @@
                     </div>
 
                     <!-- Featured Image -->
-                    <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" 
-                         class="img-fluid rounded mb-4">
+                    {% if blog.featured_image %}
+                        <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" class="blog-image">
+                    {% else %}
+                        <img src="/media/default/blog-default.jpg" alt="{{ blog.title }}" class="blog-image">
+                    {% endif %}
 
                     <!-- Content -->
                     <div class="blog-content">

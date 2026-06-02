@@ -486,7 +486,12 @@ class Blog(models.Model):
     title = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(unique=True, blank=True)
     category = models.CharField(max_length=100, default='Wall Clocks')
-    featured_image = models.ImageField(upload_to='blog/%Y/%m/')
+    featured_image = models.ImageField(
+    upload_to='blog/%Y/%m/',
+    blank=True,
+    null=True,
+    default='default/blog-default.jpg'
+)
     description = models.TextField(help_text="SEO optimized content")
 
     meta_title = models.CharField(max_length=70, blank=True)
