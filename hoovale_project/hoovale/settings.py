@@ -121,13 +121,16 @@ CSRF_COOKIE_SECURE = True
   #      'CONN_MAX_AGE': 600,  # 10 minutes
    #     'CONN_HEALTH_CHECKS': True,
     #}
-#}
+#}v6!yujh_h&3#9izra9luuc8uacvh13p38-l&qy6%ghl6w6(8*i
 
 import dj_database_url
-
+from decouple import config
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
+    'default': dj_database_url.parse(
+        config(
+            'DATABASE_URL',
+            default='sqlite:///db.sqlite3'
+        )
     )
 }
 # For PostgreSQL (uncomment for production)

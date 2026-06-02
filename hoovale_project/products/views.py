@@ -226,7 +226,7 @@ def blog_list(request):
     page_number = request.GET.get('page', 1)
     blogs_page = paginator.get_page(page_number)
     return render(request, 'products/blog_list.html', {
-        'blogs': blogs_page,
+        'blog_posts': blogs_page,
         'current_page': int(page_number) if str(page_number).isdigit() else 1,
         'total_pages': paginator.num_pages,
     })
