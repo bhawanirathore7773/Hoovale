@@ -11,8 +11,18 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-hoovale-development-k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,*.pythonanywhere.com,*.render.com').split(',')
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1,www.hoovale.com,hoovale.com,*.pythonanywhere.com,*.render.com'
+).split(',')
 
+
+USE_X_FORWARDED_HOST = True
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps', 
     'crispy_forms',
     'crispy_bootstrap5',
     'products',

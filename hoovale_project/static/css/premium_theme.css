@@ -859,3 +859,94 @@ img[loading="lazy"][src] {
 @media print {
     .navbar, .sticky-ctas, .hv-footer, .mobile-cta-bar { display: none !important; }
 }
+
+
+/* ============================================================ */
+/* BOOTSTRAP CAROUSEL FIX                                        */
+/* ============================================================ */
+
+/* Testimonial carousel ke liye Bootstrap default restore */
+#hvTestCarousel .carousel-item {
+    opacity: 1 !important;
+    transition: none !important;
+}
+
+#hvTestCarousel .carousel-item:not(.active) {
+    display: none !important;
+    opacity: 0 !important;
+}
+
+#hvTestCarousel .carousel-item.active {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Lazy image rule ko carousel ke andar apply mat karo */
+#hvTestCarousel img[loading="lazy"] {
+    opacity: 1 !important;
+}
+
+/* ============================================================ */
+/* TESTIMONIAL DOTS — FINAL FIX                                 */
+/* ============================================================ */
+#hvTestCarousel .hv-dot {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: #cccccc !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+#hvTestCarousel .hv-dot.active {
+    background-color: var(--hv-gold) !important;
+    transform: scale(1.4) !important;
+}
+
+
+.hv-footer p,
+.hv-footer li,
+.hv-footer a{
+    color:#bdbdbd;
+}
+
+.hv-footer a:hover{
+    color:#ca9416;
+}
+
+.hv-footer{
+    background:#050505;
+    padding:70px 0 25px;
+}
+
+.hv-footer h5,
+.hv-footer h6{
+    color:#fff;
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.hv-footer p{
+    color:#a0a0a0;
+    line-height:1.9;
+}
+
+.footer-divider{
+    border-top:1px solid rgba(255,255,255,.08);
+    margin-top:40px;
+    padding-top:25px;
+}
+
+.footer-bottom{
+    color:#888;
+    font-size:15px;
+}
+
+@media(min-width:992px){
+    .floating-buttons{
+        right:20px;
+    }
+}

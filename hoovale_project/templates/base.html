@@ -81,11 +81,14 @@
     {# Add Playfair Display font for premium typography #}
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+
+    {# Site CSS #}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        
     {# Premium theme #}
     <link rel="stylesheet" href="{% static 'css/premium_theme.css' %}">
    
-    {# Site CSS #}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 
     {# Per-page CSS #}
     {% block extra_css %}{% endblock %}
@@ -161,7 +164,7 @@
 {# ================================================== #}
 {# FOOTER (with NAP for local SEO)                     #}
 {# ================================================== #}
-<footer style="hv-footer">
+<footer class="hv-footer">
     <div class="container-lg">
         <div class="row g-4">
             <div class="col-lg-4 col-md-6">

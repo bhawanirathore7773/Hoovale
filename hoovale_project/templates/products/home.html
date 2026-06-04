@@ -278,7 +278,6 @@
         {% endfor %}
     </div>
 </section>
-
 {# ============================================================ #}
 {# TESTIMONIALS CAROUSEL                                         #}
 {# ============================================================ #}
@@ -295,13 +294,13 @@
             <div class="carousel-inner">
                 {% for t in testimonials %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="row g-4 justify-content-center">
+                    <div class="d-flex justify-content-center">
                         <div class="col-md-10 col-lg-8">
-                            <div class="hv-testimonial">
+                            <div class="hv-testimonial text-center">
                                 <div class="hv-testimonial-stars">{% for _ in "12345"|make_list %}{% if forloop.counter <= t.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
                                 <p class="hv-testimonial-quote">{{ t.review_content }}</p>
-                                <div class="hv-testimonial-author">
-                                    <div style="width:50px; height:50px; border-radius:50%; background:linear-gradient(135deg,#C9A961,#D4B97A); display:flex; align-items:center; justify-content:center; color:#0a0a0a; font-weight:800; font-family:'Playfair Display',serif; font-size:1.2rem;">
+                                <div class="hv-testimonial-author justify-content-center">
+                                    <div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#C9A961,#D4B97A);display:flex;align-items:center;justify-content:center;color:#0a0a0a;font-weight:800;font-family:'Playfair Display',serif;font-size:1.2rem;flex-shrink:0;">
                                         {{ t.customer_name|slice:":1" }}
                                     </div>
                                     <div>
@@ -315,16 +314,35 @@
                 </div>
                 {% endfor %}
             </div>
-            <div class="carousel-indicators" style="position:relative; margin-top:30px; bottom:0;">
+
+            {# DOTS - centered below cards #}
+            <div class="d-flex justify-content-center gap-2 mt-4">
                 {% for t in testimonials %}
-                <button type="button" data-bs-target="#hvTestCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" style="background:#0a0a0a; width:10px; height:10px; border-radius:50%;"></button>
+                <button type="button"
+                        data-bs-target="#hvTestCarousel"
+                        data-bs-slide-to="{{ forloop.counter0 }}"
+                        class="hv-dot {% if forloop.first %}active{% endif %}">
+                </button>
                 {% endfor %}
             </div>
         </div>
-    </div>
-</section>
-{% endif %}
 
+    </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var carousel = document.getElementById('hvTestCarousel');
+    if (carousel) {
+        carousel.addEventListener('slid.bs.carousel', function (e) {
+            document.querySelectorAll('#hvTestCarousel .hv-dot').forEach(function (dot, i) {
+                dot.classList.toggle('active', i === e.to);
+            });
+        });
+    }
+});
+</script>
+</section>
+
+{% endif %}
 {# ============================================================ #}
 {# FAQ                                                           #}
 {# ============================================================ #}
