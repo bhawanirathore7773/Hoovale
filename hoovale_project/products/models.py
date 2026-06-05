@@ -6,6 +6,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.html import strip_tags
+from django.core.validators import MinValueValidator, MaxValueValidator
+import json
 
 
 # ============================================================
@@ -47,6 +49,133 @@ class Category(models.Model):
         return reverse('category_products', kwargs={'slug': self.slug})
 
 
+
+
+# ============================================================
+# PRICING TIER TEMPLATE (Global Default Templates)
+# ============================================================
+# Admins create named templates here (e.g. "Standard Wall Clocks",
+# "Premium Clocks", "Budget Range") and assign them to products.
+# Each product can also override with its own custom tiers.
+
+class PricingTierTemplate(models.Model):
+    """
+    Reusable pricing tier templates manageable from Django Admin.
+    
+    Each template defines 5 quantity bands (Tier 1–5).
+    Discount can be set as PERCENT OFF or FLAT RUPEES OFF per piece.
+    
+    Admin flow:
+      1. Create a template (e.g. "Standard — 5 slabs")
+      2. Set 5 tier rows: min_qty, max_qty, discount_type, discount_value
+      3. Assign to products via product.pricing_tier_template FK
+      4. Products can still override with product.custom_pricing_tiers JSON
+    """
+    name = models.CharField(
+        max_length=200,
+        unique=True,
+        help_text="Admin label, e.g. 'Standard 5-tier', 'Premium Clocks', 'Budget Range'"
+    )
+    description = models.CharField(max_length=300, blank=True)
+
+    # ── Tier 1 (smallest qty) ─────────────────────────────
+    tier1_min_qty = models.PositiveIntegerField(
+        default=1, validators=[MinValueValidator(1)],
+        help_text="Minimum order quantity for Tier 1"
+    )
+    tier1_max_qty = models.PositiveIntegerField(
+        default=49,
+        help_text="Maximum qty for Tier 1 (use 99999 for 'no upper limit')"
+    )
+    tier1_label = models.CharField(
+        max_length=50, default='Sample / Trial',
+        help_text="Display label, e.g. 'Sample / Trial'"
+    )
+    DISCOUNT_TYPE_CHOICES = [
+        ('percent', '% Off per piece'),
+        ('flat', '₹ Off per piece'),
+    ]
+    tier1_discount_type = models.CharField(
+        max_length=10, choices=DISCOUNT_TYPE_CHOICES, default='percent'
+    )
+    tier1_discount_value = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0,
+        help_text="If type=percent: 0–100. If type=flat: rupees off per piece"
+    )
+    tier1_badge = models.CharField(
+        max_length=30, blank=True,
+        help_text="Optional badge text, e.g. 'MRP', 'Trial Price'"
+    )
+
+    # ── Tier 2 ────────────────────────────────────────────
+    tier2_min_qty = models.PositiveIntegerField(default=50)
+    tier2_max_qty = models.PositiveIntegerField(default=99)
+    tier2_label = models.CharField(max_length=50, default='Small Order')
+    tier2_discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES, default='percent')
+    tier2_discount_value = models.DecimalField(max_digits=8, decimal_places=2, default=5)
+    tier2_badge = models.CharField(max_length=30, blank=True, default='5% OFF')
+
+    # ── Tier 3 ────────────────────────────────────────────
+    tier3_min_qty = models.PositiveIntegerField(default=100)
+    tier3_max_qty = models.PositiveIntegerField(default=249)
+    tier3_label = models.CharField(max_length=50, default='Standard Bulk')
+    tier3_discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES, default='percent')
+    tier3_discount_value = models.DecimalField(max_digits=8, decimal_places=2, default=10)
+    tier3_badge = models.CharField(max_length=30, blank=True, default='10% OFF')
+
+    # ── Tier 4 ────────────────────────────────────────────
+    tier4_min_qty = models.PositiveIntegerField(default=250)
+    tier4_max_qty = models.PositiveIntegerField(default=499)
+    tier4_label = models.CharField(max_length=50, default='Large Order')
+    tier4_discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES, default='percent')
+    tier4_discount_value = models.DecimalField(max_digits=8, decimal_places=2, default=15)
+    tier4_badge = models.CharField(max_length=30, blank=True, default='15% OFF')
+
+    # ── Tier 5 (biggest qty) ──────────────────────────────
+    tier5_min_qty = models.PositiveIntegerField(default=500)
+    tier5_max_qty = models.PositiveIntegerField(
+        default=99999,
+        help_text="Set 99999 for open-ended (500+)"
+    )
+    tier5_label = models.CharField(max_length=50, default='Wholesale / OEM')
+    tier5_discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES, default='percent')
+    tier5_discount_value = models.DecimalField(max_digits=8, decimal_places=2, default=20)
+    tier5_badge = models.CharField(max_length=30, blank=True, default='Best Price 🏆')
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Pricing Tier Template'
+        verbose_name_plural = 'Pricing Tier Templates'
+
+    def __str__(self):
+        return self.name
+
+    def as_tiers_list(self):
+        """
+        Returns structured list of 5 tiers for use in templates/JS.
+        Each tier: {min_qty, max_qty, label, discount_type, discount_value, badge}
+        """
+        return [
+            {
+                'tier': i + 1,
+                'min_qty': getattr(self, f'tier{i+1}_min_qty'),
+                'max_qty': getattr(self, f'tier{i+1}_max_qty'),
+                'label': getattr(self, f'tier{i+1}_label'),
+                'discount_type': getattr(self, f'tier{i+1}_discount_type'),
+                'discount_value': float(getattr(self, f'tier{i+1}_discount_value')),
+                'badge': getattr(self, f'tier{i+1}_badge'),
+            }
+            for i in range(5)
+        ]
+
+
+
+
+
 # ============================================================
 # 2. PRODUCT (Existing - enhanced for SEO)
 # ============================================================
@@ -65,6 +194,27 @@ class Product(models.Model):
     bulk_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
                                      help_text="Discounted price for bulk orders")
     moq = models.PositiveIntegerField(default=1, help_text="Minimum Order Quantity")
+
+    # Wholesale Pricing Tiers                                  # ← NEW
+    pricing_tier_template = models.ForeignKey(               # ← NEW
+        'PricingTierTemplate',                                # ← NEW
+        on_delete=models.SET_NULL,                            # ← NEW
+        null=True, blank=True,                                # ← NEW
+        related_name='products',                              # ← NEW
+        help_text="Select a reusable pricing template. Leave blank to use site default.",  # ← NEW
+    )                                                         # ← NEW
+    custom_pricing_tiers = models.JSONField(                  # ← NEW
+        blank=True, null=True,                                # ← NEW
+        help_text=(                                           # ← NEW
+            "Override tiers for this product only. Leave blank to use the template. "  # ← NEW
+            "Format: list of 5 dicts with keys: "            # ← NEW
+            "min_qty, max_qty, label, discount_type (percent/flat), discount_value, badge."  # ← NEW
+        ),                                                    # ← NEW
+    )                                                         # ← NEW
+    use_custom_tiers = models.BooleanField(                   # ← NEW
+        default=False,                                        # ← NEW
+        help_text="Tick to use the custom tiers JSON above instead of the template.",  # ← NEW
+    )                                                         # ← NEW
 
     # Images
     image = models.ImageField(upload_to='products/')
@@ -129,6 +279,85 @@ class Product(models.Model):
     def get_image_url(self):
         return self.image.url if self.image else '/static/images/placeholder.jpg'
 
+    # ── Pricing Tier Methods ──────────────────────────────── # ← NEW
+    def get_pricing_tiers(self):                              # ← NEW
+        """
+        Returns the resolved 5-tier pricing list for this product.
+
+        Priority order:
+          1. product.custom_pricing_tiers  (if use_custom_tiers=True)
+          2. product.pricing_tier_template (assigned template)
+          3. PricingTierTemplate(name='Default')  (site-wide default)
+          4. Hard-coded fallback  (always works, no DB or migration needed)
+        """
+        # 1. Product-level custom override
+        if self.use_custom_tiers and self.custom_pricing_tiers:
+            return self.custom_pricing_tiers
+
+        # 2. Assigned template
+        if self.pricing_tier_template_id:
+            try:
+                return self.pricing_tier_template.as_tiers_list()
+            except Exception:
+                pass
+
+        # 3. Site-wide default template
+        try:
+            from django.apps import apps
+            PricingTierTemplate = apps.get_model(
+                self._meta.app_label, 'PricingTierTemplate'
+            )
+            default = PricingTierTemplate.objects.filter(
+                is_active=True, name='Default'
+            ).first()
+            if default:
+                return default.as_tiers_list()
+        except Exception:
+            pass
+
+        # 4. Hard-coded fallback — zero config needed
+        return [
+            {'tier': 1, 'min_qty': 1,   'max_qty': 49,    'label': 'Sample / Trial', 'discount_type': 'percent', 'discount_value': 0,  'badge': 'MRP'},
+            {'tier': 2, 'min_qty': 50,  'max_qty': 99,    'label': 'Small Order',    'discount_type': 'percent', 'discount_value': 5,  'badge': '5% OFF'},
+            {'tier': 3, 'min_qty': 100, 'max_qty': 249,   'label': 'Standard Bulk',  'discount_type': 'percent', 'discount_value': 10, 'badge': '10% OFF'},
+            {'tier': 4, 'min_qty': 250, 'max_qty': 499,   'label': 'Large Order',    'discount_type': 'percent', 'discount_value': 15, 'badge': '15% OFF'},
+            {'tier': 5, 'min_qty': 500, 'max_qty': 99999, 'label': 'Wholesale / OEM','discount_type': 'percent', 'discount_value': 22, 'badge': 'Best Price'},
+        ]
+
+    def get_price_for_qty(self, qty):                        # ← NEW
+        """
+        Returns a dict with computed pricing for a given quantity.
+        Useful in views, APIs, or the Django shell for quick checks.
+
+        Example:
+            product.get_price_for_qty(150)
+            → {'unit_price': 405.0, 'total_price': 60750.0,
+               'saving_per_piece': 45.0, 'total_saving': 6750.0,
+               'tier': {...}}
+        """
+        base = float(self.price or 0)
+        tiers = self.get_pricing_tiers()
+
+        active_tier = tiers[0]
+        for t in tiers:
+            if t['min_qty'] <= qty <= t['max_qty']:
+                active_tier = t
+                break
+
+        dv = float(active_tier.get('discount_value', 0))
+        if active_tier.get('discount_type') == 'percent':
+            saving = base * dv / 100
+        else:
+            saving = dv
+
+        unit_price = max(0, base - saving)
+        return {
+            'unit_price':     round(unit_price, 2),
+            'total_price':    round(unit_price * qty, 2),
+            'saving_per_piece': round(saving, 2),
+            'total_saving':   round(saving * qty, 2),
+            'tier':           active_tier,
+        }
 
 # ============================================================
 # 3. CITY LANDING PAGE (NEW — Programmatic SEO)

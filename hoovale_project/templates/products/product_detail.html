@@ -18,7 +18,94 @@
 
 {% block content %}
 
-{# BREADCRUMBS #}
+{# ─── QUANTITY PRICING TIER CSS ─────────────────────────────────────────── #}
+<style>
+/* ── Tier Table ──────────────────────────────────────────────────────────── */
+.qty-pricing-section { background:#fff; border:1.5px solid #e8edf5; border-radius:14px; overflow:hidden; margin-bottom:24px; }
+.qty-pricing-header { background:linear-gradient(135deg,#0051A3 0%,#0066cc 100%); color:#fff; padding:18px 22px 14px; }
+.qty-pricing-header h3 { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.05rem; margin:0 0 4px; letter-spacing:.3px; }
+.qty-pricing-header p { margin:0; font-size:0.82rem; opacity:.85; }
+
+/* Tier rows */
+.tier-table { width:100%; border-collapse:collapse; }
+.tier-row { display:grid; grid-template-columns:1fr 1fr 1fr auto; align-items:center; padding:11px 22px; border-bottom:1px solid #f0f4f9; cursor:pointer; transition:background .15s; gap:8px; }
+.tier-row:last-child { border-bottom:none; }
+.tier-row:hover { background:#f5f9ff; }
+.tier-row.tier-active { background:linear-gradient(90deg,#e8f2ff 0%,#f0f7ff 100%); box-shadow:inset 3px 0 0 #0051A3; }
+.tier-row.tier-active .tier-qty-range { color:#0051A3; font-weight:700; }
+
+.tier-number { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#e8edf5; font-size:.72rem; font-weight:700; color:#555; flex-shrink:0; margin-right:6px; }
+.tier-row.tier-active .tier-number { background:#0051A3; color:#fff; }
+
+.tier-label-wrap { display:flex; align-items:center; gap:6px; }
+.tier-label { font-size:.88rem; font-weight:600; color:#1a1a1a; }
+.tier-badge { font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:20px; white-space:nowrap; }
+.badge-t1 { background:#f1f1f1; color:#666; }
+.badge-t2 { background:#e8f4fd; color:#0066cc; }
+.badge-t3 { background:#e8f9ef; color:#059669; }
+.badge-t4 { background:#fff3e0; color:#d97706; }
+.badge-t5 { background:#fde8e8; color:#dc2626; }
+
+.tier-qty-range { font-size:.82rem; color:#888; text-align:center; }
+.tier-unit-price { font-size:.95rem; font-weight:800; color:#0051A3; text-align:right; }
+.tier-saving-tag { font-size:.72rem; color:#059669; font-weight:600; text-align:right; white-space:nowrap; }
+.tier-saving-tag.no-saving { color:#aaa; }
+
+/* ── Quantity Selector ───────────────────────────────────────────────────── */
+.qty-selector-wrap { background:#f8fbff; border-top:1.5px solid #e8edf5; padding:18px 22px; }
+.qty-selector-label { font-size:.82rem; font-weight:600; color:#555; margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px; }
+.qty-input-row { display:flex; align-items:center; gap:0; margin-bottom:14px; }
+.qty-btn { width:40px; height:44px; border:1.5px solid #d0daea; background:#fff; font-size:1.3rem; font-weight:700; cursor:pointer; color:#0051A3; transition:all .15s; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.qty-btn:first-child { border-radius:8px 0 0 8px; }
+.qty-btn:last-child { border-radius:0 8px 8px 0; }
+.qty-btn:hover { background:#e8f2ff; border-color:#0051A3; }
+.qty-input { width:80px; height:44px; border:1.5px solid #d0daea; border-left:none; border-right:none; text-align:center; font-size:1.1rem; font-weight:700; color:#1a1a1a; outline:none; font-family:'Montserrat',sans-serif; background:#fff; -moz-appearance:textfield; }
+.qty-input::-webkit-inner-spin-button, .qty-input::-webkit-outer-spin-button { -webkit-appearance:none; }
+.qty-input:focus { border-color:#0051A3; box-shadow:none; background:#f5f9ff; }
+
+/* Shortcut qty buttons */
+.qty-shortcuts { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.qty-shortcut { padding:5px 12px; border:1.5px solid #d0daea; border-radius:20px; font-size:.78rem; font-weight:600; color:#555; background:#fff; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.qty-shortcut:hover { border-color:#0051A3; color:#0051A3; background:#e8f2ff; }
+.qty-shortcut.active { border-color:#0051A3; color:#fff; background:#0051A3; }
+
+/* ── Live Price Display ───────────────────────────────────────────────────── */
+.live-price-card { background:linear-gradient(135deg,#0051A3 0%,#0066cc 100%); color:#fff; border-radius:10px; padding:16px 20px; margin-bottom:16px; display:none; }
+.live-price-card.visible { display:block; }
+.live-price-top { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
+.live-price-unit { font-size:2rem; font-weight:900; font-family:'Montserrat',sans-serif; }
+.live-price-per { font-size:.85rem; opacity:.8; }
+.live-price-total-row { display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid rgba(255,255,255,.2); }
+.live-price-total-label { font-size:.82rem; opacity:.8; }
+.live-price-total-val { font-size:1.25rem; font-weight:800; }
+.live-saving-pill { background:rgba(255,255,255,.2); border-radius:20px; padding:4px 12px; font-size:.78rem; font-weight:700; }
+.live-price-tier-tag { font-size:.78rem; opacity:.85; margin-top:4px; }
+
+/* Progress bar for next tier unlock */
+.tier-progress-wrap { margin-bottom:14px; }
+.tier-progress-label { display:flex; justify-content:space-between; font-size:.78rem; color:#555; margin-bottom:5px; }
+.tier-progress-bar-bg { height:7px; background:#e8edf5; border-radius:10px; overflow:hidden; }
+.tier-progress-bar-fill { height:100%; background:linear-gradient(90deg,#0051A3,#0ebc78); border-radius:10px; transition:width .4s cubic-bezier(.4,0,.2,1); }
+.tier-next-hint { font-size:.78rem; color:#059669; font-weight:600; }
+.tier-next-hint.at-top { color:#d97706; }
+
+/* ── CTA Buttons ─────────────────────────────────────────────────────────── */
+.pricing-cta-row { display:flex; gap:10px; flex-wrap:wrap; }
+.pricing-cta-row a { flex:1; min-width:160px; padding:13px 20px; border-radius:8px; text-align:center; font-weight:700; text-decoration:none; font-size:.92rem; transition:all .2s; }
+.cta-whatsapp { background:#25D366; color:#fff !important; }
+.cta-whatsapp:hover { background:#1db954; transform:translateY(-1px); box-shadow:0 6px 20px rgba(37,211,102,.35); }
+.cta-call { background:linear-gradient(135deg,#FFA500,#FF8C00); color:#fff !important; }
+.cta-call:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,165,0,.35); }
+
+/* Mobile tweaks */
+@media (max-width:600px) {
+  .tier-row { grid-template-columns:1fr 80px; gap:4px; padding:10px 14px; }
+  .tier-row .tier-qty-range { display:none; }
+  .qty-pricing-header, .qty-selector-wrap { padding:14px 16px; }
+}
+</style>
+
+{# ─── BREADCRUMBS ────────────────────────────────────────────────────────── #}
 <div style="background:#f8f9fa; padding:14px 0; font-size:0.9rem;">
     <div class="container-lg">
         {% for name, url in breadcrumb_items %}
@@ -32,16 +119,16 @@
     </div>
 </div>
 
-{# PRODUCT MAIN SECTION #}
+{# ─── PRODUCT MAIN SECTION ───────────────────────────────────────────────── #}
 <section style="padding:40px 0;">
     <div class="container-lg">
         <div class="row g-5">
-            {# Left: Image gallery #}
+
+            {# ── Left: Image ─────────────────────────────────────────────── #}
             <div class="col-lg-6">
                 <div style="background:white; border:1px solid #eee; border-radius:12px; overflow:hidden; position:sticky; top:90px;">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }} — Wall clock manufacturer Jaipur" itemprop="image" style="width:100%; height:auto; display:block;">
-
-                    {# Badges #}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }} — Wall clock manufacturer Jaipur"
+                         itemprop="image" style="width:100%; height:auto; display:block;">
                     <div style="position:absolute; top:14px; left:14px; display:flex; gap:6px; flex-direction:column;">
                         {% if product.is_bestseller %}<span style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">🔥 BESTSELLER</span>{% endif %}
                         {% if product.is_new_arrival %}<span style="background:#3b82f6; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">🆕 NEW</span>{% endif %}
@@ -50,7 +137,7 @@
                 </div>
             </div>
 
-            {# Right: Product info #}
+            {# ── Right: Product Info ──────────────────────────────────────── #}
             <div class="col-lg-6">
                 <p style="font-size:0.85rem; color:#FFA500; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
                     {{ product.category.name }}
@@ -66,37 +153,131 @@
                     <span><strong style="color:#1a1a1a;">Status:</strong> <span style="color:#10b981;">✓ {{ product.get_availability_display }}</span></span>
                 </div>
 
-                {# Pricing #}
-                {% if product.price %}
-                <div style="background:linear-gradient(135deg,#0051A3,#0066cc); color:white; padding:24px; border-radius:12px; margin-bottom:20px;">
-                    <p style="font-size:0.9rem; opacity:0.9; margin:0 0 4px;">Wholesale Price</p>
-                    <div style="display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;">
-                        <span style="font-size:2.4rem; font-weight:900;">₹{{ product.price }}</span>
-                        {% if product.bulk_price %}<span style="font-size:1rem; opacity:0.9;">Bulk: ₹{{ product.bulk_price }}/piece</span>{% endif %}
-                    </div>
-                    <p style="margin:8px 0 0; font-size:0.9rem; opacity:0.95;">
-                        <i class="fas fa-box"></i> Minimum Order: <strong>{{ product.moq }} pieces</strong>
-                    </p>
-                </div>
-                {% endif %}
-
-                {# Short description #}
                 {% if product.short_description %}
                 <p style="font-size:1.05rem; color:#444; line-height:1.7; margin-bottom:20px;">{{ product.short_description }}</p>
                 {% endif %}
 
-                {# CTAs #}
-                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
-                    <a href="{% whatsapp_link 'Hi, I want pricing for: ' %}{{ product.name }} (SKU {{ product.sku }})"
-                       target="_blank"
-                       style="flex:1; min-width:200px; background:#25D366; color:white; padding:14px 24px; border-radius:8px; text-align:center; font-weight:700; text-decoration:none;">
-                        <i class="fab fa-whatsapp"></i> WhatsApp for Best Price
-                    </a>
-                    <a href="{% call_link %}"
-                       style="flex:1; min-width:200px; background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; padding:14px 24px; border-radius:8px; text-align:center; font-weight:700; text-decoration:none;">
-                        <i class="fas fa-phone-alt"></i> Call Now
-                    </a>
-                </div>
+                {% if product.price %}
+                <div class="qty-pricing-section">
+
+                    {# Header #}
+                    <div class="qty-pricing-header">
+                        <h3 style="color:white; font-weight:700;">💰 Wholesale Pricing — Order More, Save More</h3>
+                        <p style="color:white; opacity:0.8; font-weight:700;">Base price ₹{{ product.price }}/piece · Tap a tier or enter your quantity below</p>
+                    </div>
+
+                    {# 5-Tier table #}
+                    <div style="padding:6px 0;">
+                        {% for tier in pricing_tiers %}
+                        <div class="tier-row {% if forloop.first %}tier-active{% endif %}"
+                             id="tier-row-{{ tier.tier }}"
+                             onclick="setQty({{ tier.min_qty }})"
+                             title="Click to set quantity to {{ tier.min_qty }}">
+
+                            {# Col 1: Number + label + badge #}
+                            <div class="tier-label-wrap">
+                                <span class="tier-number">{{ tier.tier }}</span>
+                                <div>
+                                    <div class="tier-label">{{ tier.label }}</div>
+                                    {% if tier.badge %}
+                                    <span class="tier-badge badge-t{{ tier.tier }}">{{ tier.badge }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {# Col 2: Qty range #}
+                            <div class="tier-qty-range">{{ tier.max_qty_display }} pcs</div>
+
+                            {# Col 3: Unit price #}
+                            <div class="tier-unit-price">₹{{ tier.unit_price }}</div>
+
+                            {# Col 4: Saving tag #}
+                            <div class="{% if tier.saving_per_piece > 0 %}tier-saving-tag{% else %}tier-saving-tag no-saving{% endif %}">
+                                {% if tier.saving_per_piece > 0 %}
+                                    Save ₹{{ tier.saving_per_piece }}
+                                {% else %}
+                                    MRP
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {# Quantity selector + live price calculator #}
+                    <div class="qty-selector-wrap">
+
+                        <div class="qty-selector-label">Enter your quantity</div>
+
+                        {# +/- input #}
+                        <div class="qty-input-row">
+                            <button class="qty-btn" onclick="adjustQty(-1)" aria-label="Decrease quantity">−</button>
+                            <input class="qty-input" type="number" id="qty-input" value="{{ product.moq }}" min="{{ product.moq }}" max="99999"
+                                   oninput="onQtyInput(this.value)" onchange="onQtyInput(this.value)">
+                            <button class="qty-btn" onclick="adjustQty(1)" aria-label="Increase quantity">+</button>
+                        </div>
+
+                        {# Quick-pick shortcut buttons (rendered from tier min_qtys) #}
+                        <div class="qty-shortcuts" id="qty-shortcuts">
+                            {% for tier in pricing_tiers %}
+                            <button class="qty-shortcut {% if forloop.first %}active{% endif %}"
+                                    data-qty="{{ tier.min_qty }}"
+                                    onclick="setQty({{ tier.min_qty }})"
+                                    title="{{ tier.label }}">
+                                {{ tier.min_qty }}{% if tier.max_qty >= 99999 %}+{% endif %} pcs
+                            </button>
+                            {% endfor %}
+                        </div>
+
+                        {# Progress bar toward next tier #}
+                        <div class="tier-progress-wrap" id="tier-progress-wrap">
+                            <div class="tier-progress-label">
+                                <span id="progress-label-left">Tier 1 of 5</span>
+                                <span id="progress-label-right" class="tier-next-hint"></span>
+                            </div>
+                            <div class="tier-progress-bar-bg">
+                                <div class="tier-progress-bar-fill" id="tier-progress-fill" style="width:5%"></div>
+                            </div>
+                        </div>
+
+                        {# Live price output card — all values pre-rendered by Django, JS updates on change #}
+                        <div class="live-price-card visible" id="live-price-card">
+                            <div class="live-price-top">
+                                <span class="live-price-unit" id="lp-unit">₹{{ pricing_tiers.0.unit_price }}</span>
+                                <span class="live-price-per">/piece</span>
+                                <span class="live-saving-pill" id="lp-saving-pill" style="{% if pricing_tiers.0.saving_per_piece == 0 %}display:none{% endif %}">
+                                    Save ₹<span id="lp-save-per">{{ pricing_tiers.0.saving_per_piece }}</span>/pc
+                                </span>
+                            </div>
+                            <div class="live-price-tier-tag" id="lp-tier-tag">{{ pricing_tiers.0.label }}</div>
+                            <div class="live-price-total-row">
+                                <div>
+                                    <div class="live-price-total-label">Total for <span id="lp-qty-disp">{{ product.moq }}</span> pieces</div>
+                                    <div class="live-price-total-val" id="lp-total">₹{{ pricing_tiers.0.unit_price }}</div>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div class="live-price-total-label">You save</div>
+                                    <div style="font-size:1.15rem; font-weight:800; color:#7dffb0;" id="lp-total-save">₹0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# CTA Buttons #}
+                        <div class="pricing-cta-row">
+                            <a id="wa-link"
+                               href="{% whatsapp_link 'Hi, I want pricing for: ' %}{{ product.name }} (SKU {{ product.sku }})"
+                               target="_blank"
+                               class="cta-whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp for Bulk Quote
+                            </a>
+                            <a href="{% call_link %}" class="cta-call">
+                                <i class="fas fa-phone-alt"></i> Call Now
+                            </a>
+                        </div>
+
+                    </div>{# /qty-selector-wrap #}
+                </div>{# /qty-pricing-section #}
+                {% endif %}{# /if product.price #}
 
                 {# Trust badges #}
                 <div style="background:#f8f9fa; padding:18px; border-radius:8px; margin-bottom:24px;">
@@ -119,12 +300,10 @@
                 <h2 style="font-family:'Montserrat',sans-serif; font-size:1.3rem; font-weight:800; color:#1a1a1a; margin-bottom:14px;">Specifications</h2>
                 <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
                     {% for spec in specifications %}
-                        
-                        <tr style="border-bottom:1px solid #eee;">
-                            <td style="padding:10px 12px; background:#f8f9fa; font-weight:600; color:#1a1a1a; width:40%;">{{ spec.key }}</td>
-                            <td style="padding:10px 12px; color:#444;">{{ spec.value }}</td>
-                        </tr>
-                    
+                    <tr style="border-bottom:1px solid #eee;">
+                        <td style="padding:10px 12px; background:#f8f9fa; font-weight:600; color:#1a1a1a; width:40%;">{{ spec.key }}</td>
+                        <td style="padding:10px 12px; color:#444;">{{ spec.value }}</td>
+                    </tr>
                     {% endfor %}
                 </table>
                 {% endif %}
@@ -138,12 +317,13 @@
                     {% if product.color_options %}<p><strong>Colours:</strong> {{ product.color_options|join:", " }}</p>{% endif %}
                 </div>
                 {% endif %}
-            </div>
-        </div>
+
+            </div>{# /col-lg-6 right #}
+        </div>{# /row #}
     </div>
 </section>
 
-{# RELATED PRODUCTS #}
+{# ─── RELATED PRODUCTS ───────────────────────────────────────────────────── #}
 {% if related_products %}
 <section style="padding:60px 0; background:#f8f9fa;">
     <div class="container-lg">
@@ -169,7 +349,7 @@
 </section>
 {% endif %}
 
-{# FAQ #}
+{# ─── FAQ ────────────────────────────────────────────────────────────────── #}
 {% if faqs %}
 <section style="padding:60px 0;">
     <div class="container-lg">
@@ -180,9 +360,13 @@
                     {% for faq in faqs %}
                     <div class="accordion-item" style="border:1px solid #eee; border-radius:8px; margin-bottom:12px; overflow:hidden;">
                         <h3 class="accordion-header">
-                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#pf{{ forloop.counter }}" style="font-weight:600;">{{ faq.question }}</button>
+                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#pf{{ forloop.counter }}"
+                                    style="font-weight:600;">{{ faq.question }}</button>
                         </h3>
-                        <div id="pf{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#prodFaq">
+                        <div id="pf{{ forloop.counter }}"
+                             class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                             data-bs-parent="#prodFaq">
                             <div class="accordion-body" style="color:#555;">{{ faq.answer|linebreaks }}</div>
                         </div>
                     </div>
@@ -194,16 +378,189 @@
 </section>
 {% endif %}
 
-{# CTA #}
+{# ─── BOTTOM CTA ─────────────────────────────────────────────────────────── #}
 <section style="padding:60px 0; background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; text-align:center;">
     <div class="container-lg">
         <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:2.4rem; margin-bottom:14px;">Need Bulk Quantity of {{ product.name }}?</h2>
         <p style="font-size:1.1rem; max-width:700px; margin:0 auto 30px; opacity:0.95;">Get factory-direct wholesale pricing for orders of 50+ pieces. Custom logo printing available.</p>
         <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-            <a href="{% whatsapp_link 'Hi, I need bulk pricing for: ' %}{{ product.name }}" target="_blank" style="background:#25D366; color:white; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;"><i class="fab fa-whatsapp"></i> WhatsApp for Bulk Quote</a>
-            <a href="{% call_link %}" style="background:white; color:#FF8C00; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;"><i class="fas fa-phone-alt"></i> Call Now</a>
+            <a href="{% whatsapp_link 'Hi, I need bulk pricing for: ' %}{{ product.name }}" target="_blank"
+               style="background:#25D366; color:white; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;">
+               <i class="fab fa-whatsapp"></i> WhatsApp for Bulk Quote
+            </a>
+            <a href="{% call_link %}"
+               style="background:white; color:#FF8C00; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;">
+               <i class="fas fa-phone-alt"></i> Call Now
+            </a>
         </div>
     </div>
 </section>
+
+
+<script>
+
+var HOOVALE_PRICING = {
+    basePrice:    {{ base_price_json|safe }},
+    tiers:        {{ pricing_tiers_json|safe }},
+    waBase:       "https://wa.me/{{ site_settings.whatsapp_number|default:'919462207356' }}?text=",
+    productName:  "{{ product.name|escapejs }}",
+    productSku:   "{{ product.sku|escapejs }}"
+};
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    var BASE_PRICE = HOOVALE_PRICING.basePrice;
+    var TIERS      = HOOVALE_PRICING.tiers;
+
+
+    var qtyInput      = document.getElementById('qty-input');
+    var lpUnit        = document.getElementById('lp-unit');
+    var lpPer         = document.getElementById('lp-save-per');
+    var lpPill        = document.getElementById('lp-saving-pill');
+    var lpTotal       = document.getElementById('lp-total');
+    var lpTotalSave   = document.getElementById('lp-total-save');
+    var lpQtyDisp     = document.getElementById('lp-qty-disp');
+    var lpTierTag     = document.getElementById('lp-tier-tag');
+    var progressFill  = document.getElementById('tier-progress-fill');
+    var progressLeft  = document.getElementById('progress-label-left');
+    var progressRight = document.getElementById('progress-label-right');
+    var waLink        = document.getElementById('wa-link');
+
+
+    if (!qtyInput) return;
+
+
+    function fmt(n) {
+        return Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+    }
+
+
+    function getTierForQty(qty) {
+        for (var i = TIERS.length - 1; i >= 0; i--) {
+            if (qty >= TIERS[i].min_qty) return TIERS[i];
+        }
+        return TIERS[0];
+    }
+
+
+    function calcPrice(qty, tier) {
+        var saving = 0;
+        if (tier.discount_type === 'percent') {
+            saving = BASE_PRICE * tier.discount_value / 100;
+        } else {
+            saving = Number(tier.discount_value);
+        }
+        var unit = Math.max(0, BASE_PRICE - saving);
+        return {
+            unit:        Math.round(unit * 100) / 100,
+            savingPer:   Math.round(saving * 100) / 100,
+            total:       Math.round(unit * qty * 100) / 100,
+            totalSaving: Math.round(saving * qty * 100) / 100
+        };
+    }
+
+
+    function update(qty) {
+        qty = Math.max(1, parseInt(qty, 10) || 1);
+
+        var tier  = getTierForQty(qty);
+        var price = calcPrice(qty, tier);
+
+        lpUnit.textContent      = '₹' + fmt(price.unit);
+        lpQtyDisp.textContent   = qty;
+        lpTotal.textContent     = '₹' + fmt(price.total);
+        lpTotalSave.textContent = '₹' + fmt(price.totalSaving);
+        lpTierTag.textContent   = tier.label;
+
+        if (price.savingPer > 0) {
+            lpPer.textContent    = fmt(price.savingPer);
+            lpPill.style.display = '';
+        } else {
+            lpPill.style.display = 'none';
+        }
+
+        
+        for (var i = 0; i < TIERS.length; i++) {
+            var row = document.getElementById('tier-row-' + TIERS[i].tier);
+            if (row) {
+                if (TIERS[i].tier === tier.tier) {
+                    row.classList.add('tier-active');
+                } else {
+                    row.classList.remove('tier-active');
+                }
+            }
+        }
+
+       
+        var shortcuts = document.querySelectorAll('.qty-shortcut');
+        for (var j = 0; j < shortcuts.length; j++) {
+            if (parseInt(shortcuts[j].dataset.qty, 10) === tier.min_qty) {
+                shortcuts[j].classList.add('active');
+            } else {
+                shortcuts[j].classList.remove('active');
+            }
+        }
+
+        
+        var tierIdx = -1;
+        for (var k = 0; k < TIERS.length; k++) {
+            if (TIERS[k].tier === tier.tier) { tierIdx = k; break; }
+        }
+        var isLast = (tierIdx === TIERS.length - 1);
+
+        if (isLast) {
+            progressFill.style.width     = '100%';
+            progressLeft.textContent     = 'Tier ' + tier.tier + ' of ' + TIERS.length + ' — Best Price Unlocked 🏆';
+            progressRight.textContent    = '';
+            progressRight.className      = 'tier-next-hint at-top';
+        } else {
+            var nextTier   = TIERS[tierIdx + 1];
+            var needed     = nextTier.min_qty - qty;
+            var rangeWidth = nextTier.min_qty - tier.min_qty;
+            var pct        = Math.min(100, Math.round(((qty - tier.min_qty) / rangeWidth) * 100));
+            progressFill.style.width  = Math.max(4, pct) + '%';
+            progressLeft.textContent  = 'Tier ' + tier.tier + ' of ' + TIERS.length;
+            progressRight.textContent = '+ ' + needed + ' pcs → unlock ' + nextTier.label;
+            progressRight.className   = 'tier-next-hint';
+        }
+
+       
+        if (waLink) {
+            var msg = encodeURIComponent(
+                'Hi, I want to order ' + qty + ' pieces of ' +
+                HOOVALE_PRICING.productName +
+                ' (SKU: ' + HOOVALE_PRICING.productSku + '). Please share the best price.'
+            );
+            waLink.href = HOOVALE_PRICING.waBase + msg;
+        }
+    }
+
+
+    window.adjustQty = function (delta) {
+        
+        var inp  = document.getElementById('qty-input');
+        var cur  = parseInt(inp.value, 10) || 1;
+        var next = Math.max(1, cur + delta);
+        inp.value = next;
+        update(next);
+    };
+
+    window.setQty = function (qty) {
+        var inp = document.getElementById('qty-input');
+        inp.value = qty;
+        update(qty);
+    };
+
+    window.onQtyInput = function (val) {
+        update(val);
+    };
+
+   
+    var initialQty = parseInt(qtyInput.value, 10) || 1;
+    update(initialQty);
+
+}); 
+</script>
 
 {% endblock %}

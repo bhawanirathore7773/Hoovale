@@ -27,55 +27,82 @@
     </div>
 </section>
 
+
+<div class="contact-heading">
+    <span>CONTACT OPTIONS</span>
+
+    <h2>How Would You Like To Reach Us?</h2>
+
+    <p>
+        Connect with our team for wholesale wall clock orders,
+        OEM manufacturing, custom branding and distributor enquiries.
+    </p>
+</div>
 {# CONTACT METHODS — 4 CARDS #}
-<section style="padding:50px 0;">
+
+<section style="padding:60px 0;background:#f8f8f8;">
     <div class="container-lg">
         <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
-                <a href="{% whatsapp_link 'Hi HOOVALE, I have a wall clock enquiry.' %}" target="_blank" style="text-decoration:none;">
-                    <div style="background:linear-gradient(135deg,#25D366,#1da851); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:transform 0.3s;"
-                         onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
-                        <i class="fab fa-whatsapp" style="font-size:2.5rem; margin-bottom:14px;"></i>
-                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">WhatsApp</h3>
-                        <p style="margin:0; font-weight:700;">Fastest Response</p>
-                        <small style="opacity:0.9;">Chat now</small>
+
+            <div class="ccol-6 col-md-6 col-lg-3">
+                <a href="{% whatsapp_link 'Hi HOOVALE, I have a wall clock enquiry.' %}"
+                   target="_blank"
+                   style="text-decoration:none;">
+                    <div class="contact-card whatsapp-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+
+                        <h3>WhatsApp</h3>
+                        <p>Instant Response</p>
+                        <small>Chat with our team</small>
                     </div>
                 </a>
             </div>
-            <div class="col-md-6 col-lg-3">
+
+            <div class="col-6 col-md-6 col-lg-3">
                 <a href="{% call_link %}" style="text-decoration:none;">
-                    <div style="background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:transform 0.3s;"
-                         onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
-                        <i class="fas fa-phone-alt" style="font-size:2.5rem; margin-bottom:14px;"></i>
-                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Call</h3>
-                        <p style="margin:0; font-weight:700; font-size:0.9rem;">{{ site.primary_phone }}</p>
-                        <small style="opacity:0.9;">Mon-Sat 9 AM - 7 PM</small>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+
+                        <h3>Call Us</h3>
+                        <p>{{ site.primary_phone }}</p>
+                        <small>Mon–Sat • 9 AM – 7 PM</small>
                     </div>
                 </a>
             </div>
-            <div class="col-md-6 col-lg-3">
+
+            <div class="col-6 col-md-6 col-lg-3">
                 <a href="mailto:{{ site.email }}" style="text-decoration:none;">
-                    <div style="background:linear-gradient(135deg,#0051A3,#0066cc); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:transform 0.3s;"
-                         onmouseover="this.style.transform='translateY(-5px)';" onmouseout="this.style.transform='translateY(0)';">
-                        <i class="fas fa-envelope" style="font-size:2.5rem; margin-bottom:14px;"></i>
-                        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Email</h3>
-                        <p style="margin:0; font-weight:700; font-size:0.85rem; word-break:break-all;">{{ site.email }}</p>
-                        <small style="opacity:0.9;">For detailed enquiries</small>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+
+                        <h3>Email</h3>
+                        <p>{{ site.email }}</p>
+                        <small>Detailed Quotations</small>
                     </div>
                 </a>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d); color:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%;">
-                    <i class="fas fa-map-marker-alt" style="font-size:2.5rem; margin-bottom:14px; color:#FFA500;"></i>
-                    <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">Visit Us</h3>
-                    <p style="margin:0; font-weight:700; font-size:0.9rem;">{{ site.locality }}, {{ site.region }}</p>
-                    <small style="opacity:0.9;">By appointment</small>
+
+            <div class="col-6 col-md-6 col-lg-3">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+
+                    <h3>Visit Us</h3>
+                    <p>{{ site.locality }}, {{ site.region }}</p>
+                    <small>By Appointment Only</small>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
-
 {# CONTACT FORM + ADDRESS #}
 <section style="padding:50px 0; background:#f8f9fa;">
     <div class="container-lg">

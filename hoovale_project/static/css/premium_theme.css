@@ -950,3 +950,322 @@ img[loading="lazy"][src] {
         right:20px;
     }
 }
+
+/* ==========================================
+   CONTACT SECTION - FINAL PRODUCTION
+========================================== */
+
+.contact-methods-section{
+    padding:60px 0 70px;
+    background:linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f8f8f8 100%
+    );
+}
+
+/* ==========================================
+   SECTION HEADING
+========================================== */
+
+.contact-heading{
+    text-align:center;
+    margin-top:35px;
+    margin-bottom:35px;
+}
+
+.contact-heading span{
+    display:inline-block;
+    color:#C9A961;
+    font-size:.85rem;
+    font-weight:700;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:12px;
+}
+
+.contact-heading h2{
+    font-size:clamp(2rem,4vw,3.4rem);
+    line-height:1.15;
+    font-weight:900;
+    color:#111;
+    margin-bottom:12px;
+    font-family:'Playfair Display',serif;
+}
+
+.contact-heading p{
+    max-width:600px;
+    margin:auto;
+    color:#666;
+    font-size:1rem;
+    line-height:1.7;
+}
+
+/* ==========================================
+   CONTACT CARDS
+========================================== */
+
+.contact-card{
+    background:#fff;
+    border:1px solid rgba(201,169,97,.12);
+    border-top:4px solid #C9A961;
+    border-radius:22px;
+    padding:24px 20px;
+    min-height:220px;
+
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+
+    transition:all .35s ease;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,.05);
+
+    backdrop-filter:blur(10px);
+}
+
+.contact-card:hover{
+    transform:translateY(-8px);
+    border-color:#C9A961;
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.12);
+}
+
+/* Premium shine */
+
+.contact-card::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-120%;
+
+    width:80%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.5),
+        transparent
+    );
+
+    transition:.8s;
+}
+
+.contact-card:hover::before{
+    left:120%;
+}
+
+/* ==========================================
+   ICONS
+========================================== */
+
+.contact-icon{
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+
+    margin:0 auto 18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+    color:#fff;
+
+    background:linear-gradient(
+        135deg,
+        #C9A961,
+        #A88E4F
+    );
+
+    box-shadow:
+        0 8px 20px rgba(201,169,97,.18);
+
+    transition:.35s ease;
+}
+
+.contact-card:hover .contact-icon{
+    transform:scale(1.08);
+}
+
+/* ==========================================
+   WHATSAPP CARD
+========================================== */
+
+.whatsapp-card{
+    border:2px solid #25D366;
+    border-top:4px solid #25D366;
+}
+
+.whatsapp-card .contact-icon{
+    background:linear-gradient(
+        135deg,
+        #25D366,
+        #1DA851
+    );
+
+    box-shadow:
+        0 8px 20px rgba(37,211,102,.20);
+}
+
+/* ==========================================
+   TYPOGRAPHY
+========================================== */
+
+.contact-card h3{
+    color:#111;
+    font-size:1.25rem;
+    font-weight:800;
+    margin-bottom:10px;
+    font-family:'Playfair Display',serif;
+}
+
+.contact-card p{
+    color:#333;
+    font-size:1rem;
+    font-weight:600;
+    margin-bottom:8px;
+    line-height:1.5;
+}
+
+.contact-card small{
+    color:#8a6f32;
+    font-size:.92rem;
+    font-weight:500;
+    display:block;
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media(max-width:991px){
+
+    .contact-methods-section{
+        padding:50px 0 60px;
+    }
+
+    .contact-heading{
+        margin-top:25px;
+        margin-bottom:30px;
+    }
+
+    .contact-heading h2{
+        font-size:2.3rem;
+    }
+
+    .contact-card{
+        min-height:200px;
+        padding:22px 18px;
+    }
+
+    .contact-icon{
+        width:65px;
+        height:65px;
+        font-size:24px;
+    }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:767px){
+
+    .contact-methods-section{
+        padding:35px 0 45px;
+    }
+
+    .contact-heading{
+        margin-top:15px;
+        margin-bottom:25px;
+        padding:0 15px;
+    }
+
+    .contact-heading span{
+        font-size:.72rem;
+        letter-spacing:2px;
+    }
+
+    .contact-heading h2{
+        font-size:1.6rem;
+        line-height:1.25;
+        margin-bottom:8px;
+    }
+
+    .contact-heading p{
+        font-size:.85rem;
+        line-height:1.6;
+        max-width:290px;
+    }
+
+    .contact-card{
+        min-height:170px;
+        padding:18px 12px;
+        border-radius:16px;
+    }
+
+    .contact-icon{
+        width:55px;
+        height:55px;
+        font-size:20px;
+        margin-bottom:12px;
+    }
+
+    .contact-card h3{
+        font-size:1rem;
+        margin-bottom:6px;
+    }
+
+    .contact-card p{
+        font-size:.82rem;
+        margin-bottom:4px;
+    }
+
+    .contact-card small{
+        font-size:.72rem;
+        line-height:1.4;
+    }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media(max-width:480px){
+
+    .contact-heading h2{
+        font-size:1.45rem;
+    }
+
+    .contact-heading p{
+        font-size:.8rem;
+    }
+
+    .contact-card{
+        min-height:155px;
+        padding:16px 10px;
+    }
+
+    .contact-icon{
+        width:50px;
+        height:50px;
+        font-size:18px;
+    }
+
+    .contact-card h3{
+        font-size:.95rem;
+    }
+
+    .contact-card p{
+        font-size:.78rem;
+    }
+
+    .contact-card small{
+        font-size:.68rem;
+    }
+}

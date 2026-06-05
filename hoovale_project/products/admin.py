@@ -6,8 +6,99 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
     Category, Product, Blog, CityPage, IndustryPage,
-    ServicePage, FAQ, Testimonial, Banner, SiteSettings
+    ServicePage, FAQ, Testimonial, Banner, SiteSettings,
+    PricingTierTemplate,                                    # ← NEW
 )
+
+
+# ============================================================
+# PRICING TIER TEMPLATE  (NEW)
+# ============================================================
+@admin.register(PricingTierTemplate)
+class PricingTierTemplateAdmin(admin.ModelAdmin):
+    list_display  = ['name', 'tier_summary', 'product_count', 'is_active']
+    list_filter   = ['is_active']
+    list_editable = ['is_active']
+    search_fields = ['name', 'description']
+    fieldsets = (
+        ('Template', {
+            'fields': ('name', 'description', 'is_active'),
+            'description': (
+                'Create a named pricing template and assign it to products. '
+                'Name one template "Default" to apply it site-wide automatically.'
+            ),
+        }),
+        ('Tier 1 — Sample / Trial (smallest qty)', {
+            'fields': [
+                ('tier1_min_qty', 'tier1_max_qty'),
+                'tier1_label',
+                ('tier1_discount_type', 'tier1_discount_value'),
+                'tier1_badge',
+            ],
+        }),
+        ('Tier 2 — Small Order', {
+            'fields': [
+                ('tier2_min_qty', 'tier2_max_qty'),
+                'tier2_label',
+                ('tier2_discount_type', 'tier2_discount_value'),
+                'tier2_badge',
+            ],
+        }),
+        ('Tier 3 — Standard Bulk', {
+            'fields': [
+                ('tier3_min_qty', 'tier3_max_qty'),
+                'tier3_label',
+                ('tier3_discount_type', 'tier3_discount_value'),
+                'tier3_badge',
+            ],
+        }),
+        ('Tier 4 — Large Order', {
+            'fields': [
+                ('tier4_min_qty', 'tier4_max_qty'),
+                'tier4_label',
+                ('tier4_discount_type', 'tier4_discount_value'),
+                'tier4_badge',
+            ],
+        }),
+        ('Tier 5 — Wholesale / OEM (best price)', {
+            'fields': [
+                ('tier5_min_qty', 'tier5_max_qty'),
+                'tier5_label',
+                ('tier5_discount_type', 'tier5_discount_value'),
+                'tier5_badge',
+            ],
+            'description': 'Set max_qty to 99999 for open-ended "500+ pieces".',
+        }),
+    )
+
+    def tier_summary(self, obj):
+        """Shows a compact 5-tier discount summary in the list view."""
+        def fmt(dv, dt):
+            return f"{int(dv)}%" if dt == 'percent' else f"₹{int(dv)}"
+
+        tiers = [
+            (obj.tier1_min_qty, obj.tier1_discount_value, obj.tier1_discount_type),
+            (obj.tier2_min_qty, obj.tier2_discount_value, obj.tier2_discount_type),
+            (obj.tier3_min_qty, obj.tier3_discount_value, obj.tier3_discount_type),
+            (obj.tier4_min_qty, obj.tier4_discount_value, obj.tier4_discount_type),
+            (obj.tier5_min_qty, obj.tier5_discount_value, obj.tier5_discount_type),
+        ]
+        parts = [
+            f'<span style="background:#f0f4ff;border-radius:3px;padding:1px 5px;font-size:0.72rem;margin-right:2px;">'
+            f'{min_q}+ → {fmt(dv, dt)}</span>'
+            for min_q, dv, dt in tiers
+        ]
+        return format_html(''.join(parts))
+    tier_summary.short_description = 'Tier discounts'
+
+    def product_count(self, obj):
+        count = obj.products.count()
+        color = '#0051A3' if count else '#999'
+        return format_html(
+            '<strong style="color:{};">{} product{}</strong>',
+            color, count, 's' if count != 1 else ''
+        )
+    product_count.short_description = 'Assigned to'
 
 
 # ============================================================
@@ -37,7 +128,7 @@ class CategoryAdmin(admin.ModelAdmin):
 # ============================================================
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'price', 'moq', 'badges', 'is_active']
+    list_display = ['name', 'category', 'price', 'moq', 'tier_template_tag', 'badges', 'is_active']
     list_filter = ['category', 'is_featured', 'is_bestseller', 'is_new_arrival', 'is_active']
     search_fields = ['name', 'description', 'sku']
     prepopulated_fields = {'slug': ('name',)}
@@ -45,6 +136,24 @@ class ProductAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Basic', {'fields': ('name', 'slug', 'category', 'short_description', 'description', 'specifications')}),
         ('Pricing', {'fields': ('price', 'bulk_price', 'moq')}),
+        ('Wholesale Pricing Tiers', {                           # ← NEW fieldset
+            'fields': ('pricing_tier_template', 'use_custom_tiers', 'custom_pricing_tiers'),
+            'description': (
+                '<strong>How it works:</strong> '
+                'Select a template for standard tier pricing, or tick "Use custom tiers" '
+                'and paste a JSON array to override for this product only. '
+                'Leave both blank to use the site-wide "Default" template (or the built-in fallback). '
+                '<br><br>'
+                '<strong>Custom JSON format:</strong><br>'
+                '<code>'
+                '[{"tier":1,"min_qty":1,"max_qty":49,"label":"Sample","discount_type":"percent","discount_value":0,"badge":"MRP"},'
+                ' {"tier":2,"min_qty":50,"max_qty":99,"label":"Small Order","discount_type":"percent","discount_value":5,"badge":"5% OFF"},'
+                ' ...]'
+                '</code><br>'
+                'discount_type: <code>"percent"</code> (% off) or <code>"flat"</code> (₹ off per piece)'
+            ),
+            'classes': ('collapse',),
+        }),
         ('Images', {'fields': ('image', 'additional_images')}),
         ('Customization', {'fields': ('size_options', 'material_options', 'color_options'),
                           'classes': ('collapse',)}),
@@ -57,10 +166,30 @@ class ProductAdmin(admin.ModelAdmin):
 
     def badges(self, obj):
         b = []
-        if obj.is_featured: b.append('<span style="background:#FFA500;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">⭐ FEATURED</span>')
-        if obj.is_bestseller: b.append('<span style="background:#10b981;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">🔥 BESTSELLER</span>')
+        if obj.is_featured:    b.append('<span style="background:#FFA500;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">⭐ FEATURED</span>')
+        if obj.is_bestseller:  b.append('<span style="background:#10b981;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">🔥 BESTSELLER</span>')
         if obj.is_new_arrival: b.append('<span style="background:#3b82f6;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">🆕 NEW</span>')
         return format_html(' '.join(b)) if b else '-'
+
+    def tier_template_tag(self, obj):                          # ← NEW list column
+        if not hasattr(obj, 'pricing_tier_template'):
+            return format_html('<span style="color:#ccc;font-size:0.75rem;">—</span>')
+        if obj.use_custom_tiers and obj.custom_pricing_tiers:
+            return format_html(
+                '<span style="background:#fde8ff;color:#7e22ce;padding:2px 6px;'
+                'border-radius:3px;font-size:0.72rem;">✏️ Custom</span>'
+            )
+        if obj.pricing_tier_template:
+            return format_html(
+                '<span style="background:#e8f2ff;color:#0051A3;padding:2px 6px;'
+                'border-radius:3px;font-size:0.72rem;">📋 {}</span>',
+                obj.pricing_tier_template.name
+            )
+        return format_html(
+            '<span style="background:#f1f1f1;color:#666;padding:2px 6px;'
+            'border-radius:3px;font-size:0.72rem;">↩ Default</span>'
+        )
+    tier_template_tag.short_description = 'Tier pricing'
 
 
 # ============================================================
@@ -199,7 +328,6 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     )
 
     def has_add_permission(self, request):
-        # Singleton — prevent adding more than 1
         return not SiteSettings.objects.exists()
 
     def has_delete_permission(self, request, obj=None):

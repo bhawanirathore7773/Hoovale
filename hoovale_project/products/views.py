@@ -7,6 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+import json
 from .models import (
     Product, Category, Blog, CityPage, IndustryPage,
     ServicePage, FAQ, Testimonial, Banner, SiteSettings
@@ -79,33 +80,69 @@ def product_detail(request, slug):
         category=product.category, is_active=True
     ).exclude(id=product.id)[:4]
     faqs = FAQ.objects.filter(is_active=True, scope__in=['global', 'product'])[:6]
-  
 
+    # ── Specifications ────────────────────────────────────────
     specifications = []
-
     if product.specifications:
         for line in product.specifications.splitlines():
-
             if ":" in line:
                 key, value = line.split(":", 1)
-
                 specifications.append({
                     "key": key.strip(),
                     "value": value.strip()
                 })
 
+    # ── Pricing Tiers ─────────────────────────────────────────
+    # Resolves the 5-tier structure via: custom JSON > template > default template > fallback
+    base_price = float(product.price) if product.price else 0
+
+    # Call get_pricing_tiers() if the method exists on the model,
+    # otherwise use the inline fallback below (safe before migration).
+    if hasattr(product, 'get_pricing_tiers'):
+        raw_tiers = product.get_pricing_tiers()
+    else:
+        # Inline fallback — remove once migration is applied
+        raw_tiers = [
+            {'tier': 1, 'min_qty': 1,   'max_qty': 49,    'label': 'Sample / Trial', 'discount_type': 'percent', 'discount_value': 0,  'badge': 'MRP'},
+            {'tier': 2, 'min_qty': 50,  'max_qty': 99,    'label': 'Small Order',    'discount_type': 'percent', 'discount_value': 5,  'badge': '5% OFF'},
+            {'tier': 3, 'min_qty': 100, 'max_qty': 249,   'label': 'Standard Bulk',  'discount_type': 'percent', 'discount_value': 10, 'badge': '10% OFF'},
+            {'tier': 4, 'min_qty': 250, 'max_qty': 499,   'label': 'Large Order',    'discount_type': 'percent', 'discount_value': 15, 'badge': '15% OFF'},
+            {'tier': 5, 'min_qty': 500, 'max_qty': 99999, 'label': 'Wholesale / OEM','discount_type': 'percent', 'discount_value': 22, 'badge': 'Best Price'},
+        ]
+
+    # Enrich each tier with computed prices for template rendering
+    pricing_tiers = []
+    for t in raw_tiers:
+        dv = float(t.get('discount_value', 0))
+        if t.get('discount_type') == 'percent':
+            saving = base_price * dv / 100
+        else:
+            saving = dv
+        unit_price = max(0, base_price - saving)
+        max_qty = t.get('max_qty', 99999)
+        pricing_tiers.append({
+            **t,
+            'unit_price':        round(unit_price, 2),
+            'saving_per_piece':  round(saving, 2),
+            'max_qty_display':   f"{t['min_qty']}+" if max_qty >= 99999 else f"{t['min_qty']}–{max_qty}",
+        })
 
     context = {
-        'product': product,
-        'related_products': related_products,
-        "specifications": specifications,
-        'faqs': faqs,
+        'product':           product,
+        'related_products':  related_products,
+        'specifications':    specifications,
+        'faqs':              faqs,
         'breadcrumb_items': [
             ('Home', '/'),
             ('Products', '/products/'),
             (product.category.name, product.category.get_absolute_url()),
             (product.name, None),
         ],
+        # Pricing tier context — used by template + injected as JSON for JS
+        'pricing_tiers':      pricing_tiers,
+        'pricing_tiers_json': json.dumps(pricing_tiers),
+        'base_price':         base_price,
+        'base_price_json':    json.dumps(base_price),
     }
     return render(request, 'products/product_detail.html', context)
 
