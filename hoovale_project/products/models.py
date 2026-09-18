@@ -273,10 +273,21 @@ class Product(models.Model):
         self.slug = candidate
 
         if not self.meta_title:
-            self.meta_title = f"{self.name} | Wholesale Wall Clock Manufacturer Jaipur"
+            # meta_title is limited to 70 characters in the database.
+            # Product names can be much longer, so never generate a value
+            # that can exceed the database column size.
+            generated_title = f"{self.name} | Wholesale Wall Clock Manufacturer Jaipur"
+            self.meta_title = generated_title[:70].rstrip()
+        else:
+            # Keep programmatic/admin saves safe even when a value is supplied
+            # outside Django form validation.
+            self.meta_title = self.meta_title[:70].rstrip()
+
         if not self.meta_description:
             clean = strip_tags(self.description)[:155]
-            self.meta_description = f"{clean}..."
+            self.meta_description = f"{clean}..."[:160]
+        else:
+            self.meta_description = self.meta_description[:160].rstrip()
         if not self.sku:
             self.sku = f"HV-{self.id or 'NEW'}-{slugify(self.name)[:10].upper()}"
         super().save(*args, **kwargs)
