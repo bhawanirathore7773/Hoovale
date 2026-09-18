@@ -5,6 +5,7 @@ Phase 1: All SEO models registered with rich admin interfaces
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from .models import (
     Category, Product, Blog, CityPage, IndustryPage,
     ServicePage, FAQ, Testimonial, Banner, SiteSettings,
@@ -170,15 +171,16 @@ class ProductAdmin(ModelAdmin):
         if obj.is_featured:    b.append('<span style="background:#FFA500;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">⭐ FEATURED</span>')
         if obj.is_bestseller:  b.append('<span style="background:#10b981;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">🔥 BESTSELLER</span>')
         if obj.is_new_arrival: b.append('<span style="background:#3b82f6;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;">🆕 NEW</span>')
-        return format_html(' '.join(b)) if b else '-'
+        return format_html("{}", mark_safe(" ".join(b))) if b else '-'
 
     def tier_template_tag(self, obj):                          # ← NEW list column
         if not hasattr(obj, 'pricing_tier_template'):
-            return format_html('<span style="color:#ccc;font-size:0.75rem;">—</span>')
+            return format_html('<span style="color:#ccc;font-size:0.75rem;">{}</span>', '—')
         if obj.use_custom_tiers and obj.custom_pricing_tiers:
             return format_html(
                 '<span style="background:#fde8ff;color:#7e22ce;padding:2px 6px;'
-                'border-radius:3px;font-size:0.72rem;">✏️ Custom</span>'
+                'border-radius:3px;font-size:0.72rem;">{}</span>',
+                '✏️ Custom'
             )
         if obj.pricing_tier_template:
             return format_html(
@@ -188,7 +190,8 @@ class ProductAdmin(ModelAdmin):
             )
         return format_html(
             '<span style="background:#f1f1f1;color:#666;padding:2px 6px;'
-            'border-radius:3px;font-size:0.72rem;">↩ Default</span>'
+            'border-radius:3px;font-size:0.72rem;">{}</span>',
+            '↩ Default'
         )
     tier_template_tag.short_description = 'Tier pricing'
 
