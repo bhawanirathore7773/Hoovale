@@ -25,8 +25,11 @@ urlpatterns = [
 ]
 
 # Media files in development
+# Serve uploaded media files on the Render web service as well.
+# Render Free is fine for testing; for production, move media to object storage.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Custom error handlers
