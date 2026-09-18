@@ -1,9 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import Enquiry
 
 
 @admin.register(Enquiry)
-class EnquiryAdmin(admin.ModelAdmin):
+class EnquiryAdmin(ModelAdmin):
     list_display = ['name', 'phone', 'city', 'status', 'created_at']
     list_filter = ['status', 'created_at', 'city']
     search_fields = ['name', 'phone', 'email', 'city']
