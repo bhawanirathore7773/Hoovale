@@ -15,7 +15,9 @@
             'button[aria-label*="close sidebar" i]',
             'button[title*="close sidebar" i]',
             'button[data-sidebar-close]',
-            'button[aria-label*="sidebar" i]'
+            'button[aria-label*="sidebar" i][aria-expanded="true"]',
+            'button[title*="sidebar" i][aria-expanded="true"]',
+            'button[aria-expanded="true"][data-sidebar-toggle]'
         ];
 
         for (var i = 0; i < selectors.length; i++) {
