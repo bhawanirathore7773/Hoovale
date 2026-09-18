@@ -262,8 +262,16 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        # Always keep the public slug unique so adding a product with an
+        # existing/similar name cannot turn a normal admin save into HTTP 500.
+        base_slug = slugify(self.slug or self.name) or "product"
+        candidate = base_slug
+        counter = 2
+        while Product.objects.filter(slug=candidate).exclude(pk=self.pk).exists():
+            candidate = f"{base_slug}-{counter}"
+            counter += 1
+        self.slug = candidate
+
         if not self.meta_title:
             self.meta_title = f"{self.name} | Wholesale Wall Clock Manufacturer Jaipur"
         if not self.meta_description:
