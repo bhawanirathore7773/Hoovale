@@ -28,7 +28,7 @@ def _exists(queryset):
 def _slice(queryset, limit=8):
     """Return a safe queryset/list for dashboard widgets."""
     try:
-        return queryset[:limit]
+        return list(queryset[:limit])
     except Exception:
         return []
 
