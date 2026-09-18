@@ -254,3 +254,20 @@ ULTRAMSG_INSTANCE_ID = 'instance168346'
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# Professional HOOVALE admin configuration
+UNFOLD = {
+    "SITE_TITLE": "HOOVALE Admin",
+    "SITE_HEADER": "HOOVALE",
+    "SITE_SUBHEADER": "Website Management",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "schedule",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "SHOW_BACK_BUTTON": True,
+    "SHOW_UI_WARNINGS": False,
+    "THEME": "light",
+    "BORDER_RADIUS": "10px",
+    "DASHBOARD_CALLBACK": "hoovale.admin_dashboard.dashboard_callback",
+}
