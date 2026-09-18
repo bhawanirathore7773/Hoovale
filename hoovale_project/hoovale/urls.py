@@ -7,9 +7,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
+from accounts import views as accounts_views
 from products.sitemaps import sitemaps
 
 urlpatterns = [
+    path('admin/login/', accounts_views.admin_login, name='admin_login'),
     path('admin/', admin.site.urls),
 
     # Sitemap framework — Google Search Console will crawl this
