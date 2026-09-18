@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from decouple import config
 from django.urls import reverse_lazy
+from django.templatetags.static import static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -270,8 +271,8 @@ UNFOLD = {
     "SITE_SUBHEADER": "Website Management",
     "SITE_URL": "/",
     "SITE_SYMBOL": "schedule",
-    "SITE_LOGO": lambda request: "/static/images/hoovale-mark.svg",
-    "SITE_ICON": lambda request: "/static/images/hoovale-mark.svg",
+    "SITE_LOGO": lambda request: static("images/hoovale-mark.svg"),
+    "SITE_ICON": lambda request: static("images/hoovale-mark.svg"),
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
     "SHOW_BACK_BUTTON": True,
