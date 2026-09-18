@@ -88,7 +88,7 @@ def can_request_reset(target: str) -> tuple[bool, str]:
     return True, ""
 
 
-def _render_otp_email(otp: str) -> tuple[str, str]:
+def _render_otp_email(otp: str) -> tuple[str, str, str]:
     subject = "Your HOOVALE Admin password reset OTP"
     context = {
         "otp": otp,
