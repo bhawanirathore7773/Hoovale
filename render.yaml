@@ -3,7 +3,7 @@ services:
     name: hoovale
     runtime: python
     rootDir: hoovale_project
-    buildCommand: ./render-build.sh
+    buildCommand: bash render-build.sh
     startCommand: gunicorn hoovale.wsgi:application --bind 0.0.0.0:$PORT --workers 1
     plan: free
     envVars:
