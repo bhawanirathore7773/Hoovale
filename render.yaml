@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: hoovale
+    runtime: python
+    rootDir: hoovale_project
+    buildCommand: ./render-build.sh
+    startCommand: gunicorn hoovale.wsgi:application --bind 0.0.0.0:$PORT --workers 1
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hoovale_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ADMIN_USERNAME
+        value: "admin"
+      - key: ADMIN_EMAIL
+        value: "admin@hoovale.com"
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: hoovale_db
+    databaseName: hoovale_db
+    user: hoovale_user
+    plan: free
