@@ -129,10 +129,29 @@
         <a class="navbar-brand" href="{% url 'home' %}" style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.6rem; color:#0051A3; letter-spacing:1px;">
             HOOVALE
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-            <span class="navbar-toggler-icon"></span>
+        <button
+            class="navbar-toggler hv-menu-toggle"
+            id="hvMenuToggle"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-controls="nav"
+            aria-expanded="false">
+            <span class="hv-menu-icon" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </span>
         </button>
-        <div class="collapse navbar-collapse" id="nav">
+        <div class="hv-menu-overlay" id="hvMenuOverlay" aria-hidden="true"></div>
+        <div class="collapse navbar-collapse hv-mobile-drawer" id="nav">
+            <div class="hv-drawer-header">
+                <span class="hv-drawer-title">MENU</span>
+                <button
+                    class="hv-drawer-close"
+                    id="hvMenuClose"
+                    type="button"
+                    aria-label="Close navigation menu">
+                    <span></span><span></span>
+                </button>
+            </div>
             <ul class="navbar-nav ms-auto" style="gap:8px;">
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'products_list' %}">Products</a></li>
