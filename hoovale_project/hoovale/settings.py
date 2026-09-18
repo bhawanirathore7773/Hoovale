@@ -4,6 +4,7 @@ from pathlib import Path
 import dj_database_url
 from decouple import config
 from django.templatetags.static import static
+from django.urls import reverse_lazy
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -226,6 +227,12 @@ UNFOLD = {
     "THEME": "light",
     "BORDER_RADIUS": "10px",
     "DASHBOARD_CALLBACK": "hoovale.admin_dashboard.dashboard_callback",
+    "STYLES": [
+        lambda request: static("css/hoovale-admin.css"),
+    ],
+    "SCRIPTS": [
+        lambda request: static("js/hoovale-admin.js"),
+    ],
 }
 
 UNFOLD["SIDEBAR"] = {
@@ -246,13 +253,13 @@ UNFOLD["SIDEBAR"] = {
             "separator": True,
             "collapsible": True,
             "items": [
-                {"title": "Products", "icon": "inventory_2", "link": "/admin/products/product/"},
-                {"title": "Categories", "icon": "category", "link": "/admin/products/category/"},
-                {"title": "Services", "icon": "design_services", "link": "/admin/products/servicepage/"},
-                {"title": "Banners", "icon": "image", "link": "/admin/products/banner/"},
-                {"title": "Blog", "icon": "article", "link": "/admin/products/blog/"},
-                {"title": "FAQs", "icon": "help", "link": "/admin/products/faq/"},
-                {"title": "Testimonials", "icon": "reviews", "link": "/admin/products/testimonial/"},
+                {"title": "Products", "icon": "inventory_2", "link": reverse_lazy("admin:products_product_changelist")},
+                {"title": "Categories", "icon": "category", "link": reverse_lazy("admin:products_category_changelist")},
+                {"title": "Services", "icon": "design_services", "link": reverse_lazy("admin:products_servicepage_changelist")},
+                {"title": "Banners", "icon": "image", "link": reverse_lazy("admin:products_banner_changelist")},
+                {"title": "Blog", "icon": "article", "link": reverse_lazy("admin:products_blog_changelist")},
+                {"title": "FAQs", "icon": "help", "link": reverse_lazy("admin:products_faq_changelist")},
+                {"title": "Testimonials", "icon": "reviews", "link": reverse_lazy("admin:products_testimonial_changelist")},
             ],
         },
         {
@@ -260,10 +267,10 @@ UNFOLD["SIDEBAR"] = {
             "separator": True,
             "collapsible": True,
             "items": [
-                {"title": "City Pages", "icon": "location_city", "link": "/admin/products/citypage/"},
-                {"title": "Industry Pages", "icon": "business", "link": "/admin/products/industrypage/"},
-                {"title": "Pricing Templates", "icon": "sell", "link": "/admin/products/pricingtiertemplate/"},
-                {"title": "Site & SEO Settings", "icon": "settings", "link": "/admin/products/sitesettings/"},
+                {"title": "City Pages", "icon": "location_city", "link": reverse_lazy("admin:products_citypage_changelist")},
+                {"title": "Industry Pages", "icon": "business", "link": reverse_lazy("admin:products_industrypage_changelist")},
+                {"title": "Pricing Templates", "icon": "sell", "link": reverse_lazy("admin:products_pricingtiertemplate_changelist")},
+                {"title": "Site & SEO Settings", "icon": "settings", "link": reverse_lazy("admin:products_sitesettings_changelist")},
             ],
         },
         {
@@ -271,7 +278,7 @@ UNFOLD["SIDEBAR"] = {
             "separator": True,
             "collapsible": True,
             "items": [
-                {"title": "Enquiries", "icon": "contact_mail", "link": "/admin/enquiries/enquiry/"},
+                {"title": "Enquiries", "icon": "contact_mail", "link": reverse_lazy("admin:enquiries_enquiry_changelist")},
             ],
         },
         {
@@ -279,8 +286,8 @@ UNFOLD["SIDEBAR"] = {
             "separator": True,
             "collapsible": True,
             "items": [
-                {"title": "Users", "icon": "people", "link": "/admin/auth/user/"},
-                {"title": "Groups", "icon": "group", "link": "/admin/auth/group/"},
+                {"title": "Users", "icon": "people", "link": reverse_lazy("admin:auth_user_changelist")},
+                {"title": "Groups", "icon": "group", "link": reverse_lazy("admin:auth_group_changelist")},
             ],
         },
     ],
