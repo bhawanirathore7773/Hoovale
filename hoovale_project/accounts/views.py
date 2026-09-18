@@ -2,9 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.views import redirect_to_login
-from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
+from django.core.cache import cache
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
@@ -207,16 +207,27 @@ def admin_login(request):
         User = get_user_model()
         user = User.objects.filter(email__iexact=identifier, is_active=True).first()
         username = user.username if user else identifier
+        rate_key = f"hoovale-admin-login:{request.META.get('REMOTE_ADDR', 'unknown')}:{username.lower()}"
+        attempts = cache.get(rate_key, 0)
+        if attempts >= 10:
+            messages.error(request, "Too many sign-in attempts. Please wait 15 minutes and try again.")
+            return render(request, "admin/login.html", {"next": request.POST.get("next", "")})
+
         authenticated = authenticate(request, username=username, password=password)
 
         if authenticated and authenticated.is_staff:
             login(request, authenticated)
             request.session.set_expiry(60 * 60 * 24 * 30 if remember else 0)
             next_url = request.POST.get("next") or request.GET.get("next") or reverse("admin:index")
-            if not next_url.startswith("/"):
+            if not url_has_allowed_host_and_scheme(
+                next_url,
+                allowed_hosts={request.get_host()},
+                require_https=request.is_secure(),
+            ):
                 next_url = reverse("admin:index")
             return redirect(next_url)
 
+        cache.set(rate_key, attempts + 1, 60 * 15)
         messages.error(request, "The email/username or password is incorrect.")
 
     return render(request, "admin/login.html", {
