@@ -271,3 +271,36 @@ UNFOLD = {
     "BORDER_RADIUS": "10px",
     "DASHBOARD_CALLBACK": "hoovale.admin_dashboard.dashboard_callback",
 }
+
+UNFOLD["SIDEBAR"] = {
+    "show_search": True,
+    "show_all_applications": False,
+    "navigation": [
+        {"title": "Overview", "separator": True, "collapsible": False, "items": [
+            {"title": "Dashboard", "icon": "dashboard", "link": "/admin/"},
+            {"title": "View Website", "icon": "language", "link": "/"},
+        ]},
+        {"title": "Website Content", "separator": True, "collapsible": True, "items": [
+            {"title": "Products", "icon": "inventory_2", "link": "/admin/products/product/"},
+            {"title": "Categories", "icon": "category", "link": "/admin/products/category/"},
+            {"title": "Services", "icon": "design_services", "link": "/admin/products/servicepage/"},
+            {"title": "Banners", "icon": "image", "link": "/admin/products/banner/"},
+            {"title": "Blog", "icon": "article", "link": "/admin/products/blog/"},
+            {"title": "FAQs", "icon": "help", "link": "/admin/products/faq/"},
+            {"title": "Testimonials", "icon": "reviews", "link": "/admin/products/testimonial/"},
+        ]},
+        {"title": "SEO & Growth", "separator": True, "collapsible": True, "items": [
+            {"title": "City Pages", "icon": "location_city", "link": "/admin/products/citypage/"},
+            {"title": "Industry Pages", "icon": "business", "link": "/admin/products/industrypage/"},
+            {"title": "Pricing Templates", "icon": "sell", "link": "/admin/products/pricingtiertemplate/"},
+            {"title": "Site & SEO Settings", "icon": "settings", "link": "/admin/products/sitesettings/"},
+        ]},
+        {"title": "Leads", "separator": True, "collapsible": True, "items": [
+            {"title": "Enquiries", "icon": "contact_mail", "link": "/admin/enquiries/enquiry/"},
+        ]},
+        {"title": "Administration", "separator": True, "collapsible": True, "items": [
+            {"title": "Users", "icon": "people", "link": "/admin/auth/user/"},
+            {"title": "Groups", "icon": "group", "link": "/admin/auth/group/"},
+        ]},
+    ],
+}
