@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect, render
 from django.core.cache import cache
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -22,7 +21,6 @@ from .services import (
     normalize_phone,
     send_email_otp,
     send_phone_otp,
-    target_digest,
     verify_phone_otp,
 )
 
@@ -40,6 +38,9 @@ def _clear_reset_session(request):
 def admin_forgot_password(request):
     step = "request"
     challenge = None
+
+    if request.GET.get("restart") == "1":
+        _clear_reset_session(request)
 
     challenge_id = request.session.get("reset_challenge_id")
     if challenge_id:
@@ -67,7 +68,7 @@ def admin_forgot_password(request):
                 target = identifier.lower()
                 user = find_admin_by_email(identifier)
 
-            allowed, wait_message = can_request_reset(target_digest(target) if target else "")
+            allowed, wait_message = can_request_reset(target)
             if not target or not user:
                 # Keep account existence private.
                 messages.success(
