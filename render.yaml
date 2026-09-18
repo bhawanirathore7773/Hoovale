@@ -17,26 +17,40 @@ services:
         generateValue: true
       - key: DEBUG
         value: "False"
+
+      # Admin account
       - key: ADMIN_USERNAME
         value: "admin"
       - key: ADMIN_EMAIL
         value: "hoovale@outlook.com"
-      - key: ADMIN_RESET_PHONE
+      - key: ADMIN_PASSWORD
         sync: false
       - key: ADMIN_RESET_USERNAME
         value: "admin"
-      - key: EMAIL_HOST
-        value: "smtp-mail.outlook.com"
-      - key: EMAIL_PORT
-        value: "587"
-      - key: EMAIL_USE_TLS
-        value: "True"
-      - key: EMAIL_HOST_USER
-        value: "hoovale@outlook.com"
-      - key: EMAIL_HOST_PASSWORD
+      - key: ADMIN_RESET_PHONE
         sync: false
-      - key: DEFAULT_FROM_EMAIL
-        value: "hoovale@outlook.com"
+
+      # Free transactional email via Brevo
+      - key: OTP_EMAIL_PROVIDER
+        value: "brevo"
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_EMAIL
+        sync: false
+      - key: BREVO_SENDER_NAME
+        value: "HOOVALE"
+
+      # SMS OTP via Twilio Verify
+      - key: OTP_SMS_PROVIDER
+        value: "twilio"
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_VERIFY_SERVICE_SID
+        sync: false
+
+      # Production security
       - key: SECURE_SSL_REDIRECT
         value: "True"
       - key: SESSION_COOKIE_SECURE
@@ -45,13 +59,13 @@ services:
         value: "True"
       - key: SECURE_CONTENT_TYPE_NOSNIFF
         value: "True"
-      - key: TWILIO_ACCOUNT_SID
+
+      # Existing WhatsApp integration — secrets stay in Render
+      - key: OWNER_WHATSAPP_NUMBER
         sync: false
-      - key: TWILIO_AUTH_TOKEN
+      - key: ULTRAMSG_TOKEN
         sync: false
-      - key: TWILIO_VERIFY_SERVICE_SID
-        sync: false
-      - key: ADMIN_PASSWORD
+      - key: ULTRAMSG_INSTANCE_ID
         sync: false
 
 databases:
