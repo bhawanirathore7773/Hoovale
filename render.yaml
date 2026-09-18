@@ -20,7 +20,29 @@ services:
       - key: ADMIN_USERNAME
         value: "admin"
       - key: ADMIN_EMAIL
-        value: "admin@hoovale.com"
+        value: "hoovale@outlook.com"
+      - key: ADMIN_RESET_PHONE
+        sync: false
+      - key: ADMIN_RESET_USERNAME
+        value: "admin"
+      - key: EMAIL_HOST
+        value: "smtp-mail.outlook.com"
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        value: "hoovale@outlook.com"
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        value: "hoovale@outlook.com"
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_VERIFY_SERVICE_SID
+        sync: false
       - key: ADMIN_PASSWORD
         sync: false
 
