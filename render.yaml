@@ -37,6 +37,14 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         value: "hoovale@outlook.com"
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
+      - key: SESSION_COOKIE_SECURE
+        value: "True"
+      - key: CSRF_COOKIE_SECURE
+        value: "True"
+      - key: SECURE_CONTENT_TYPE_NOSNIFF
+        value: "True"
       - key: TWILIO_ACCOUNT_SID
         sync: false
       - key: TWILIO_AUTH_TOKEN
