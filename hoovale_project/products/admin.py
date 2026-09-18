@@ -353,3 +353,36 @@ class BlogAdmin(ModelAdmin):
 admin.site.site_header = "🕐 HOOVALE Admin"
 admin.site.site_title = "HOOVALE - Wall Clock Manufacturer"
 admin.site.index_title = "SEO + Content Management"
+
+
+# ============================================================
+# AUTHENTICATION — styled user/group management
+# ============================================================
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin as BaseGroupAdmin
+from django.contrib.auth.models import User, Group
+from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
+
+try:
+    admin.site.unregister(User)
+except admin.sites.NotRegistered:
+    pass
+
+try:
+    admin.site.unregister(Group)
+except admin.sites.NotRegistered:
+    pass
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+    list_display = ("username", "email", "first_name", "last_name", "is_staff", "is_active")
+    list_filter = ("is_staff", "is_superuser", "is_active")
+    search_fields = ("username", "email", "first_name", "last_name")
+
+
+@admin.register(Group)
+class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+    pass
