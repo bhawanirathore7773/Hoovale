@@ -11,10 +11,19 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-hoovale-development-k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1,www.hoovale.com,hoovale.com,*.pythonanywhere.com,*.render.com'
-).split(',')
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in config(
+        'ALLOWED_HOSTS',
+        default='localhost,127.0.0.1,www.hoovale.com,hoovale.com'
+    ).split(',')
+    if host.strip()
+]
+
+# Render supplies the service hostname automatically.
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 USE_X_FORWARDED_HOST = True
