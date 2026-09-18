@@ -12,6 +12,7 @@ from products.sitemaps import sitemaps
 
 urlpatterns = [
     path('admin/login/', accounts_views.admin_login, name='admin_login'),
+    path('admin/forgot-password/', accounts_views.admin_forgot_password, name='admin_forgot_password'),
     path('admin/', admin.site.urls),
 
     # Sitemap framework — Google Search Console will crawl this
