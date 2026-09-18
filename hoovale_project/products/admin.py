@@ -3,6 +3,7 @@ HOOVALE Admin Configuration
 Phase 1: All SEO models registered with rich admin interfaces
 """
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from django.utils.html import format_html
 from .models import (
     Category, Product, Blog, CityPage, IndustryPage,
@@ -15,7 +16,7 @@ from .models import (
 # PRICING TIER TEMPLATE  (NEW)
 # ============================================================
 @admin.register(PricingTierTemplate)
-class PricingTierTemplateAdmin(admin.ModelAdmin):
+class PricingTierTemplateAdmin(ModelAdmin):
     list_display  = ['name', 'tier_summary', 'product_count', 'is_active']
     list_filter   = ['is_active']
     list_editable = ['is_active']
@@ -105,7 +106,7 @@ class PricingTierTemplateAdmin(admin.ModelAdmin):
 # CATEGORY
 # ============================================================
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModelAdmin):
     list_display = ['name', 'product_count', 'is_featured', 'display_order']
     list_filter = ['is_featured']
     search_fields = ['name', 'description']
@@ -127,7 +128,7 @@ class CategoryAdmin(admin.ModelAdmin):
 # PRODUCT
 # ============================================================
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ModelAdmin):
     list_display = ['name', 'category', 'price', 'moq', 'tier_template_tag', 'badges', 'is_active']
     list_filter = ['category', 'is_featured', 'is_bestseller', 'is_new_arrival', 'is_active']
     search_fields = ['name', 'description', 'sku']
@@ -196,7 +197,7 @@ class ProductAdmin(admin.ModelAdmin):
 # CITY LANDING PAGE
 # ============================================================
 @admin.register(CityPage)
-class CityPageAdmin(admin.ModelAdmin):
+class CityPageAdmin(ModelAdmin):
     list_display = ['city_name', 'page_type', 'is_published', 'display_order']
     list_filter = ['page_type', 'is_published']
     search_fields = ['city_name', 'state', 'h1_heading']
@@ -228,7 +229,7 @@ class CityPageAdmin(admin.ModelAdmin):
 # INDUSTRY PAGE
 # ============================================================
 @admin.register(IndustryPage)
-class IndustryPageAdmin(admin.ModelAdmin):
+class IndustryPageAdmin(ModelAdmin):
     list_display = ['industry_name', 'is_published', 'display_order']
     list_filter = ['is_published']
     search_fields = ['industry_name', 'h1_heading']
@@ -241,7 +242,7 @@ class IndustryPageAdmin(admin.ModelAdmin):
 # SERVICE PAGE
 # ============================================================
 @admin.register(ServicePage)
-class ServicePageAdmin(admin.ModelAdmin):
+class ServicePageAdmin(ModelAdmin):
     list_display = ['name', 'is_published', 'display_order']
     list_filter = ['is_published']
     search_fields = ['name', 'short_description']
@@ -253,7 +254,7 @@ class ServicePageAdmin(admin.ModelAdmin):
 # FAQ
 # ============================================================
 @admin.register(FAQ)
-class FAQAdmin(admin.ModelAdmin):
+class FAQAdmin(ModelAdmin):
     list_display = ['question_short', 'scope', 'display_order', 'is_active']
     list_filter = ['scope', 'is_active']
     search_fields = ['question', 'answer']
@@ -268,7 +269,7 @@ class FAQAdmin(admin.ModelAdmin):
 # TESTIMONIAL
 # ============================================================
 @admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
+class TestimonialAdmin(ModelAdmin):
     list_display = ['customer_name', 'customer_designation', 'stars', 'is_featured', 'is_active']
     list_filter = ['rating', 'is_featured', 'is_active']
     search_fields = ['customer_name', 'review_content']
@@ -282,7 +283,7 @@ class TestimonialAdmin(admin.ModelAdmin):
 # BANNER (Homepage Carousel)
 # ============================================================
 @admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
+class BannerAdmin(ModelAdmin):
     list_display = ['title', 'banner_type_icon', 'order', 'is_active', 'preview']
     list_filter = ['banner_type', 'is_active']
     list_editable = ['order', 'is_active']
@@ -302,7 +303,7 @@ class BannerAdmin(admin.ModelAdmin):
 # SITE SETTINGS (Singleton — only 1 record)
 # ============================================================
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(ModelAdmin):
     fieldsets = (
         ('Business Identity', {
             'fields': ('business_name', 'tagline', 'establishment_year', 'employee_count', 'gst_number'),
@@ -338,7 +339,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 # BLOG
 # ============================================================
 @admin.register(Blog)
-class BlogAdmin(admin.ModelAdmin):
+class BlogAdmin(ModelAdmin):
     list_display = ['title', 'category', 'is_published', 'created_at']
     list_filter = ['category', 'is_published']
     search_fields = ['title', 'description']
