@@ -98,7 +98,7 @@
                 {% endfor %}
             {% endif %}
 
-            <form method="post" action="{% url 'admin:login' %}" novalidate>
+            <form method="post" action="{% url 'admin_login' %}" novalidate>
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}">
 
