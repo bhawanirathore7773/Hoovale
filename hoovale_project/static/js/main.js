@@ -168,21 +168,71 @@ function initializeTooltips() {
  * Handle responsive navigation
  */
 function setupResponsiveNav() {
-    const navToggler = document.querySelector('.navbar-toggler');
-    const navMenu = document.querySelector('.navbar-collapse');
-    
-    if (navToggler && navMenu) {
-        navToggler.addEventListener('click', function() {
-            navMenu.classList.toggle('show');
-        });
-        
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                navMenu.classList.remove('show');
-            });
-        });
+    const navToggler = document.querySelector('#hvMenuToggle');
+    const navMenu = document.querySelector('#nav');
+    const navOverlay = document.querySelector('#hvMenuOverlay');
+    const navClose = document.querySelector('#hvMenuClose');
+
+    if (!navToggler || !navMenu) return;
+
+    const isMobile = () => window.matchMedia('(max-width: 991px)').matches;
+
+    function setMenu(open) {
+        if (!isMobile()) {
+            navMenu.classList.remove('is-open');
+            navOverlay?.classList.remove('is-visible');
+            navToggler.classList.remove('is-open');
+            navToggler.setAttribute('aria-expanded', 'false');
+            navToggler.setAttribute('aria-label', 'Open navigation menu');
+            document.body.classList.remove('hv-menu-open');
+            return;
+        }
+
+        navMenu.classList.toggle('is-open', open);
+        navOverlay?.classList.toggle('is-visible', open);
+        navToggler.classList.toggle('is-open', open);
+        navToggler.setAttribute('aria-expanded', String(open));
+        navToggler.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+        navOverlay?.setAttribute('aria-hidden', String(!open));
+        document.body.classList.toggle('hv-menu-open', open);
     }
+
+    navToggler.addEventListener('click', function() {
+        setMenu(!navMenu.classList.contains('is-open'));
+    });
+
+    navClose?.addEventListener('click', function() {
+        setMenu(false);
+    });
+
+    navOverlay?.addEventListener('click', function() {
+        setMenu(false);
+    });
+
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            setMenu(false);
+        });
+    });
+
+    navMenu.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function() {
+            setMenu(false);
+        });
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && navMenu.classList.contains('is-open')) {
+            setMenu(false);
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (!isMobile()) setMenu(false);
+    });
+
+    // Make sure the drawer is closed on the initial page load.
+    setMenu(false);
 }
 
 // Initialize responsive navigation when DOM is ready
