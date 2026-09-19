@@ -37,20 +37,16 @@ function initializeBottomNav() {
 
     items.forEach(item => {
         const type = item.dataset.bottomNav;
-        const isHome = type === 'home' && (path === '' || path === '/');
+        const isHome = type === 'home' && path === '/';
         const isProducts = type === 'products' && path.startsWith('/products');
-        const isServices = type === 'services' && path.startsWith('/services');
+        const isCategories = type === 'categories' && path.startsWith('/categories');
         const isContact = type === 'contact' && path === '/contact';
-        item.classList.toggle('active', isHome || isProducts || isServices || isContact);
+        const isAbout = type === 'about' && path === '/about';
+        item.classList.toggle('active', isHome || isProducts || isCategories || isContact || isAbout);
     });
-
-    // Reuse the main hamburger's existing drawer logic.
-    const menuButton = document.querySelector('[data-bottom-nav="menu"]');
-    const navToggler = document.querySelector('#hvMenuToggle');
-    if (menuButton && navToggler) {
-        menuButton.addEventListener('click', () => navToggler.click());
-    }
 }
+
+
 function initializeLazyLoading() {
     if ('IntersectionObserver' in window) {
         const images = document.querySelectorAll('img[loading="lazy"]');
@@ -191,70 +187,56 @@ function initializeTooltips() {
  * Handle responsive navigation
  */
 function setupResponsiveNav() {
-    const navToggler = document.querySelector('#hvMenuToggle');
-    const navMenu = document.querySelector('#nav');
-    const navOverlay = document.querySelector('#hvMenuOverlay');
-    const navClose = document.querySelector('#hvMenuClose');
+    const toggler = document.getElementById('hvMenuToggle');
+    const drawer = document.getElementById('nav');
+    const overlay = document.getElementById('hvMenuOverlay');
+    const closeButton = document.getElementById('hvMenuClose');
 
-    if (!navToggler || !navMenu) return;
+    if (!toggler || !drawer) return;
+
+    // Keep Bootstrap's collapse class from fighting the custom drawer.
+    drawer.classList.remove('show');
 
     const isMobile = () => window.matchMedia('(max-width: 991px)').matches;
 
     function setMenu(open) {
-        if (!isMobile()) {
-            navMenu.classList.remove('is-open');
-            navOverlay?.classList.remove('is-visible');
-            navToggler.classList.remove('is-open');
-            navToggler.setAttribute('aria-expanded', 'false');
-            navToggler.setAttribute('aria-label', 'Open navigation menu');
-            document.body.classList.remove('hv-menu-open');
-            return;
-        }
+        if (!isMobile()) open = false;
 
-        navMenu.classList.toggle('is-open', open);
-        navOverlay?.classList.toggle('is-visible', open);
-        navToggler.classList.toggle('is-open', open);
-        navToggler.setAttribute('aria-expanded', String(open));
-        navToggler.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-        navOverlay?.setAttribute('aria-hidden', String(!open));
+        drawer.classList.toggle('is-open', open);
+        drawer.classList.remove('show');
+        overlay?.classList.toggle('is-visible', open);
+        toggler.classList.toggle('is-open', open);
+        toggler.setAttribute('aria-expanded', String(open));
+        toggler.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+        overlay?.setAttribute('aria-hidden', String(!open));
         document.body.classList.toggle('hv-menu-open', open);
     }
 
-    navToggler.addEventListener('click', function() {
-        setMenu(!navMenu.classList.contains('is-open'));
+    // Remove duplicate handlers if this initializer is ever called again.
+    if (toggler.dataset.hvNavBound === 'true') return;
+    toggler.dataset.hvNavBound = 'true';
+
+    toggler.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        setMenu(!drawer.classList.contains('is-open'));
     });
 
-    navClose?.addEventListener('click', function() {
-        setMenu(false);
-    });
+    closeButton?.addEventListener('click', () => setMenu(false));
+    overlay?.addEventListener('click', () => setMenu(false));
 
-    navOverlay?.addEventListener('click', function() {
-        setMenu(false);
-    });
-
-    navMenu.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            setMenu(false);
-        });
-    });
-
-    navMenu.querySelectorAll('.btn').forEach(button => {
-        button.addEventListener('click', function() {
-            setMenu(false);
-        });
+    drawer.querySelectorAll('.nav-link, .nav-item .btn').forEach(link => {
+        link.addEventListener('click', () => setMenu(false));
     });
 
     document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && navMenu.classList.contains('is-open')) {
-            setMenu(false);
-        }
+        if (event.key === 'Escape') setMenu(false);
     });
 
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', () => {
         if (!isMobile()) setMenu(false);
     });
 
-    // Make sure the drawer is closed on the initial page load.
     setMenu(false);
 }
 
