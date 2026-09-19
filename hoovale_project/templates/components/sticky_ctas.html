@@ -75,7 +75,7 @@
     color: white;
 }
 
-/* Mobile bottom navigation — app-style, compact and thumb-friendly */
+/* Mobile bottom navigation — full-width, edge-to-edge */
 .mobile-cta-bar {
     display: none;
 }
@@ -83,90 +83,124 @@
 @media (max-width: 768px) {
     .mobile-cta-bar {
         position: fixed;
-        left: 10px;
-        right: 10px;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        height: 68px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: calc(64px + env(safe-area-inset-bottom));
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        align-items: stretch;
-        gap: 3px;
-        padding: 6px;
-        background: rgba(255,255,255,.96);
-        border: 1px solid rgba(15,23,42,.10);
-        border-radius: 18px;
-        box-shadow: 0 12px 35px rgba(15,23,42,.18);
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: start;
+        gap: 0;
+        padding: 0 0 env(safe-area-inset-bottom);
+        margin: 0;
+        background: rgba(255,255,255,.98);
+        border: 0;
+        border-top: 1px solid rgba(15,23,42,.10);
+        border-radius: 0;
+        box-shadow: 0 -8px 28px rgba(15,23,42,.12);
         backdrop-filter: blur(18px);
         -webkit-backdrop-filter: blur(18px);
         z-index: 9998;
     }
 
     .mobile-cta-item {
+        position: relative;
+        width: 100%;
         min-width: 0;
-        min-height: 56px;
+        height: 64px;
+        min-height: 64px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 3px;
+        gap: 4px;
         border: 0;
-        border-radius: 13px;
+        border-radius: 0;
         background: transparent;
         color: #667085;
         text-decoration: none;
         font: inherit;
-        font-size: .67rem;
+        font-size: .68rem;
         font-weight: 700;
         line-height: 1.1;
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
-        transition: transform .18s ease, background .18s ease, color .18s ease;
+        transition: color .18s ease, background .18s ease, transform .18s ease;
     }
 
     .mobile-cta-item i {
-        font-size: 19px;
+        font-size: 20px;
         line-height: 1;
+        transition: transform .18s ease;
+    }
+
+    .mobile-cta-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        padding: 0 2px;
     }
 
     .mobile-cta-item:active {
-        transform: scale(.94);
+        background: rgba(0,81,163,.055);
+        transform: none;
     }
 
     .mobile-cta-item.active {
         color: #0051A3;
-        background: rgba(0,81,163,.08);
+        background: rgba(0,81,163,.055);
     }
 
-    .mobile-cta-item.mobile-cta-quote {
-        color: #fff;
-        background: linear-gradient(135deg,#FFA500,#FF8C00);
-        box-shadow: 0 6px 14px rgba(255,140,0,.24);
+    .mobile-cta-item.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 30px;
+        height: 3px;
+        transform: translateX(-50%);
+        background: #0051A3;
+        border-radius: 0 0 4px 4px;
     }
 
-    .mobile-cta-item.mobile-cta-whatsapp {
-        color: #fff;
-        background: #25D366;
-        box-shadow: 0 6px 14px rgba(37,211,102,.20);
+    .mobile-cta-item.active i {
+        transform: translateY(-1px);
+    }
+
+    /* Enquiry gets subtle brand emphasis, not a bulky pill */
+    .mobile-cta-enquiry {
+        color: #b17d1e;
+    }
+
+    .mobile-cta-enquiry i {
+        color: #c59a45;
+    }
+
+    /* Hamburger/menu item */
+    .mobile-cta-menu {
+        color: #344054;
     }
 
     body {
-        padding-bottom: calc(92px + env(safe-area-inset-bottom));
+        padding-bottom: calc(76px + env(safe-area-inset-bottom));
     }
 
+    /* WhatsApp stays as a floating circular action above the bottom nav. */
     .sticky-whatsapp {
-        bottom: 90px;
-        right: 16px;
+        display: block;
+        bottom: calc(82px + env(safe-area-inset-bottom));
+        right: 18px;
+        pointer-events: auto;
     }
 
     .sticky-whatsapp a {
-        width: 52px;
-        height: 52px;
-        font-size: 24px;
-    }
-
-    /* The bottom WhatsApp action replaces the floating mobile WhatsApp bubble. */
-    .sticky-whatsapp {
-        display: none;
+        width: 56px;
+        height: 56px;
+        font-size: 25px;
+        border: 3px solid #fff;
+        box-shadow: 0 8px 24px rgba(37,211,102,.38);
     }
 
     .sticky-call {
@@ -175,21 +209,22 @@
 }
 
 @media (max-width: 380px) {
-    .mobile-cta-bar {
-        left: 7px;
-        right: 7px;
-        height: 64px;
-        border-radius: 16px;
-        padding: 5px;
-    }
-
     .mobile-cta-item {
-        min-height: 52px;
-        font-size: .61rem;
+        font-size: .62rem;
     }
 
     .mobile-cta-item i {
-        font-size: 17px;
+        font-size: 18px;
+    }
+
+    .sticky-whatsapp {
+        right: 14px;
+    }
+
+    .sticky-whatsapp a {
+        width: 52px;
+        height: 52px;
+        font-size: 23px;
     }
 }
 
@@ -248,7 +283,7 @@
 </div>
 
 {# Mobile bottom bar #}
-<nav class="mobile-cta-bar" aria-label="Quick navigation">
+<nav class="mobile-cta-bar" aria-label="Mobile navigation">
     <a href="{% url 'home' %}" class="mobile-cta-item" data-bottom-nav="home" aria-label="Home">
         <i class="fas fa-house" aria-hidden="true"></i>
         <span>Home</span>
@@ -259,28 +294,22 @@
         <span>Products</span>
     </a>
 
-    <a href="{% url 'products_list' %}" class="mobile-cta-item" data-bottom-nav="search" aria-label="Search products">
-        <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
-        <span>Search</span>
+    <a href="{% url 'services_index' %}" class="mobile-cta-item" data-bottom-nav="services" aria-label="Services">
+        <i class="fas fa-layer-group" aria-hidden="true"></i>
+        <span>Services</span>
+    </a>
+
+    <a href="{% url 'contact' %}" class="mobile-cta-item mobile-cta-enquiry" data-bottom-nav="contact" aria-label="Contact and enquiry">
+        <i class="fas fa-file-pen" aria-hidden="true"></i>
+        <span>Enquiry</span>
     </a>
 
     <button type="button"
-            class="mobile-cta-item mobile-cta-quote"
-            data-bottom-nav="quote"
-            data-bs-toggle="modal"
-            data-bs-target="#bulkInquiryModal"
-            aria-label="Get a quote">
-        <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i>
-        <span>Get Quote</span>
+            class="mobile-cta-item mobile-cta-menu"
+            data-bottom-nav="menu"
+            aria-label="Open menu"
+            aria-controls="nav">
+        <i class="fas fa-bars" aria-hidden="true"></i>
+        <span>Menu</span>
     </button>
-
-    <a href="{% whatsapp_link 'Hi HOOVALE, I want wall clock wholesale pricing.' %}"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="mobile-cta-item mobile-cta-whatsapp"
-       data-bottom-nav="whatsapp"
-       aria-label="Chat with HOOVALE on WhatsApp">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-        <span>WhatsApp</span>
-    </a>
 </nav>
