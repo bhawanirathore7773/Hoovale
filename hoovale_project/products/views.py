@@ -45,6 +45,15 @@ def home(request):
 
 
 # ============================================================
+# CATEGORIES
+# ============================================================
+def categories_index(request):
+    """Render the marketplace-style category catalogue."""
+    categories = Category.objects.all().order_by('display_order', 'name')
+    return render(request, 'products/categories_index.html', {'categories': categories})
+
+
+# ============================================================
 # PRODUCTS
 # ============================================================
 def products_list(request):
