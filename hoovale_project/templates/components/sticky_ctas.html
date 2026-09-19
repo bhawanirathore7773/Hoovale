@@ -170,11 +170,11 @@
     }
 
     /* Enquiry gets subtle brand emphasis, not a bulky pill */
-    .mobile-cta-enquiry {
+    .mobile-cta-contact {
         color: #b17d1e;
     }
 
-    .mobile-cta-enquiry i {
+    .mobile-cta-contact i {
         color: #c59a45;
     }
 
@@ -294,22 +294,18 @@
         <span>Products</span>
     </a>
 
-    <a href="{% url 'services_index' %}" class="mobile-cta-item" data-bottom-nav="services" aria-label="Services">
+    <a href="{% url 'categories_index' %}" class="mobile-cta-item" data-bottom-nav="categories" aria-label="Categories">
         <i class="fas fa-layer-group" aria-hidden="true"></i>
-        <span>Services</span>
+        <span>Category</span>
     </a>
 
-    <a href="{% url 'contact' %}" class="mobile-cta-item mobile-cta-enquiry" data-bottom-nav="contact" aria-label="Contact and enquiry">
-        <i class="fas fa-file-pen" aria-hidden="true"></i>
-        <span>Enquiry</span>
+    <a href="{% url 'contact' %}" class="mobile-cta-item mobile-cta-contact" data-bottom-nav="contact" aria-label="Contact HOOVALE">
+        <i class="fas fa-phone" aria-hidden="true"></i>
+        <span>Contact</span>
     </a>
 
-    <button type="button"
-            class="mobile-cta-item mobile-cta-menu"
-            data-bottom-nav="menu"
-            aria-label="Open menu"
-            aria-controls="nav">
-        <i class="fas fa-bars" aria-hidden="true"></i>
-        <span>Menu</span>
-    </button>
+    <a href="{% url 'about' %}" class="mobile-cta-item mobile-cta-about" data-bottom-nav="about" aria-label="About HOOVALE">
+        <i class="fas fa-circle-info" aria-hidden="true"></i>
+        <span>About</span>
+    </a>
 </nav>
