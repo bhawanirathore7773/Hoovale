@@ -33,16 +33,24 @@ function initializeBottomNav() {
     const items = document.querySelectorAll('[data-bottom-nav]');
     if (!items.length) return;
 
-    const path = window.location.pathname.replace(/\\/$/, '') || '/';
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
 
     items.forEach(item => {
         const type = item.dataset.bottomNav;
         const isHome = type === 'home' && (path === '' || path === '/');
         const isProducts = type === 'products' && path.startsWith('/products');
-        item.classList.toggle('active', isHome || isProducts);
+        const isServices = type === 'services' && path.startsWith('/services');
+        const isContact = type === 'contact' && path === '/contact';
+        item.classList.toggle('active', isHome || isProducts || isServices || isContact);
     });
-}
 
+    // Reuse the main hamburger's existing drawer logic.
+    const menuButton = document.querySelector('[data-bottom-nav="menu"]');
+    const navToggler = document.querySelector('#hvMenuToggle');
+    if (menuButton && navToggler) {
+        menuButton.addEventListener('click', () => navToggler.click());
+    }
+}
 function initializeLazyLoading() {
     if ('IntersectionObserver' in window) {
         const images = document.querySelectorAll('img[loading="lazy"]');
