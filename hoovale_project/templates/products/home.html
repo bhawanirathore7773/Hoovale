@@ -235,6 +235,100 @@
  .hv-product-card h3 { min-height:2.25em; }
 }
 
+
+/* =========================================================
+   REFERENCE MOBILE HOME LAYOUT
+   Four trust points in one row, then a short marketplace banner.
+   ========================================================= */
+.hv-home-trust-four-wrap{
+    background:#fff;
+    border-bottom:1px solid #edf0f4;
+    box-shadow:0 5px 20px rgba(15,23,42,.04);
+}
+.hv-home-trust .hv-trust-four{
+    display:flex;
+    flex-wrap:nowrap;
+}
+.hv-home-trust .hv-trust-four .trust-item{
+    flex:1 1 25%;
+    max-width:25%;
+    min-width:0;
+    padding:18px 8px;
+    text-align:center;
+    border-right:1px solid #edf0f4;
+}
+.hv-home-trust .hv-trust-four .trust-item:last-child{border-right:0}
+.hv-home-trust .hv-trust-four i{
+    display:block;
+    color:#b18a35;
+    font-size:1.35rem;
+    margin-bottom:7px;
+}
+.hv-home-trust .hv-trust-four strong{
+    display:block;
+    color:#151515;
+    font-size:.95rem;
+    font-weight:800;
+    line-height:1.2;
+}
+.hv-home-trust .hv-trust-four small{
+    display:block;
+    color:#6b7280;
+    font-size:.68rem;
+    line-height:1.25;
+    margin-top:4px;
+}
+.hv-home-banner-wrap{
+    padding:14px 0 8px;
+    background:#fff;
+}
+.hv-home-banner{
+    width:100%;
+    max-width:1220px;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:14px;
+}
+.hv-banner-link{
+    height:190px;
+    border-radius:14px;
+}
+@media(max-width:767px){
+    .hv-home-trust-four-wrap{box-shadow:none}
+    .hv-home-trust .hv-trust-four{
+        display:grid;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+    .hv-home-trust .hv-trust-four .trust-item{
+        max-width:none;
+        width:100%;
+        padding:15px 3px 13px;
+    }
+    .hv-home-trust .hv-trust-four .trust-item i{
+        font-size:1.15rem;
+        margin-bottom:6px;
+    }
+    .hv-home-trust .hv-trust-four .trust-item strong{
+        font-size:.68rem;
+        line-height:1.15;
+        white-space:normal;
+    }
+    .hv-home-trust .hv-trust-four .trust-item small{
+        font-size:.57rem;
+        margin-top:4px;
+        line-height:1.15;
+    }
+    .hv-home-banner-wrap{
+        padding:10px 16px 6px;
+    }
+    .hv-home-banner{
+        border-radius:12px;
+    }
+    .hv-banner-link{
+        height:145px;
+        border-radius:12px;
+    }
+}
 </style>
 {% endblock %}
 
@@ -261,12 +355,7 @@
       <button class="hv-home-secondary" type="button" data-bs-toggle="modal" data-bs-target="#bulkInquiryModal"><i class="fas fa-file-invoice-dollar"></i> Get Bulk Quote</button>
       <a class="hv-home-outline" href="{% url 'products_list' %}"><i class="fas fa-th-large"></i> Browse Products</a>
     </div>
-    <div class="hv-hero-stats mt-4">
-      <div class="stat"><strong>{{ site.establishment_year }}+</strong><span>Established</span></div>
-      <div class="stat"><strong>Bulk</strong><span>Wholesale Supply</span></div>
-      <div class="stat"><strong>Custom</strong><span>Logo & Branding</span></div>
-      <div class="stat"><strong>Pan India</strong><span>Delivery</span></div>
-    </div>
+
    </div>
    <div class="col-lg-5 d-none d-md-block">
     <div class="hv-home-hero-showcase">
@@ -284,46 +373,16 @@
 </section>
 
 <!-- TRUST -->
-<section class="hv-home-trust">
+<section class="hv-home-trust hv-home-trust-four-wrap">
  <div class="container-lg">
-  <div class="row g-0">
-   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-industry"></i><strong>Direct Manufacturer</strong><small>Jaipur based</small></div>
-   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-boxes-stacked"></i><strong>Wholesale Supply</strong><small>Bulk quantities</small></div>
-   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-paint-brush"></i><strong>Custom Branding</strong><small>Logo printing</small></div>
-   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-bullhorn"></i><strong>Promotional Clocks</strong><small>Brand campaigns</small></div>
-   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-truck-fast"></i><strong>PAN India</strong><small>Delivery support</small></div>
-   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-headset"></i><strong>Direct Enquiry</strong><small>WhatsApp / Call</small></div>
+  <div class="row g-0 hv-trust-four">
+   <div class="col-3 trust-item"><i class="fas fa-calendar-check"></i><strong>{{ site.establishment_year }}+</strong><small>Established</small></div>
+   <div class="col-3 trust-item"><i class="fas fa-boxes-stacked"></i><strong>Bulk Supply</strong><small>Wholesale Orders</small></div>
+   <div class="col-3 trust-item"><i class="fas fa-pen-ruler"></i><strong>Custom</strong><small>Logo &amp; Branding</small></div>
+   <div class="col-3 trust-item"><i class="fas fa-truck-fast"></i><strong>Fast Delivery</strong><small>Across India</small></div>
   </div>
  </div>
 </section>
-
-<!-- TOP PRODUCT SHELF: NEW ARRIVALS -->
-{% if new_arrivals %}
-<section class="hv-shelf hv-home-product-priority">
- <div class="container-lg">
-  <div class="hv-shelf-head">
-   <div><div class="hv-home-kicker">Fresh Collection</div><h2>New Arrival Wall Clocks</h2><p>Latest designs added to the HOOVALE collection.</p></div>
-   <a class="hv-shelf-link" href="{% url 'products_list' %}">View All <i class="fas fa-arrow-right"></i></a>
-  </div>
-  <div class="row g-3">
-   {% for product in new_arrivals %}
-   <div class="col-6 col-lg-3">
-    <article class="hv-product-card">
-     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link">
-      <div class="image">
-       <img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">
-       <span class="hv-product-badge new">New</span>
-      </div>
-      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
-     </a>
-     <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
-    </article>
-   </div>
-   {% endfor %}
-  </div>
- </div>
-</section>
-{% endif %}
 
 <!-- SHORT FULL-WIDTH ROTATING BANNER -->
 {% if website_banners or mobile_banners %}
@@ -369,6 +428,34 @@
     {% endfor %}
     {% endif %}
    </div>
+  </div>
+ </div>
+</section>
+{% endif %}
+
+<!-- TOP PRODUCT SHELF: NEW ARRIVALS -->
+{% if new_arrivals %}
+<section class="hv-shelf hv-home-product-priority">
+ <div class="container-lg">
+  <div class="hv-shelf-head">
+   <div><div class="hv-home-kicker">Fresh Collection</div><h2>New Arrival Wall Clocks</h2><p>Latest designs added to the HOOVALE collection.</p></div>
+   <a class="hv-shelf-link" href="{% url 'products_list' %}">View All <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="row g-3">
+   {% for product in new_arrivals %}
+   <div class="col-6 col-lg-3">
+    <article class="hv-product-card">
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link">
+      <div class="image">
+       <img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">
+       <span class="hv-product-badge new">New</span>
+      </div>
+      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
+     </a>
+     <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
+    </article>
+   </div>
+   {% endfor %}
   </div>
  </div>
 </section>
