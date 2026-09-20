@@ -2,9 +2,9 @@
 {% load static seo_tags %}
 {% include 'components/bulk_inquiry.html' %}
 
-{% block meta_title %}Wall Clock Manufacturer in Jaipur | HOOVALE – Wholesale, Custom & Promotional Clocks{% endblock %}
-{% block meta_description %}HOOVALE is a wall clock manufacturer in Jaipur supplying wholesale, retail, customized, promotional and corporate wall clocks across India. Get bulk pricing, custom logo printing and OEM solutions.{% endblock %}
-{% block meta_keywords %}wall clock manufacturer in Jaipur, wall clock manufacturers Jaipur, wall clock supplier Jaipur, wall clock wholesaler Jaipur, customized wall clock Jaipur, promotional wall clock Jaipur, corporate wall clock manufacturer, wholesale wall clocks India{% endblock %}
+{% block meta_title %}HOOVALE | Custom & Wholesale Wall Clocks in Jaipur{% endblock %}
+{% block meta_description %}Explore wall clocks for homes, offices, retailers and businesses. HOOVALE offers retail, wholesale, custom logo and promotional clock orders from Jaipur with delivery support across India.{% endblock %}
+{% block meta_keywords %}wall clocks Jaipur, custom wall clocks, wholesale wall clocks, promotional wall clocks, wall clock supplier Jaipur, corporate wall clocks{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/premium_theme.css' %}">
@@ -125,6 +125,83 @@
  .hv-checks{grid-template-columns:1fr}
  .hv-final-cta h2{font-size:2rem}
 }
+
+/* Mobile-safe homepage fixes: keep content readable on dark sections and avoid broken media-dependent About imagery. */
+.hv-home .hv-home-section.dark h2,
+.hv-home .hv-home-section.dark h3,
+.hv-home .hv-home-section.dark a h3,
+.hv-home .hv-final-cta h2 {
+    color: #fff !important;
+}
+.hv-home .hv-home-section.dark .hv-home-section-head h2 {
+    color: #fff !important;
+}
+.hv-about-profile {
+    min-height: 430px;
+    padding: 42px;
+    border-radius: 20px;
+    border: 1px solid rgba(201,169,97,.35);
+    background:
+        radial-gradient(circle at 80% 15%, rgba(201,169,97,.18), transparent 32%),
+        linear-gradient(145deg,#111518,#0b0d0f);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 20px 50px rgba(15,23,42,.12);
+}
+.hv-about-profile-icon {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(201,169,97,.12);
+    border: 1px solid rgba(201,169,97,.35);
+    color: #d9bb72;
+    font-size: 1.7rem;
+    margin-bottom: 24px;
+}
+.hv-about-profile-kicker {
+    color: #d9bb72;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.hv-about-profile-title {
+    max-width: 420px;
+    font-family: "Playfair Display",serif;
+    font-size: clamp(1.7rem,3vw,2.5rem);
+    line-height: 1.15;
+    font-weight: 900;
+    margin-bottom: 24px;
+}
+.hv-about-profile-list {
+    display: grid;
+    gap: 12px;
+}
+.hv-about-profile-list span {
+    color: rgba(255,255,255,.78);
+    font-size: .9rem;
+}
+.hv-about-profile-list i {
+    color: #d9bb72;
+    margin-right: 8px;
+}
+@media(max-width:767px){
+    .hv-home-hero { padding: 38px 0 44px; }
+    .hv-home-hero h1 { font-size: 2.15rem; line-height: 1.06; }
+    .hv-home-eyebrow { font-size: .68rem; line-height: 1.45; }
+    .hv-home-hero-copy { font-size: .92rem; }
+    .hv-about-profile {
+        min-height: 0;
+        padding: 28px;
+        border-radius: 16px;
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -141,10 +218,10 @@
  <div class="container-lg" style="position:relative;z-index:2">
   <div class="row align-items-center">
    <div class="col-lg-7">
-    <div class="hv-home-eyebrow"><i class="fas fa-industry"></i> Jaipur Manufacturer • Wholesale • Custom</div>
-    <h1>Wall Clock Manufacturer in <span>Jaipur</span></h1>
+    <div class="hv-home-eyebrow"><i class="fas fa-clock"></i> Designed for Homes • Businesses • Brands</div>
+    <h1>Custom &amp; Wholesale Wall Clocks, <span>Made in Jaipur</span></h1>
     <p class="hv-home-hero-copy">
-      HOOVALE manufactures and supplies wall clocks for retailers, distributors, corporates, institutions and bulk buyers. Explore wholesale wall clocks, customized logo clocks, promotional clocks and retail designs — with direct factory support from Jaipur.
+      Explore practical, decorative and branded wall clocks for homes, offices, retailers and businesses. HOOVALE supports retail purchases, bulk supply and custom logo requirements from Jaipur, with order assistance and delivery support across India.
     </p>
     <div class="hv-home-actions">
       <a class="hv-home-primary" href="{% whatsapp_link 'Hi HOOVALE, I need your wall clock catalogue and wholesale pricing.' %}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp for Catalogue</a>
@@ -273,16 +350,20 @@
 <section class="hv-home-section">
  <div class="container-lg">
   <div class="hv-about-grid">
-   <div class="hv-about-images">
-    {% for p in featured_products|slice:":3" %}
-    <div class="image"><img src="{{ p.image.url }}" alt="{{ p.name }} — HOOVALE wall clock" loading="lazy"></div>
-    {% empty %}
-    <div class="image" style="display:flex;align-items:center;justify-content:center;font-size:3rem;color:#b18a35"><i class="fas fa-clock"></i></div>
-    {% endfor %}
+   <div class="hv-about-profile" aria-label="HOOVALE Jaipur business profile">
+    <div class="hv-about-profile-icon"><i class="fas fa-clock"></i></div>
+    <div class="hv-about-profile-kicker">HOOVALE • JAIPUR</div>
+    <div class="hv-about-profile-title">Wall clocks for everyday spaces and business needs.</div>
+    <div class="hv-about-profile-list">
+      <span><i class="fas fa-check"></i> Retail &amp; bulk orders</span>
+      <span><i class="fas fa-check"></i> Custom branding options</span>
+      <span><i class="fas fa-check"></i> Promotional requirements</span>
+      <span><i class="fas fa-check"></i> Delivery support across India</span>
+    </div>
    </div>
    <div class="hv-about-copy">
     <div class="hv-home-kicker">About HOOVALE</div>
-    <h2>Jaipur-based wall clock manufacturing for modern buyers.</h2>
+    <h2>Wall clocks made for homes, businesses and brands.</h2>
     <p>HOOVALE serves businesses and individual buyers looking for dependable wall clocks, promotional clocks and customized designs. From selecting the right model to discussing branding, quantity and delivery, our team provides direct assistance.</p>
     <div class="hv-checks">
      <div class="hv-check"><i class="fas fa-check-circle"></i> Wholesale & retail supply</div>
@@ -360,7 +441,7 @@
  <div class="container-lg">
   <div class="hv-home-section-head" style="margin-bottom:18px">
    <div class="hv-home-kicker">Jaipur • Rajasthan • India</div>
-   <h2>Wall Clock Manufacturer & Supplier in Jaipur</h2>
+   <h2>Wall Clock Supplier in Jaipur for Wholesale &amp; Custom Orders</h2>
   </div>
   <p class="hv-location-copy">
    HOOVALE is a Jaipur-based wall clock business serving wholesale, retail, promotional and customized requirements. Buyers can explore wall clock designs online, ask for bulk pricing, discuss logo printing or custom branding, and connect with the team for order and delivery details. We also support buyers across India looking for wall clock manufacturers, suppliers and wholesale sources from Jaipur.
@@ -391,8 +472,8 @@
 <section class="hv-final-cta">
  <div class="container-lg">
   <div class="hv-home-kicker">Ready to Buy?</div>
-  <h2>Need Wall Clocks in Bulk or Customised?</h2>
-  <p>Tell us the quantity, product type and branding requirement. We'll help you choose the right wall clock and share the next steps.</p>
+  <h2>Looking for Wall Clocks for Your Home or Business?</h2>
+  <p>Share the product type, quantity and branding requirement. Our team can help you shortlist suitable wall clocks and discuss pricing, customisation and delivery.</p>
   <div class="hv-home-actions justify-content-center">
    <a class="hv-home-primary" href="{% whatsapp_link 'Hi HOOVALE, I need a quote for wall clocks. Please help me with product options and pricing.' %}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
    <button class="hv-home-secondary" type="button" data-bs-toggle="modal" data-bs-target="#bulkInquiryModal"><i class="fas fa-paper-plane"></i> Send Enquiry</button>
