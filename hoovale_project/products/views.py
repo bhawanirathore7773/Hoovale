@@ -22,6 +22,22 @@ def home(request):
     website_banners = Banner.objects.filter(is_active=True, banner_type='website').order_by('order')
     mobile_banners = Banner.objects.filter(is_active=True, banner_type='mobile').order_by('order')
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:8]
+    new_arrivals = Product.objects.filter(is_active=True, is_new_arrival=True).order_by('-created_at')[:8]
+    if not new_arrivals.exists():
+        new_arrivals = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
+
+    bestseller_products = Product.objects.filter(
+        is_active=True, is_bestseller=True
+    ).order_by('-updated_at', '-created_at')[:8]
+
+    custom_products = Product.objects.filter(
+        is_active=True
+    ).filter(
+        Q(category__name__icontains='custom') |
+        Q(category__name__icontains='promotional') |
+        Q(category__name__icontains='corporate')
+    ).order_by('-is_featured', '-created_at')[:8]
+
     categories = Category.objects.filter(is_featured=True).order_by('display_order', 'name')[:6]
 
     # Marketplace-style homepage product shelves: each featured category
@@ -48,6 +64,9 @@ def home(request):
         'website_banners': website_banners,
         'mobile_banners': mobile_banners,
         'featured_products': featured_products,
+        'new_arrivals': new_arrivals,
+        'bestseller_products': bestseller_products,
+        'custom_products': custom_products,
         'categories': categories,
         'category_product_sections': category_product_sections,
         'testimonials': testimonials,
