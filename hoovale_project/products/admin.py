@@ -114,7 +114,7 @@ class CategoryAdmin(ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ['is_featured', 'display_order']
     fieldsets = (
-        ('Basic', {'fields': ('name', 'slug', 'description', 'image')}),
+        ('Basic', {'fields': ('name', 'slug', 'description', 'image', 'static_image_path')}),
         ('SEO', {'fields': ('meta_title', 'meta_description', 'meta_keywords', 'h1_heading', 'seo_content'),
                  'classes': ('collapse',)}),
         ('Display', {'fields': ('is_featured', 'display_order')}),
@@ -287,19 +287,43 @@ class TestimonialAdmin(ModelAdmin):
 # ============================================================
 @admin.register(Banner)
 class BannerAdmin(ModelAdmin):
-    list_display = ['title', 'banner_type_icon', 'order', 'is_active', 'preview']
-    list_filter = ['banner_type', 'is_active']
-    list_editable = ['order', 'is_active']
-
-    def banner_type_icon(self, obj):
-        icon = '💻' if obj.banner_type == 'website' else '📱'
-        return f"{icon} {obj.get_banner_type_display()}"
-    banner_type_icon.short_description = 'Type'
+    list_display = ['title', 'order', 'is_active', 'is_page_published', 'preview']
+    list_filter = ['is_active', 'is_page_published']
+    search_fields = ['title', 'heading', 'page_heading']
+    prepopulated_fields = {'slug': ('title',)}
+    list_editable = ['order', 'is_active', 'is_page_published']
+    filter_horizontal = ['page_products']
+    fieldsets = (
+        ('🎯 Banner Identity', {
+            'fields': ('title', 'slug', 'order', 'is_active'),
+        }),
+        ('🖼️ Responsive Images', {
+            'fields': ('desktop_image', 'mobile_image', 'image', 'fallback_desktop', 'fallback_mobile'),
+            'description': (
+                'Upload BOTH desktop and mobile artwork for the same campaign. '
+                'Recommended: desktop 1920×600; mobile 800×1000. '
+                'Fallback SVGs are used until real product/banner photography is uploaded.'
+            ),
+        }),
+        ('🏷️ Homepage Slide', {
+            'fields': ('heading', 'subheading', 'cta_text', 'cta_url', 'text_color', 'text_position', 'overlay_opacity'),
+        }),
+        ('📄 Dynamic Campaign Page', {
+            'fields': (
+                'page_heading', 'page_subheading', 'page_intro', 'page_content',
+                'page_image', 'page_products', 'is_page_published',
+                'seo_title', 'seo_description', 'seo_keywords',
+            ),
+            'description': (
+                'The banner opens /collection/<slug>/. Select only the products '
+                'that belong to this campaign. If none are selected, the page uses a general product fallback.'
+            ),
+        }),
+    )
 
     def preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" style="max-width:120px; border-radius:4px;">', obj.image.url)
-        return '-'
+        src = obj.homepage_desktop_url
+        return format_html('<img src="{}" style="width:160px;height:60px;object-fit:cover;border-radius:6px;">', src)
 
 
 # ============================================================
