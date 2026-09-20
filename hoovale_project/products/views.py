@@ -22,7 +22,21 @@ def home(request):
     website_banners = Banner.objects.filter(is_active=True, banner_type='website').order_by('order')
     mobile_banners = Banner.objects.filter(is_active=True, banner_type='mobile').order_by('order')
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:8]
-    categories = Category.objects.filter(is_featured=True)[:6]
+    categories = Category.objects.filter(is_featured=True).order_by('display_order', 'name')[:6]
+
+    # Marketplace-style homepage product shelves: each featured category
+    # gets its own small product rail so buyers can scan products quickly.
+    category_product_sections = []
+    for category in categories:
+        section_products = Product.objects.filter(
+            is_active=True, category=category
+        ).order_by('-is_featured', '-is_bestseller', '-created_at')[:4]
+        if section_products.exists():
+            category_product_sections.append({
+                'category': category,
+                'products': section_products,
+            })
+
     testimonials = Testimonial.objects.filter(is_active=True, is_featured=True)[:6]
     faqs = FAQ.objects.filter(is_active=True, scope__in=['global', 'home'])[:8]
     industries = IndustryPage.objects.filter(is_published=True)[:6]
@@ -35,6 +49,7 @@ def home(request):
         'mobile_banners': mobile_banners,
         'featured_products': featured_products,
         'categories': categories,
+        'category_product_sections': category_product_sections,
         'testimonials': testimonials,
         'faqs': faqs,
         'industries': industries,
