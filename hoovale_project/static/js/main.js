@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeContactForm();
     initializeProductFilters();
     initializeProductCardLinks();
-    initializeInstantNavigation();
 });
 
 /**
