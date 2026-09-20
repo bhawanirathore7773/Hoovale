@@ -45,7 +45,7 @@ def home(request):
         Q(category__name__icontains='corporate')
     ).order_by('-is_featured', '-created_at')[:8]
 
-    categories = Category.objects.filter(is_featured=True).order_by('display_order', 'name')[:6]
+    categories = Category.objects.filter(is_featured=True).order_by('display_order', 'name')[:8]
 
     # Marketplace-style homepage product shelves: each featured category
     # gets its own small product rail so buyers can scan products quickly.
