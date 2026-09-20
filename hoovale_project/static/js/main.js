@@ -461,3 +461,60 @@ function initializeProductCardLinks() {
     });
 }
 
+/* ============================================================
+   CONTACT ENQUIRY FORM
+   Works after instant page swaps as well as normal page loads.
+   ============================================================ */
+function initializeContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form || form.dataset.hvContactBound === '1') return;
+
+    form.dataset.hvContactBound = '1';
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const responseDiv = document.getElementById('formResponse');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!submitBtn) return;
+
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            });
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                if (responseDiv) {
+                    responseDiv.innerHTML =
+                        '<div class="alert alert-success"> <i class="fas fa-check-circle"></i> ' +
+                        (data.message || 'Enquiry sent successfully!') +
+                        ' We will contact you soon.</div>';
+                }
+                form.reset();
+            } else {
+                if (responseDiv) {
+                    responseDiv.innerHTML =
+                        '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ' +
+                        (data.error || 'Please check the details and try again.') +
+                        '</div>';
+                }
+            }
+        } catch (error) {
+            if (responseDiv) {
+                responseDiv.innerHTML =
+                    '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ' +
+                    'Network error. Please WhatsApp us directly.</div>';
+            }
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    });
+}
+
