@@ -504,7 +504,7 @@ class Migration(migrations.Migration):
             name='is_page_published',
             field=models.BooleanField(default=True),
         ),
-        migrations.AddField(
+        migrations.AlterField(
             model_name='banner',
             name='cta_text',
             field=models.CharField(blank=True, default='Explore', max_length=100),
