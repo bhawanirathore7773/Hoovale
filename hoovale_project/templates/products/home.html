@@ -1,13 +1,131 @@
 {% extends 'base.html' %}
 {% load static seo_tags %}
 {% include 'components/bulk_inquiry.html' %}
-{% block meta_title %}HOOVALE — Premium Wall Clock Manufacturer in Jaipur | Bulk, OEM, Custom Logo{% endblock %}
-{% block meta_description %}Direct from Jaipur factory — premium wall clocks for retailers, hotels, corporates and bulk buyers. Custom logo printing, OEM manufacturing, PAN India delivery.{% endblock %}
-{% block meta_keywords %}wall clock manufacturer in jaipur, premium wall clocks, bulk wall clocks india, customized wall clocks, corporate wall clocks{% endblock %}
+
+{% block meta_title %}Wall Clock Manufacturer in Jaipur | HOOVALE – Wholesale, Custom & Promotional Clocks{% endblock %}
+{% block meta_description %}HOOVALE is a wall clock manufacturer in Jaipur supplying wholesale, retail, customized, promotional and corporate wall clocks across India. Get bulk pricing, custom logo printing and OEM solutions.{% endblock %}
+{% block meta_keywords %}wall clock manufacturer in Jaipur, wall clock manufacturers Jaipur, wall clock supplier Jaipur, wall clock wholesaler Jaipur, customized wall clock Jaipur, promotional wall clock Jaipur, corporate wall clock manufacturer, wholesale wall clocks India{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/premium_theme.css' %}">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   HOOVALE HOME — B2B + RETAIL MARKETPLACE EXPERIENCE
+   ============================================================ */
+.hv-home{background:#fff;color:#151515;overflow-x:clip}
+.hv-home .container-lg{max-width:1220px}
+.hv-home-hero{position:relative;min-height:610px;display:flex;align-items:center;background:radial-gradient(circle at 80% 25%,rgba(201,169,97,.18),transparent 28%),linear-gradient(135deg,#0b0d0f 0%,#15181b 58%,#0b0d0f 100%);color:#fff;overflow:hidden}
+.hv-home-hero:after{content:"";position:absolute;inset:auto -10% -55% 25%;height:420px;background:radial-gradient(circle,rgba(201,169,97,.12),transparent 65%);pointer-events:none}
+.hv-home-eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(201,169,97,.5);background:rgba(201,169,97,.09);color:#e1c681;border-radius:999px;padding:8px 14px;font-size:.74rem;font-weight:800;letter-spacing:1.1px;text-transform:uppercase}
+.hv-home-hero h1{font-family:"Playfair Display",serif;font-size:clamp(2.6rem,5vw,4.7rem);line-height:1.03;font-weight:900;margin:22px 0 18px;color:#fff}
+.hv-home-hero h1 span{color:#d9bb72}
+.hv-home-hero-copy{max-width:700px;color:rgba(255,255,255,.8);font-size:1.06rem;line-height:1.75;margin-bottom:26px}
+.hv-home-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hv-home-actions a,.hv-home-actions button{min-height:50px;padding:13px 20px;border-radius:10px;font-weight:800;text-decoration:none}
+.hv-home-primary{background:#25d366;color:#fff;border:1px solid #25d366}
+.hv-home-secondary{background:#fff;color:#111;border:1px solid #fff}
+.hv-home-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45)}
+.hv-home-hero-showcase{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;transform:rotate(-3deg);padding:18px}
+.hv-home-hero-showcase .showcase-card{background:#fff;padding:10px;border-radius:12px;box-shadow:0 25px 60px rgba(0,0,0,.4)}
+.hv-home-hero-showcase img{display:block;width:100%;height:190px;object-fit:cover;border-radius:7px}
+.hv-home-trust{background:#fff;border-bottom:1px solid #e9edf2;box-shadow:0 5px 20px rgba(15,23,42,.04);position:relative;z-index:2}
+.hv-home-trust .trust-item{padding:18px 10px;text-align:center;border-right:1px solid #edf0f4}
+.hv-home-trust .trust-item:last-child{border-right:0}
+.hv-home-trust i{color:#b18a35;font-size:1.2rem;margin-bottom:7px}
+.hv-home-trust strong{display:block;font-size:.9rem}
+.hv-home-trust small{color:#6b7280;font-size:.72rem}
+.hv-home-section{padding:68px 0}
+.hv-home-section.tinted{background:#f7f9fc}
+.hv-home-section.dark{background:#101315;color:#fff}
+.hv-home-section-head{max-width:760px;margin:0 auto 34px;text-align:center}
+.hv-home-kicker{color:#a47b2d;font-size:.72rem;font-weight:900;letter-spacing:1.7px;text-transform:uppercase}
+.hv-home-section-head h2{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,3vw,2.7rem);font-weight:900;margin:8px 0 10px;color:inherit}
+.hv-home-section-head p{color:#6b7280;margin:0;line-height:1.65}
+.dark .hv-home-section-head p{color:rgba(255,255,255,.68)}
+.hv-category-tile{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e7ebf0;border-radius:14px;overflow:hidden;height:100%;transition:transform .25s ease,box-shadow .25s ease}
+.hv-category-tile:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(15,23,42,.1);color:inherit}
+.hv-category-tile .image{height:190px;background:#eef2f6;overflow:hidden}
+.hv-category-tile img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.hv-category-tile:hover img{transform:scale(1.04)}
+.hv-category-tile .body{padding:16px}
+.hv-category-tile h3{font-size:1rem;font-weight:800;margin:0 0 5px}
+.hv-category-tile p{margin:0;color:#6b7280;font-size:.78rem}
+.hv-shelf{padding:55px 0;background:#fff}
+.hv-shelf:nth-of-type(even){background:#f7f9fc}
+.hv-shelf-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:20px}
+.hv-shelf-head h2{font-family:"Playfair Display",serif;font-size:1.8rem;margin:5px 0 0;font-weight:900}
+.hv-shelf-head p{color:#6b7280;margin:0;font-size:.86rem}
+.hv-shelf-link{color:#0051a3;font-weight:800;text-decoration:none;white-space:nowrap}
+.hv-product-card{background:#fff;border:1px solid #e6eaf0;border-radius:14px;overflow:hidden;height:100%;transition:transform .22s ease,box-shadow .22s ease}
+.hv-product-card:hover{transform:translateY(-4px);box-shadow:0 15px 35px rgba(15,23,42,.1)}
+.hv-product-card .image{height:220px;position:relative;background:#f2f4f7;overflow:hidden}
+.hv-product-card img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.hv-product-card:hover img{transform:scale(1.035)}
+.hv-product-card .body{padding:15px}
+.hv-product-card .category{font-size:.66rem;text-transform:uppercase;letter-spacing:1px;color:#a47b2d;font-weight:800}
+.hv-product-card h3{font-size:.95rem;line-height:1.35;margin:6px 0 9px;font-weight:800;color:#151515}
+.hv-product-meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hv-product-price{color:#0051a3;font-size:1.05rem;font-weight:900}
+.hv-product-moq{font-size:.7rem;color:#6b7280}
+.hv-product-card .wa{display:block;margin:0 15px 15px;text-align:center;background:#25d366;color:#fff;border-radius:8px;padding:9px;text-decoration:none;font-weight:800;font-size:.8rem}
+.hv-solution-card{height:100%;border:1px solid rgba(201,169,97,.22);background:linear-gradient(145deg,#181c1f,#101315);border-radius:15px;padding:28px;color:#fff}
+.hv-solution-card i{font-size:1.8rem;color:#d6b86f;margin-bottom:17px}
+.hv-solution-card h3{font-size:1.1rem;margin:0 0 8px}
+.hv-solution-card p{font-size:.86rem;line-height:1.65;color:rgba(255,255,255,.68);margin:0}
+.hv-about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:55px;align-items:center}
+.hv-about-images{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}
+.hv-about-images .image{border-radius:16px;overflow:hidden;background:#e9edf1;min-height:210px}
+.hv-about-images .image:first-child{grid-row:span 2;min-height:430px}
+.hv-about-images img{width:100%;height:100%;object-fit:cover;display:block}
+.hv-about-copy h2{font-family:"Playfair Display",serif;font-size:2.5rem;line-height:1.1;font-weight:900}
+.hv-about-copy p{color:#5f6670;line-height:1.75}
+.hv-checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0}
+.hv-check{font-size:.86rem;font-weight:700;display:flex;gap:9px;align-items:flex-start}
+.hv-check i{color:#16a36a;margin-top:3px}
+.hv-process{counter-reset:step}
+.hv-step{position:relative;padding:26px 20px;background:#fff;border:1px solid #e6eaf0;border-radius:14px;height:100%}
+.hv-step:before{counter-increment:step;content:"0" counter(step);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:#0f1720;color:#d8bb74;font-weight:900;margin-bottom:15px}
+.hv-step h3{font-size:1rem;font-weight:800}
+.hv-step p{color:#6b7280;font-size:.82rem;line-height:1.6;margin:0}
+.hv-faq .accordion-item{border:1px solid #e4e8ed;border-radius:10px!important;margin-bottom:10px;overflow:hidden}
+.hv-faq .accordion-button{font-weight:800;box-shadow:none}
+.hv-location-copy{max-width:900px;margin:auto;text-align:center;color:#59616b;line-height:1.8}
+.hv-final-cta{background:linear-gradient(135deg,#0c1013,#16212a);color:#fff;text-align:center;padding:65px 0}
+.hv-final-cta h2{font-family:"Playfair Display",serif;font-size:2.4rem;font-weight:900}
+.hv-final-cta p{color:rgba(255,255,255,.72);max-width:720px;margin:0 auto 22px;line-height:1.7}
+@media(max-width:991px){
+ .hv-home-hero{min-height:auto;padding:75px 0}
+ .hv-home-hero-showcase{margin-top:30px;transform:none}
+ .hv-home-hero-showcase img{height:150px}
+ .hv-about-grid{grid-template-columns:1fr;gap:30px}
+}
+@media(max-width:767px){
+ .hv-home-hero{padding:46px 0 55px}
+ .hv-home-hero h1{font-size:2.35rem}
+ .hv-home-hero-copy{font-size:.94rem;line-height:1.65}
+ .hv-home-actions{display:grid;grid-template-columns:1fr}
+ .hv-home-actions a,.hv-home-actions button{width:100%;text-align:center}
+ .hv-home-trust .trust-item{padding:14px 6px;border-right:0;border-bottom:1px solid #edf0f4}
+ .hv-home-section{padding:48px 0}
+ .hv-home-section-head{margin-bottom:24px}
+ .hv-category-tile .image{height:145px}
+ .hv-shelf{padding:40px 0}
+ .hv-shelf-head h2{font-size:1.45rem}
+ .hv-shelf-head{align-items:start}
+ .hv-shelf-link{font-size:.75rem}
+ .hv-product-card .image{height:175px}
+ .hv-product-card .body{padding:12px}
+ .hv-product-card h3{font-size:.84rem}
+ .hv-product-card .wa{margin:0 12px 12px}
+ .hv-about-images{grid-template-columns:1fr 1fr}
+ .hv-about-images .image:first-child{grid-row:span 2;min-height:320px}
+ .hv-about-images .image{min-height:155px}
+ .hv-about-copy h2{font-size:2rem}
+ .hv-checks{grid-template-columns:1fr}
+ .hv-final-cta h2{font-size:2rem}
+}
+</style>
 {% endblock %}
 
 {% block page_schema %}
@@ -16,389 +134,272 @@
 {% endblock %}
 
 {% block content %}
+<div class="hv-home">
 
-{# ============================================================ #}
-{# HERO — Premium Black with Gold accents                       #}
-{# ============================================================ #}
-<section class="hv-hero">
-    <div class="container-lg" style="position:relative; z-index:2;">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <div class="hv-hero-tag">
-                    <i class="fas fa-industry"></i> EST. {{ site.establishment_year }} • JAIPUR, INDIA
-                </div>
-
-                <h1>
-                    Premium Wall Clock<br>
-                    <span class="accent">Manufacturer in Jaipur</span>
-                </h1>
-
-                <p>
-                    Direct factory supply for retailers, distributors, corporates and bulk buyers across India. Bulk orders, custom logo printing, OEM manufacturing — all under one roof.
-                </p>
-
-                <div style="display:flex; gap:14px; flex-wrap:wrap; margin-bottom:20px;">
-                    <a href="{% whatsapp_link 'Hi HOOVALE, I need wall clock wholesale catalogue with pricing.' %}" target="_blank" class="btn-hv-whatsapp">
-                        <i class="fab fa-whatsapp"></i> Get Catalogue
-                    </a>
-                    <button type="button" class="btn-hv-outline" data-bs-toggle="modal" data-bs-target="#bulkInquiryModal">
-                        <i class="fas fa-bolt"></i> Bulk Inquiry
-                    </button>
-                </div>
-
-                <div class="hv-hero-stats">
-                    <div class="stat"><strong>500+</strong><span>Designs</span></div>
-                    <div class="stat"><strong>15+</strong><span>Years</span></div>
-                    <div class="stat"><strong>1000+</strong><span>Clients</span></div>
-                    <div class="stat"><strong>150+</strong><span>Cities</span></div>
-                </div>
-            </div>
-
-            <div class="col-lg-5 d-none d-lg-block">
-                {# Premium product showcase - rotated grid #}
-                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px; transform:rotate(-3deg); position:relative;">
-                    {% for p in featured_products|slice:":4" %}
-                    <div style="background:white; padding:14px; border-radius:8px; box-shadow:0 24px 60px rgba(0,0,0,0.4); transition:transform 0.4s; border:1px solid rgba(201,169,97,0.2);"
-                         onmouseover="this.style.transform='translateY(-8px) rotate(2deg)';"
-                         onmouseout="this.style.transform='translateY(0) rotate(0)';">
-                        <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy" style="width:100%; height:140px; object-fit:cover; border-radius:4px;">
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hv-home-hero">
+ <div class="container-lg" style="position:relative;z-index:2">
+  <div class="row align-items-center">
+   <div class="col-lg-7">
+    <div class="hv-home-eyebrow"><i class="fas fa-industry"></i> Jaipur Manufacturer • Wholesale • Custom</div>
+    <h1>Wall Clock Manufacturer in <span>Jaipur</span></h1>
+    <p class="hv-home-hero-copy">
+      HOOVALE manufactures and supplies wall clocks for retailers, distributors, corporates, institutions and bulk buyers. Explore wholesale wall clocks, customized logo clocks, promotional clocks and retail designs — with direct factory support from Jaipur.
+    </p>
+    <div class="hv-home-actions">
+      <a class="hv-home-primary" href="{% whatsapp_link 'Hi HOOVALE, I need your wall clock catalogue and wholesale pricing.' %}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp for Catalogue</a>
+      <button class="hv-home-secondary" type="button" data-bs-toggle="modal" data-bs-target="#bulkInquiryModal"><i class="fas fa-file-invoice-dollar"></i> Get Bulk Quote</button>
+      <a class="hv-home-outline" href="{% url 'products_list' %}"><i class="fas fa-th-large"></i> Browse Products</a>
     </div>
+    <div class="hv-hero-stats mt-4">
+      <div class="stat"><strong>{{ site.establishment_year }}+</strong><span>Established</span></div>
+      <div class="stat"><strong>Bulk</strong><span>Wholesale Supply</span></div>
+      <div class="stat"><strong>Custom</strong><span>Logo & Branding</span></div>
+      <div class="stat"><strong>Pan India</strong><span>Delivery</span></div>
+    </div>
+   </div>
+   <div class="col-lg-5 d-none d-md-block">
+    <div class="hv-home-hero-showcase">
+      {% for p in featured_products|slice:":4" %}
+      <a href="{{ p.get_absolute_url }}" class="showcase-card" aria-label="{{ p.name }}">
+       <img src="{{ p.image.url }}" alt="{{ p.name }} wall clock by HOOVALE Jaipur" loading="eager">
+      </a>
+      {% empty %}
+      <div class="showcase-card"><div style="height:190px;display:flex;align-items:center;justify-content:center;color:#777">HOOVALE</div></div>
+      {% endfor %}
+    </div>
+   </div>
+  </div>
+ </div>
 </section>
 
-{# ============================================================ #}
-{# TRUST BADGES BAR                                              #}
-{# ============================================================ #}
-<section class="hv-trust-bar">
-    <div class="container-lg">
-        <div class="row align-items-center justify-content-center text-center g-4">
-            <div class="col-6 col-md-3 col-lg-2 hv-trust-item">
-                <i class="fas fa-industry"></i>
-                <h6>Direct Manufacturer</h6>
-                <small>Not a Trader</small>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2 hv-trust-item">
-                <i class="fas fa-shield-alt"></i>
-                <h6>GST Registered</h6>
-                <small>{% if site.gst_number %}{{ site.gst_number|truncatechars:15 }}{% else %}Full Compliance{% endif %}</small>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2 hv-trust-item">
-                <i class="fas fa-award"></i>
-                <h6>15+ Years</h6>
-                <small>Experience</small>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2 hv-trust-item">
-                <i class="fas fa-truck-fast"></i>
-                <h6>PAN India</h6>
-                <small>Delivery</small>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2 hv-trust-item">
-                <i class="fas fa-paint-brush"></i>
-                <h6>Custom Logo</h6>
-                <small>Free on Bulk</small>
-            </div>
-            <div class="col-6 col-md-3 col-lg-2 hv-trust-item">
-                <i class="fas fa-check-double"></i>
-                <h6>1 Year</h6>
-                <small>Warranty</small>
-            </div>
-        </div>
-    </div>
+<!-- TRUST -->
+<section class="hv-home-trust">
+ <div class="container-lg">
+  <div class="row g-0">
+   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-industry"></i><strong>Direct Manufacturer</strong><small>Jaipur based</small></div>
+   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-boxes-stacked"></i><strong>Wholesale Supply</strong><small>Bulk quantities</small></div>
+   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-paint-brush"></i><strong>Custom Branding</strong><small>Logo printing</small></div>
+   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-bullhorn"></i><strong>Promotional Clocks</strong><small>Brand campaigns</small></div>
+   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-truck-fast"></i><strong>PAN India</strong><small>Delivery support</small></div>
+   <div class="col-6 col-md-3 col-lg-2 trust-item"><i class="fas fa-headset"></i><strong>Direct Enquiry</strong><small>WhatsApp / Call</small></div>
+  </div>
+ </div>
 </section>
 
-{# ============================================================ #}
-{# CATEGORIES                                                    #}
-{# ============================================================ #}
+<!-- CATEGORIES -->
 {% if categories %}
-<section class="hv-section hv-section-tinted">
-    <div class="container-lg">
-        <div class="hv-section-header">
-            <div class="hv-section-eyebrow">PRODUCTS</div>
-            <h2>Shop by Category</h2>
-            <p>Browse our extensive wall clock collection across 14 categories</p>
-        </div>
-        <div class="row g-4">
-            {% for cat in categories %}
-            <div class="col-md-6 col-lg-4">
-                <a href="{{ cat.get_absolute_url }}" style="text-decoration:none; color:inherit;">
-                    <div class="hv-card">
-                        <div class="hv-card-image">
-                            {% if cat.image %}
-                            <img src="{{ cat.image.url }}" alt="{{ cat.name }} manufacturer Jaipur" loading="lazy">
-                            {% else %}
-                            <div style="width:100%; height:100%; background:linear-gradient(135deg,#1a1a1a,#2a2a2a); display:flex; align-items:center; justify-content:center;">
-                                <i class="fas fa-clock" style="font-size:3rem; color:#C9A961;"></i>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="hv-card-body">
-                            <h3>{{ cat.name }}</h3>
-                            <p style="color:#6b6b6b; font-size:0.85rem; margin:0;">{{ cat.products.count }} products available</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<section class="hv-home-section tinted">
+ <div class="container-lg">
+  <div class="hv-home-section-head">
+   <div class="hv-home-kicker">Explore Collection</div>
+   <h2>Shop Wall Clocks by Category</h2>
+   <p>Find the right clock for home décor, offices, retail counters, corporate gifting, promotions and bulk requirements.</p>
+  </div>
+  <div class="row g-3">
+   {% for cat in categories %}
+   <div class="col-6 col-md-4">
+    <a href="{{ cat.get_absolute_url }}" class="hv-category-tile">
+     <div class="image">
+      {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }} wall clock manufacturer Jaipur" loading="lazy">{% else %}<div style="height:100%;display:flex;align-items:center;justify-content:center;background:#111;color:#c9a961;font-size:2.5rem"><i class="fas fa-clock"></i></div>{% endif %}
+     </div>
+     <div class="body"><h3>{{ cat.name }}</h3><p>{{ cat.products.count }} products • View collection <i class="fas fa-arrow-right"></i></p></div>
+    </a>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
 </section>
 {% endif %}
 
-{# ============================================================ #}
-{# FEATURED PRODUCTS                                             #}
-{# ============================================================ #}
-{% if featured_products %}
-<section class="hv-section hv-section-light">
-    <div class="container-lg">
-        <div class="hv-section-header">
-            <div class="hv-section-eyebrow">BESTSELLERS</div>
-            <h2>Top Wall Clocks</h2>
-            <p>Hand-picked products our wholesale buyers love</p>
-        </div>
-        <div class="row g-4">
-            {% for product in featured_products %}
-            <div class="col-md-6 col-lg-3">
-                <div class="hv-card">
-                    <a href="{{ product.get_absolute_url }}" style="text-decoration:none; color:inherit; display:block;">
-                        <div class="hv-card-image">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }} — wall clock supplier Jaipur" loading="lazy">
-                            {% if product.is_bestseller %}<span class="hv-badge hv-badge-bestseller">Bestseller</span>{% endif %}
-                            {% if product.is_new_arrival %}<span class="hv-badge hv-badge-new">New</span>{% endif %}
-                        </div>
-                        <div class="hv-card-body">
-                            <p class="hv-card-eyebrow">{{ product.category.name }}</p>
-                            <h3>{{ product.name }}</h3>
-                            <div class="hv-card-price">
-                                {% if product.price %}<span class="price">₹{{ product.price }}</span>{% endif %}
-                                <span class="moq">MOQ {{ product.moq }}</span>
-                            </div>
-                        </div>
-                    </a>
-                    <div style="padding:0 22px 18px;">
-                        <a href="{% whatsapp_link 'Hi, interested in: ' %}{{ product.name }}" target="_blank" class="btn-hv-whatsapp" style="width:100%; padding:10px;">
-                            <i class="fab fa-whatsapp"></i> Get Best Price
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div style="text-align:center; margin-top:50px;">
-            <a href="{% url 'products_list' %}" class="btn-hv-primary">
-                View All Products <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
+<!-- PRODUCT SHELVES -->
+{% for shelf in category_product_sections %}
+<section class="hv-shelf">
+ <div class="container-lg">
+  <div class="hv-shelf-head">
+   <div>
+    <div class="hv-home-kicker">{{ shelf.category.name }}</div>
+    <h2>{{ shelf.category.name }} Wall Clocks</h2>
+    <p>Selected designs available for wholesale and retail enquiries.</p>
+   </div>
+   <a class="hv-shelf-link" href="{{ shelf.category.get_absolute_url }}">View all <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="row g-3">
+   {% for product in shelf.products %}
+   <div class="col-6 col-lg-3">
+    <article class="hv-product-card">
+     <a href="{{ product.get_absolute_url }}" style="text-decoration:none;color:inherit">
+      <div class="image">
+       <img src="{{ product.image.url }}" alt="{{ product.name }} — {{ shelf.category.name }} wall clock, Jaipur manufacturer" loading="lazy">
+       {% if product.is_bestseller %}<span class="badge bg-success position-absolute top-0 start-0 m-2">Bestseller</span>{% endif %}
+       {% if product.is_new_arrival %}<span class="badge bg-dark position-absolute top-0 end-0 m-2">New</span>{% endif %}
+      </div>
+      <div class="body">
+       <div class="category">{{ shelf.category.name }}</div>
+       <h3>{{ product.name }}</h3>
+       <div class="hv-product-meta">
+        {% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}
+        <span class="hv-product-moq">MOQ {{ product.moq }}</span>
+       </div>
+      </div>
+     </a>
+     <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the best wholesale price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
+    </article>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
 </section>
-{% endif %}
+{% endfor %}
 
-{# ============================================================ #}
-{# INDUSTRIES SERVED                                             #}
-{# ============================================================ #}
+<!-- SOLUTIONS -->
+<section class="hv-home-section dark">
+ <div class="container-lg">
+  <div class="hv-home-section-head">
+   <div class="hv-home-kicker">Built for Every Buyer</div>
+   <h2>Wall Clock Solutions for Business & Retail</h2>
+   <p>Choose the buying route that matches your requirement. Our team can help with product selection, quantity, branding and delivery.</p>
+  </div>
+  <div class="row g-3">
+   <div class="col-md-6 col-lg-3"><div class="hv-solution-card"><i class="fas fa-store"></i><h3>Retail & Resellers</h3><p>Ready-to-sell wall clock designs for retailers, gift stores and online sellers.</p></div></div>
+   <div class="col-md-6 col-lg-3"><div class="hv-solution-card"><i class="fas fa-boxes-stacked"></i><h3>Wholesale & Distribution</h3><p>Bulk supply with quantity-based pricing for distributors and dealers.</p></div></div>
+   <div class="col-md-6 col-lg-3"><div class="hv-solution-card"><i class="fas fa-bullhorn"></i><h3>Promotional Clocks</h3><p>Logo-branded clocks for marketing campaigns, dealer meets and business promotion.</p></div></div>
+   <div class="col-md-6 col-lg-3"><div class="hv-solution-card"><i class="fas fa-pen-ruler"></i><h3>Custom & OEM</h3><p>Discuss custom dial, logo placement, branding and OEM requirements with our team.</p></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ABOUT / MANUFACTURING -->
+<section class="hv-home-section">
+ <div class="container-lg">
+  <div class="hv-about-grid">
+   <div class="hv-about-images">
+    {% for p in featured_products|slice:":3" %}
+    <div class="image"><img src="{{ p.image.url }}" alt="{{ p.name }} — HOOVALE wall clock" loading="lazy"></div>
+    {% empty %}
+    <div class="image" style="display:flex;align-items:center;justify-content:center;font-size:3rem;color:#b18a35"><i class="fas fa-clock"></i></div>
+    {% endfor %}
+   </div>
+   <div class="hv-about-copy">
+    <div class="hv-home-kicker">About HOOVALE</div>
+    <h2>Jaipur-based wall clock manufacturing for modern buyers.</h2>
+    <p>HOOVALE serves businesses and individual buyers looking for dependable wall clocks, promotional clocks and customized designs. From selecting the right model to discussing branding, quantity and delivery, our team provides direct assistance.</p>
+    <div class="hv-checks">
+     <div class="hv-check"><i class="fas fa-check-circle"></i> Wholesale & retail supply</div>
+     <div class="hv-check"><i class="fas fa-check-circle"></i> Custom logo printing</div>
+     <div class="hv-check"><i class="fas fa-check-circle"></i> Promotional & corporate use</div>
+     <div class="hv-check"><i class="fas fa-check-circle"></i> PAN India order support</div>
+    </div>
+    <a href="{% url 'about' %}" class="btn btn-dark px-4 py-2">Know More About HOOVALE <i class="fas fa-arrow-right ms-1"></i></a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hv-home-section tinted">
+ <div class="container-lg">
+  <div class="hv-home-section-head">
+   <div class="hv-home-kicker">Simple Buying Process</div>
+   <h2>From Enquiry to Delivery</h2>
+   <p>A clear process for wholesale, custom and promotional wall clock orders.</p>
+  </div>
+  <div class="row g-3 hv-process">
+   <div class="col-md-6 col-lg-3"><div class="hv-step"><h3>Tell Us Your Requirement</h3><p>Share product type, quantity, budget, branding needs and delivery city.</p></div></div>
+   <div class="col-md-6 col-lg-3"><div class="hv-step"><h3>Get Product & Pricing</h3><p>Our team helps you shortlist suitable designs and quantity-based pricing.</p></div></div>
+   <div class="col-md-6 col-lg-3"><div class="hv-step"><h3>Approve Customisation</h3><p>For branded orders, confirm logo, artwork, dial and other requirements.</p></div></div>
+   <div class="col-md-6 col-lg-3"><div class="hv-step"><h3>Production & Dispatch</h3><p>Order processing followed by packing and delivery support to your location.</p></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- INDUSTRIES -->
 {% if industries %}
-<section class="hv-section hv-section-dark">
-    <div class="container-lg">
-        <div class="hv-section-header">
-            <div class="hv-section-eyebrow" style="color:#C9A961;">INDUSTRIES</div>
-            <h2>Industries We Serve</h2>
-            <p style="color:rgba(255,255,255,0.75);">Trusted by businesses across multiple verticals</p>
-        </div>
-        <div class="row g-4">
-            {% for ind in industries %}
-            <div class="col-md-6 col-lg-4">
-                <a href="{{ ind.get_absolute_url }}" style="text-decoration:none; color:inherit; display:block;">
-                    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,97,0.15); padding:34px; border-radius:8px; transition:all 0.3s; height:100%;"
-                         onmouseover="this.style.background='rgba(201,169,97,0.08)'; this.style.borderColor='#C9A961'; this.style.transform='translateY(-4px)';"
-                         onmouseout="this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(201,169,97,0.15)'; this.style.transform='translateY(0)';">
-                        <i class="{{ ind.icon_class|default:'fas fa-building' }}" style="font-size:2.5rem; color:#C9A961; margin-bottom:18px;"></i>
-                        <h3 style="color:white; font-size:1.2rem; font-weight:700; margin-bottom:10px;">{{ ind.industry_name }}</h3>
-                        <p style="color:rgba(255,255,255,0.7); font-size:0.9rem; line-height:1.6; margin:0;">{{ ind.hero_subheading|truncatewords:18 }}</p>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<section class="hv-home-section dark">
+ <div class="container-lg">
+  <div class="hv-home-section-head"><div class="hv-home-kicker">Applications</div><h2>Where Our Wall Clocks Are Used</h2><p>Solutions for businesses, institutions and promotional requirements.</p></div>
+  <div class="row g-3">
+   {% for ind in industries %}
+   <div class="col-6 col-md-4">
+    <a href="{{ ind.get_absolute_url }}" class="hv-solution-card d-block text-decoration-none">
+     <i class="{{ ind.icon_class|default:'fas fa-building' }}"></i>
+     <h3>{{ ind.industry_name }}</h3>
+     <p>{{ ind.hero_subheading|truncatewords:16 }}</p>
+    </a>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
 </section>
 {% endif %}
 
-{# ============================================================ #}
-{# CITIES (Internal linking)                                     #}
-{# ============================================================ #}
-{% if cities %}
-<section class="hv-section hv-section-tinted">
-    <div class="container-lg">
-        <div class="hv-section-header">
-            <div class="hv-section-eyebrow">PAN INDIA</div>
-            <h2><i class="fas fa-map-marker-alt" style="color:#C9A961;"></i> Cities We Supply</h2>
-            <p>Wall clock supplier serving major cities across India</p>
-        </div>
-        <div class="row g-3">
-            {% for city in cities %}
-            <div class="col-6 col-md-4 col-lg-3">
-                <a href="{{ city.get_absolute_url }}" style="text-decoration:none;">
-                    <div style="background:white; padding:22px 18px; border-radius:8px; text-align:center; border:1px solid rgba(10,10,10,0.06); transition:all 0.3s; height:100%;"
-                         onmouseover="this.style.borderColor='#C9A961'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 30px rgba(201,169,97,0.15)';"
-                         onmouseout="this.style.borderColor='rgba(10,10,10,0.06)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <i class="fas fa-map-marker-alt" style="color:#C9A961; font-size:1.4rem; margin-bottom:10px;"></i>
-                        <h4 style="font-size:0.95rem; font-weight:700; color:#0a0a0a; margin:0 0 4px;">Wall Clock {{ city.get_page_type_display|truncatewords:1 }}</h4>
-                        <p style="font-size:0.85rem; color:#6b6b6b; margin:0;">in {{ city.city_name }}</p>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{# ============================================================ #}
-{# CATALOGUE DOWNLOAD (Email capture)                            #}
-{# ============================================================ #}
-{% include 'components/catalogue_download.html' %}
-
-{# ============================================================ #}
-{# CLIENT LOGOS SLIDER                                           #}
-{# ============================================================ #}
-<section class="hv-logos-slider">
-    <div class="container-lg" style="margin-bottom:30px; text-align:center;">
-        <div class="hv-section-eyebrow">TRUSTED BY</div>
-        <h2 style="font-family:'Playfair Display',serif; font-weight:800; color:#0a0a0a; font-size:1.8rem; margin-top:8px;">1000+ Businesses Across India</h2>
-    </div>
-    <div class="hv-logos-track">
-        {% for n in "12345678" %}
-        <div style="height:60px; padding:0 20px; display:flex; align-items:center; opacity:0.5; font-family:'Playfair Display',serif; font-weight:800; color:#1a1a1a; font-size:1.4rem; white-space:nowrap; letter-spacing:2px;">CLIENT {{ forloop.counter }}</div>
-        {% endfor %}
-        {% for n in "12345678" %}
-        <div style="height:60px; padding:0 20px; display:flex; align-items:center; opacity:0.5; font-family:'Playfair Display',serif; font-weight:800; color:#1a1a1a; font-size:1.4rem; white-space:nowrap; letter-spacing:2px;">CLIENT {{ forloop.counter }}</div>
-        {% endfor %}
-    </div>
-</section>
-{# ============================================================ #}
-{# TESTIMONIALS CAROUSEL                                         #}
-{# ============================================================ #}
+<!-- TESTIMONIALS -->
 {% if testimonials %}
-<section class="hv-section hv-section-light">
-    <div class="container-lg">
-        <div class="hv-section-header">
-            <div class="hv-section-eyebrow">TESTIMONIALS</div>
-            <h2>What Our Customers Say</h2>
-            <p>Real reviews from retailers, corporates, hotels and bulk buyers</p>
-        </div>
-
-        <div id="hvTestCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
-            <div class="carousel-inner">
-                {% for t in testimonials %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="d-flex justify-content-center">
-                        <div class="col-md-10 col-lg-8">
-                            <div class="hv-testimonial text-center">
-                                <div class="hv-testimonial-stars">{% for _ in "12345"|make_list %}{% if forloop.counter <= t.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
-                                <p class="hv-testimonial-quote">{{ t.review_content }}</p>
-                                <div class="hv-testimonial-author justify-content-center">
-                                    <div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#C9A961,#D4B97A);display:flex;align-items:center;justify-content:center;color:#0a0a0a;font-weight:800;font-family:'Playfair Display',serif;font-size:1.2rem;flex-shrink:0;">
-                                        {{ t.customer_name|slice:":1" }}
-                                    </div>
-                                    <div>
-                                        <strong>{{ t.customer_name }}</strong>
-                                        <small>{{ t.customer_designation }}{% if t.customer_city %} • {{ t.customer_city }}{% endif %}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-
-            {# DOTS - centered below cards #}
-            <div class="d-flex justify-content-center gap-2 mt-4">
-                {% for t in testimonials %}
-                <button type="button"
-                        data-bs-target="#hvTestCarousel"
-                        data-bs-slide-to="{{ forloop.counter0 }}"
-                        class="hv-dot {% if forloop.first %}active{% endif %}">
-                </button>
-                {% endfor %}
-            </div>
-        </div>
-
+<section class="hv-home-section">
+ <div class="container-lg">
+  <div class="hv-home-section-head"><div class="hv-home-kicker">Customer Feedback</div><h2>What Buyers Say</h2><p>Feedback from customers and business buyers.</p></div>
+  <div id="hvTestimonialHome" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+   <div class="carousel-inner">
+    {% for t in testimonials %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+     <div class="col-lg-8 mx-auto text-center">
+      <div style="font-size:1.3rem;color:#b18a35;letter-spacing:3px">★★★★★</div>
+      <blockquote style="font-family:'Playfair Display',serif;font-size:1.35rem;line-height:1.6;margin:18px 0">“{{ t.review_content }}”</blockquote>
+      <strong>{{ t.customer_name }}</strong><div class="text-muted small">{{ t.customer_designation }}{% if t.customer_city %} • {{ t.customer_city }}{% endif %}</div>
+     </div>
     </div>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var carousel = document.getElementById('hvTestCarousel');
-    if (carousel) {
-        carousel.addEventListener('slid.bs.carousel', function (e) {
-            document.querySelectorAll('#hvTestCarousel .hv-dot').forEach(function (dot, i) {
-                dot.classList.toggle('active', i === e.to);
-            });
-        });
-    }
-});
-</script>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+</section>
+{% endif %}
+
+<!-- SEO / LOCAL RELEVANCE -->
+<section class="hv-home-section tinted">
+ <div class="container-lg">
+  <div class="hv-home-section-head" style="margin-bottom:18px">
+   <div class="hv-home-kicker">Jaipur • Rajasthan • India</div>
+   <h2>Wall Clock Manufacturer & Supplier in Jaipur</h2>
+  </div>
+  <p class="hv-location-copy">
+   HOOVALE is a Jaipur-based wall clock business serving wholesale, retail, promotional and customized requirements. Buyers can explore wall clock designs online, ask for bulk pricing, discuss logo printing or custom branding, and connect with the team for order and delivery details. We also support buyers across India looking for wall clock manufacturers, suppliers and wholesale sources from Jaipur.
+  </p>
+ </div>
 </section>
 
-{% endif %}
-{# ============================================================ #}
-{# FAQ                                                           #}
-{# ============================================================ #}
+<!-- FAQ -->
 {% if faqs %}
-<section class="hv-section hv-section-tinted">
-    <div class="container-lg">
-        <div class="hv-section-header">
-            <div class="hv-section-eyebrow">FAQ</div>
-            <h2>Frequently Asked Questions</h2>
-        </div>
-        <div class="row">
-            <div class="col-lg-9 mx-auto">
-                <div class="accordion" id="homeFaq">
-                    {% for faq in faqs %}
-                    <div class="accordion-item" style="border:1px solid rgba(10,10,10,0.06); border-radius:8px; margin-bottom:12px; overflow:hidden;">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#hf{{ forloop.counter }}" style="font-weight:600; font-family:inherit; color:#0a0a0a;">
-                                {{ faq.question }}
-                            </button>
-                        </h3>
-                        <div id="hf{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#homeFaq">
-                            <div class="accordion-body" style="color:#3a3a3a;">{{ faq.answer|linebreaks }}</div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+<section class="hv-home-section hv-faq">
+ <div class="container-lg">
+  <div class="hv-home-section-head"><div class="hv-home-kicker">Need to Know?</div><h2>Frequently Asked Questions</h2></div>
+  <div class="col-lg-9 mx-auto">
+   <div class="accordion" id="homeFaq">
+    {% for faq in faqs %}
+    <div class="accordion-item">
+     <h3 class="accordion-header"><button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ forloop.counter }}">{{ faq.question }}</button></h3>
+     <div id="faq{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#homeFaq"><div class="accordion-body text-muted">{{ faq.answer|linebreaks }}</div></div>
     </div>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
 </section>
 {% endif %}
 
-{# ============================================================ #}
-{# FINAL CTA                                                     #}
-{# ============================================================ #}
-<section class="hv-section" style="background:var(--grad-gold); color:#0a0a0a; text-align:center;">
-    <div class="container-lg">
-        <h2 style="font-family:'Playfair Display',serif; font-weight:900; color:#0a0a0a; margin-bottom:14px;">Ready to Place Your Bulk Order?</h2>
-        <p style="font-size:1.15rem; max-width:700px; margin:0 auto 32px; color:rgba(10,10,10,0.85);">
-            Direct factory pricing. Custom logo printing. Pan-India delivery. Talk to us for a wholesale quote.
-        </p>
-        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-            <a href="{% whatsapp_link 'Hi HOOVALE, please share wall clock catalogue with bulk pricing.' %}" target="_blank" class="btn-hv-whatsapp">
-                <i class="fab fa-whatsapp"></i> WhatsApp for Quote
-            </a>
-            <a href="{% call_link %}" class="btn-hv-primary" style="background:#0a0a0a; color:white; border-color:#0a0a0a;">
-                <i class="fas fa-phone-alt"></i> Call: {{ site.primary_phone }}
-            </a>
-        </div>
-    </div>
+<!-- FINAL CTA -->
+<section class="hv-final-cta">
+ <div class="container-lg">
+  <div class="hv-home-kicker">Ready to Buy?</div>
+  <h2>Need Wall Clocks in Bulk or Customised?</h2>
+  <p>Tell us the quantity, product type and branding requirement. We'll help you choose the right wall clock and share the next steps.</p>
+  <div class="hv-home-actions justify-content-center">
+   <a class="hv-home-primary" href="{% whatsapp_link 'Hi HOOVALE, I need a quote for wall clocks. Please help me with product options and pricing.' %}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+   <button class="hv-home-secondary" type="button" data-bs-toggle="modal" data-bs-target="#bulkInquiryModal"><i class="fas fa-paper-plane"></i> Send Enquiry</button>
+   <a class="hv-home-outline" href="{% url 'contact' %}"><i class="fas fa-phone"></i> Contact Team</a>
+  </div>
+ </div>
 </section>
 
-{# Bulk inquiry modal (defined below, triggered from anywhere) #}
-{% include 'components/bulk_inquiry.html' %}
-
-{# Exit intent popup #}
-{% include 'components/exit_intent.html' %}
-
+</div>
 {% endblock %}
