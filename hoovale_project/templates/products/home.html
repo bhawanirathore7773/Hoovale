@@ -237,6 +237,130 @@
 
 
 /* =========================================================
+   REFERENCE BANNER — MARKETPLACE STYLE
+   Same wide banner ratio on desktop + mobile, with responsive artwork.
+   ========================================================= */
+.hv-home-banner-wrap{
+    width:100%;
+    padding:16px 0 10px;
+    background:#fff;
+}
+.hv-home-banner{
+    width:100%;
+    max-width:1220px;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:14px;
+}
+.hv-banner-link{
+    display:block;
+    position:relative;
+    width:100%;
+    aspect-ratio:2.55 / 1;
+    min-height:0;
+    overflow:hidden;
+    background:#f3f4f6;
+    border-radius:14px;
+}
+.hv-banner-link picture,
+.hv-banner-link img{
+    display:block;
+    width:100%;
+    height:100%;
+}
+.hv-banner-link img{
+    object-fit:cover;
+}
+.hv-banner-content{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    padding:clamp(18px,4vw,48px);
+    background:linear-gradient(90deg,rgba(0,0,0,.58),rgba(0,0,0,.04) 72%);
+    color:#fff;
+    pointer-events:none;
+}
+.hv-banner-content h2{
+    color:#fff!important;
+    font-family:"Playfair Display",serif;
+    font-size:clamp(1.25rem,3vw,2.55rem);
+    line-height:1.08;
+    margin:0 0 7px;
+}
+.hv-banner-content p{
+    color:rgba(255,255,255,.92);
+    margin:0 0 9px;
+    max-width:650px;
+    font-size:clamp(.72rem,1.5vw,.98rem);
+    line-height:1.4;
+}
+.hv-banner-content span{
+    color:#fff;
+    background:#b88b32;
+    border-radius:999px;
+    padding:8px 15px;
+    font-size:.75rem;
+    font-weight:800;
+}
+.hv-home-banner .carousel-control-prev,
+.hv-home-banner .carousel-control-next{
+    width:42px;
+    height:42px;
+    top:50%;
+    transform:translateY(-50%);
+    margin:0 10px;
+    border-radius:50%;
+    background:rgba(255,255,255,.94);
+    opacity:.95;
+}
+.hv-home-banner .carousel-control-prev-icon,
+.hv-home-banner .carousel-control-next-icon{
+    filter:invert(1);
+    width:18px;
+    height:18px;
+}
+@media(max-width:767px){
+    .hv-home-banner-wrap{
+        padding:10px 16px 7px;
+    }
+    .hv-home-banner{
+        border-radius:12px;
+    }
+    .hv-banner-link{
+        aspect-ratio:2.55 / 1;
+        border-radius:12px;
+    }
+    .hv-banner-content{
+        padding:14px 18px;
+        background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.02) 82%);
+    }
+    .hv-banner-content h2{
+        font-size:clamp(1.05rem,5vw,1.4rem);
+        max-width:58%;
+        margin-bottom:4px;
+    }
+    .hv-banner-content p{
+        max-width:58%;
+        font-size:.64rem;
+        line-height:1.3;
+        margin-bottom:6px;
+    }
+    .hv-banner-content span{
+        padding:6px 10px;
+        font-size:.62rem;
+    }
+    .hv-home-banner .carousel-control-prev,
+    .hv-home-banner .carousel-control-next{
+        width:30px;
+        height:30px;
+        margin:0 6px;
+    }
+}
+
+/* =========================================================
    REFERENCE MOBILE HOME LAYOUT
    Four trust points in one row, then a short marketplace banner.
    ========================================================= */
@@ -401,16 +525,21 @@
 </section>
 
 <!-- SHORT FULL-WIDTH ROTATING BANNER -->
-{% if website_banners or mobile_banners %}
+{% if website_banners %}
 <section class="hv-home-banner-wrap" aria-label="HOOVALE offers and collections">
- <div class="hv-home-banner desktop-banner">
-  <div id="hvDesktopBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+ <div class="hv-home-banner">
+  <div id="hvHomeBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
    <div class="carousel-inner">
     {% for banner in website_banners %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{% if banner.cta_url %}{{ banner.cta_url }}{% else %}{{ banner.get_absolute_url }}{% endif %}" class="hv-banner-link">
-      <img src="{{ banner.homepage_desktop_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
-      {% if banner.heading or banner.subheading %}
+     <a href="{% if banner.cta_url %}{{ banner.cta_url }}{% else %}{{ banner.get_absolute_url }}{% endif %}" class="hv-banner-link" aria-label="{{ banner.title }}">
+      <picture>
+       {% if banner.mobile_image or banner.fallback_mobile %}
+       <source media="(max-width: 767px)" srcset="{{ banner.homepage_mobile_url }}">
+       {% endif %}
+       <img src="{{ banner.homepage_desktop_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      </picture>
+      {% if banner.heading or banner.subheading or banner.cta_text %}
       <div class="hv-banner-content">
        {% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}
        {% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}
@@ -421,29 +550,10 @@
     </div>
     {% endfor %}
    </div>
-   {% if website_banners|length > 1 %}<button class="carousel-control-prev" type="button" data-bs-target="#hvDesktopBanner" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#hvDesktopBanner" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>{% endif %}
-  </div>
- </div>
- <div class="hv-home-banner mobile-banner">
-  <div id="hvMobileBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
-   <div class="carousel-inner">
-    {% if mobile_banners %}
-    {% for banner in mobile_banners %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link">
-      <img src="{{ banner.homepage_mobile_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
-      {% if banner.heading or banner.subheading %}<div class="hv-banner-content">{% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}{% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}{% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}</div>{% endif %}
-     </a>
-    </div>
-    {% endfor %}
-    {% else %}
-    {% for banner in website_banners %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{% if banner.cta_url %}{{ banner.cta_url }}{% else %}{{ banner.get_absolute_url }}{% endif %}" class="hv-banner-link"><img src="{{ banner.homepage_mobile_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"></a>
-    </div>
-    {% endfor %}
-    {% endif %}
-   </div>
+   {% if website_banners|length > 1 %}
+   <button class="carousel-control-prev" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="prev" aria-label="Previous banner"><span class="carousel-control-prev-icon"></span></button>
+   <button class="carousel-control-next" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="next" aria-label="Next banner"><span class="carousel-control-next-icon"></span></button>
+   {% endif %}
   </div>
  </div>
 </section>
