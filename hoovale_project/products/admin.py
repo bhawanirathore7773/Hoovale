@@ -300,9 +300,10 @@ class BannerAdmin(ModelAdmin):
         ('🖼️ Responsive Images', {
             'fields': ('desktop_image', 'mobile_image', 'image', 'fallback_desktop', 'fallback_mobile'),
             'description': (
-                'Upload BOTH desktop and mobile artwork for the same campaign. '
-                'Recommended: desktop 1920×600; mobile 800×1000. '
-                'Fallback SVGs are used until real product/banner photography is uploaded.'
+                'Upload BOTH desktop and mobile artwork for the SAME campaign. '
+                'Recommended ratio is about 2.55:1 so both versions stay short and wide. '
+                'Example: desktop 1920×750 and mobile 1080×425. '
+                'The mobile file is shown automatically on phones; desktop is shown on larger screens.'
             ),
         }),
         ('🏷️ Homepage Slide', {
@@ -322,8 +323,15 @@ class BannerAdmin(ModelAdmin):
     )
 
     def preview(self, obj):
-        src = obj.homepage_desktop_url
-        return format_html('<img src="{}" style="width:160px;height:60px;object-fit:cover;border-radius:6px;">', src)
+        desktop = obj.homepage_desktop_url
+        mobile = obj.homepage_mobile_url
+        return format_html(
+            '<div style="display:flex;gap:8px;align-items:center;">'
+            '<img src="{}" title="Desktop" style="width:160px;height:62px;object-fit:cover;border-radius:6px;">'
+            '<img src="{}" title="Mobile" style="width:92px;height:62px;object-fit:cover;border-radius:6px;">'
+            '</div>',
+            desktop, mobile
+        )
 
 
 # ============================================================
