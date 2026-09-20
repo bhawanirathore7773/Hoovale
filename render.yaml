@@ -4,7 +4,7 @@ services:
     runtime: python
     rootDir: hoovale_project
     buildCommand: bash render-build.sh
-    startCommand: gunicorn hoovale.wsgi:application --bind 0.0.0.0:$PORT --workers 1
+    startCommand: python manage.py migrate --noinput && gunicorn hoovale.wsgi:application --bind 0.0.0.0:$PORT --workers 1
     plan: free
     envVars:
       - key: PYTHON_VERSION
