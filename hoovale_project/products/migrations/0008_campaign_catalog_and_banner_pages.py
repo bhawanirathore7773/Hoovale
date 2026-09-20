@@ -426,10 +426,17 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, default='', help_text='Optional static fallback image path, e.g. /static/images/categories/home-decor.svg', max_length=300),
             preserve_default=False,
         ),
-        migrations.AddField(
-            model_name='banner',
-            name='slug',
-            field=models.SlugField(blank=True, max_length=220, null=True),
+        # Some earlier production deployments created Banner.slug manually.
+        # Keep the migration state in sync without attempting to add the column twice.
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.AddField(
+                    model_name='banner',
+                    name='slug',
+                    field=models.SlugField(blank=True, max_length=220, null=True),
+                ),
+            ],
         ),
         migrations.AddField(
             model_name='banner',
