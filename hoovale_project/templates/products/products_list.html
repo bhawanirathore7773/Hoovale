@@ -209,59 +209,6 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const enquiryButtons = document.querySelectorAll('.enquiry-btn');
-    const enquiryModal = new bootstrap.Modal(document.getElementById('enquiryModal'));
-    
-    enquiryButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const productId = this.dataset.productId;
-            const productName = this.dataset.productName;
-            
-            document.getElementById('productId').value = productId;
-            document.getElementById('message').value = `I am interested in ${productName}.`;
-            enquiryModal.show();
-        });
-    });
-    
-    const enquiryForm = document.getElementById('enquiryForm');
-    enquiryForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const btn = this.querySelector('button[type="submit"]');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        btn.disabled = true;
-        
-        fetch('{% url "submit_enquiry" %}', {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                enquiryForm.reset();
-                enquiryModal.hide();
-            } else {
-                alert('Error: ' + (data.error || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again.');
-        })
-        .finally(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        });
-    });
-});
+document.addEventListener('DOMContentLoaded', initializeProductEnquiry);
 </script>
-
 {% endblock %}
