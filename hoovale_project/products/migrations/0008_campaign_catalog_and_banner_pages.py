@@ -1,5 +1,22 @@
 from django.db import migrations, models
+from django.utils.text import slugify
 import django.db.models.deletion
+
+
+
+def backfill_banner_slugs(apps, schema_editor):
+    Banner = apps.get_model('products', 'Banner')
+    used = set()
+    for banner in Banner.objects.all().order_by('id'):
+        base = slugify(banner.title) or f'banner-{banner.id}'
+        slug = base
+        n = 2
+        while slug in used or Banner.objects.filter(slug=slug).exclude(pk=banner.pk).exists():
+            slug = f'{base}-{n}'
+            n += 1
+        banner.slug = slug
+        banner.save(update_fields=['slug'])
+        used.add(slug)
 
 
 def seed_hoovale_catalog(apps, schema_editor):
@@ -395,7 +412,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='banner',
             name='slug',
-            field=models.SlugField(blank=True, max_length=220, unique=True),
+            field=models.SlugField(blank=True, max_length=220),
         ),
         migrations.AddField(
             model_name='banner',
@@ -466,6 +483,12 @@ class Migration(migrations.Migration):
             model_name='banner',
             name='cta_text',
             field=models.CharField(blank=True, default='Explore', max_length=100),
+        ),
+        migrations.RunPython(backfill_banner_slugs, migrations.RunPython.noop),
+        migrations.AlterField(
+            model_name='banner',
+            name='slug',
+            field=models.SlugField(blank=True, max_length=220, unique=True),
         ),
         migrations.AlterField(
             model_name='banner',
