@@ -1808,3 +1808,22 @@ h1, h2, h3, h4, h5, h6 {
     color: #fff;
     text-shadow: 0 2px 10px rgba(0,0,0,0.6);
 }
+
+/* ========================================
+   FAST PAGE NAVIGATION FEEDBACK
+   ======================================== */
+
+body.hv-page-leaving {
+    cursor: progress;
+}
+
+body.hv-page-leaving main {
+    opacity: 0.96;
+    transition: opacity 0.12s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.hv-page-leaving main {
+        transition: none;
+    }
+}
