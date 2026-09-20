@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeLazyLoading();
     initializeSmoothScroll();
     initializeFormValidation();
+    initializeFastNavigation();
+    initializePageTransitions();
 });
 
 /**
@@ -246,6 +248,97 @@ if (document.readyState === 'loading') {
 } else {
     setupResponsiveNav();
 }
+
+/**
+ * Fast same-site navigation
+ *
+ * Starts fetching important pages before the user taps them. This is
+ * especially useful on mobile and on Render's free tier where a sleeping
+ * instance can make the first request feel slow.
+ */
+function initializeFastNavigation() {
+    const links = document.querySelectorAll(
+        'a[href]:not([target="_blank"]):not([download]):not([href^="#"]):not([href^="mailto:"]):not([href^="tel:"])'
+    );
+
+    const prefetched = new Set();
+
+    function isSameOriginPage(link) {
+        try {
+            const url = new URL(link.href, window.location.href);
+            return (
+                url.origin === window.location.origin &&
+                url.pathname !== window.location.pathname &&
+                !url.pathname.startsWith('/admin') &&
+                !url.pathname.startsWith('/media/') &&
+                !url.pathname.startsWith('/static/')
+            );
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function prefetch(link) {
+        if (!link || !isSameOriginPage(link)) return;
+
+        const url = new URL(link.href, window.location.href);
+        const key = url.href;
+
+        if (prefetched.has(key)) return;
+        prefetched.add(key);
+
+        const prefetchLink = document.createElement('link');
+        prefetchLink.rel = 'prefetch';
+        prefetchLink.href = url.href;
+        prefetchLink.as = 'document';
+        prefetchLink.fetchPriority = 'low';
+        document.head.appendChild(prefetchLink);
+    }
+
+    links.forEach(link => {
+        link.addEventListener('mouseenter', () => prefetch(link), { passive: true });
+        link.addEventListener('focus', () => prefetch(link), { passive: true });
+        link.addEventListener('touchstart', () => prefetch(link), {
+            passive: true,
+            once: true
+        });
+    });
+
+    // These are the most frequently used mobile destinations.
+    ['/products/', '/categories/'].forEach(path => {
+        const link = document.querySelector('a[href="' + path + '"]');
+        if (link) prefetch(link);
+    });
+}
+
+/**
+ * Add a lightweight page transition so navigation feels intentional instead
+ * of showing a sudden white flash while the next Django page loads.
+ */
+function initializePageTransitions() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    document.addEventListener('click', function(event) {
+        const link = event.target.closest('a[href]');
+        if (!link || event.defaultPrevented) return;
+        if (link.target === '_blank' || link.hasAttribute('download')) return;
+        if (link.href.startsWith('mailto:') || link.href.startsWith('tel:')) return;
+
+        let url;
+        try {
+            url = new URL(link.href, window.location.href);
+        } catch (error) {
+            return;
+        }
+
+        if (url.origin !== window.location.origin) return;
+        if (url.pathname === window.location.pathname && !url.hash) return;
+        if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/media/')) return;
+
+        document.body.classList.add('hv-page-leaving');
+    }, { passive: true });
+}
+
 
 /**
  * Price formatter for display
