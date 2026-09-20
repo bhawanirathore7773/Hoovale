@@ -919,6 +919,165 @@
     }
 }
 
+
+
+/* =========================================================
+   FINAL MOBILE + DESKTOP BANNER POLISH
+   ========================================================= */
+.hv-home-banner-wrap{
+    width:100%;
+    padding:28px 24px 26px;
+    background:#fff;
+}
+.hv-home-banner{
+    width:100%;
+    max-width:1220px;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:18px;
+    border:1px solid #e4e8ee;
+    box-shadow:0 12px 34px rgba(15,23,42,.10);
+    isolation:isolate;
+}
+.hv-home-banner .carousel-inner{
+    border-radius:18px;
+    overflow:hidden;
+}
+.hv-banner-link{
+    width:100%;
+    aspect-ratio:2.7 / 1;
+    min-height:0;
+    border-radius:18px;
+    overflow:hidden;
+}
+.hv-banner-link picture,
+.hv-banner-link img{
+    width:100%;
+    height:100%;
+    display:block;
+}
+.hv-banner-link img{
+    object-fit:cover;
+    object-position:center;
+}
+.hv-banner-content{
+    padding:clamp(24px,4vw,56px);
+    background:linear-gradient(90deg,rgba(0,0,0,.68) 0%,rgba(0,0,0,.34) 42%,rgba(0,0,0,0) 78%);
+}
+.hv-banner-content h2{
+    max-width:650px;
+    font-size:clamp(1.65rem,3.5vw,3rem);
+    line-height:1.05;
+    margin-bottom:10px;
+}
+.hv-banner-content p{
+    max-width:610px;
+    font-size:clamp(.82rem,1.35vw,1rem);
+    line-height:1.45;
+    margin-bottom:14px;
+}
+.hv-banner-content span{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:10px 16px;
+    border-radius:10px;
+    background:#fff;
+    color:#111;
+    font-size:.78rem;
+    font-weight:900;
+    box-shadow:0 7px 20px rgba(0,0,0,.16);
+}
+.hv-home-banner .carousel-control-prev,
+.hv-home-banner .carousel-control-next{
+    width:44px;
+    height:44px;
+    margin:0 14px;
+    border-radius:50%;
+    background:rgba(255,255,255,.96);
+    box-shadow:0 6px 18px rgba(15,23,42,.16);
+    opacity:.98;
+    z-index:5;
+}
+.hv-home-banner .carousel-control-prev-icon,
+.hv-home-banner .carousel-control-next-icon{
+    width:17px;
+    height:17px;
+    filter:invert(1);
+}
+.hv-banner-indicators{
+    bottom:14px;
+    gap:7px;
+    padding:6px 9px;
+    background:rgba(17,24,39,.28);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+}
+/* Keep category section visually separated from the banner. */
+.hv-category-section{
+    padding-top:54px;
+    border-top:1px solid #edf0f4;
+}
+@media(max-width:767px){
+    .hv-home-banner-wrap{
+        padding:18px 16px 18px;
+    }
+    .hv-home-banner,
+    .hv-home-banner .carousel-inner,
+    .hv-banner-link{
+        border-radius:14px;
+    }
+    .hv-home-banner{
+        border-radius:14px;
+        box-shadow:0 9px 26px rgba(15,23,42,.09);
+    }
+    .hv-banner-link{
+        aspect-ratio:2.05 / 1;
+    }
+    .hv-banner-content{
+        padding:18px 18px 22px;
+        background:linear-gradient(90deg,rgba(0,0,0,.66) 0%,rgba(0,0,0,.30) 50%,rgba(0,0,0,.02) 88%);
+    }
+    .hv-banner-content h2{
+        max-width:66%;
+        font-size:clamp(1.15rem,5.3vw,1.55rem);
+        line-height:1.06;
+        margin-bottom:5px;
+    }
+    .hv-banner-content p{
+        max-width:64%;
+        font-size:.67rem;
+        line-height:1.32;
+        margin-bottom:7px;
+    }
+    .hv-banner-content span{
+        padding:7px 10px;
+        border-radius:8px;
+        font-size:.63rem;
+    }
+    .hv-home-banner .carousel-control-prev,
+    .hv-home-banner .carousel-control-next{
+        width:34px;
+        height:34px;
+        margin:0 8px;
+    }
+    .hv-home-banner .carousel-control-prev-icon,
+    .hv-home-banner .carousel-control-next-icon{
+        width:13px;
+        height:13px;
+    }
+    .hv-banner-indicators{
+        bottom:8px;
+        gap:5px;
+        padding:4px 7px;
+    }
+    .hv-banner-indicators button{width:6px;height:6px}
+    .hv-banner-indicators button.active{width:18px}
+    .hv-category-section{
+        padding-top:38px;
+        padding-bottom:48px;
+    }
+}
 </style>
 {% endblock %}
 
@@ -977,6 +1136,8 @@
   </div>
  </div>
 </section>
+
+
 
 <!-- SHORT FULL-WIDTH ROTATING BANNER -->
 <section class="hv-home-banner-wrap" aria-label="HOOVALE featured collections">
