@@ -532,7 +532,7 @@
    <div class="carousel-inner">
     {% for banner in website_banners %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{% if banner.cta_url %}{{ banner.cta_url }}{% else %}{{ banner.get_absolute_url }}{% endif %}" class="hv-banner-link" aria-label="{{ banner.title }}">
+     <a href="{{ banner.get_absolute_url }}" class="hv-banner-link" aria-label="{{ banner.title }} — open collection">
       <picture>
        {% if banner.mobile_image or banner.fallback_mobile %}
        <source media="(max-width: 767px)" srcset="{{ banner.homepage_mobile_url }}">
