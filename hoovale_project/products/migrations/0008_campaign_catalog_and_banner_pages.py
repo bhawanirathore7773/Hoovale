@@ -407,7 +407,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='category',
             name='static_image_path',
-            field=models.CharField(blank=True, help_text='Optional static fallback image path, e.g. /static/images/categories/home-decor.svg', max_length=300),
+            field=models.CharField(blank=True, default='', help_text='Optional static fallback image path, e.g. /static/images/categories/home-decor.svg', max_length=300),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
@@ -427,32 +428,37 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='banner',
             name='fallback_desktop',
-            field=models.CharField(blank=True, help_text='Optional static fallback path, e.g. /static/images/banners/wedding-desktop.svg', max_length=300),
+            field=models.CharField(blank=True, default='', help_text='Optional static fallback path, e.g. /static/images/banners/wedding-desktop.svg', max_length=300),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
             name='fallback_mobile',
-            field=models.CharField(blank=True, help_text='Optional static fallback path for mobile.', max_length=300),
+            field=models.CharField(blank=True, default='', help_text='Optional static fallback path for mobile.', max_length=300),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
             name='page_heading',
-            field=models.CharField(blank=True, max_length=220),
+            field=models.CharField(blank=True, max_length=220, null=True),
         ),
         migrations.AddField(
             model_name='banner',
             name='page_subheading',
-            field=models.CharField(blank=True, max_length=400),
+            field=models.CharField(blank=True, default='', max_length=400),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
             name='page_intro',
-            field=models.TextField(blank=True),
+            field=models.TextField(blank=True, default=''),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
             name='page_content',
-            field=models.TextField(blank=True, help_text='Main campaign content. Keep it useful and specific to the banner.'),
+            field=models.TextField(blank=True, default='', help_text='Main campaign content. Keep it useful and specific to the banner.'),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
@@ -462,17 +468,20 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='banner',
             name='seo_title',
-            field=models.CharField(blank=True, max_length=70),
+            field=models.CharField(blank=True, default='', max_length=70),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
             name='seo_description',
-            field=models.CharField(blank=True, max_length=160),
+            field=models.CharField(blank=True, default='', max_length=160),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
             name='seo_keywords',
-            field=models.CharField(blank=True, max_length=400),
+            field=models.CharField(blank=True, default='', max_length=400),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='banner',
