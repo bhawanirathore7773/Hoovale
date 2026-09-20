@@ -169,16 +169,7 @@
         transform: translateY(-1px);
     }
 
-    /* Contact gets subtle brand emphasis */
-    .mobile-cta-contact {
-        color: #b17d1e;
-    }
-
-    .mobile-cta-contact i {
-        color: #c59a45;
-    }
-
-    /* About is neutral so Contact remains the secondary action. */
+    /* Contact uses the same neutral navigation color as the other items. */
     .mobile-cta-about {
         color: #344054;
     }
@@ -199,7 +190,6 @@
         width: 56px;
         height: 56px;
         font-size: 25px;
-        border: 3px solid #fff;
         box-shadow: 0 8px 24px rgba(37,211,102,.38);
     }
 
@@ -299,7 +289,7 @@
         <span>Category</span>
     </a>
 
-    <a href="{% url 'contact' %}" class="mobile-cta-item mobile-cta-contact" data-bottom-nav="contact" aria-label="Contact HOOVALE">
+    <a href="{% url 'contact' %}" class="mobile-cta-item" data-bottom-nav="contact" aria-label="Contact HOOVALE">
         <i class="fas fa-phone" aria-hidden="true"></i>
         <span>Contact</span>
     </a>
