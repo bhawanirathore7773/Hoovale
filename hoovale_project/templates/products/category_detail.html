@@ -11,6 +11,8 @@
 
 {% block page_schema %}
     {% breadcrumb_schema breadcrumb_items %}
+{% endblock page_schema %}
+
 {% block content %}
 <div class="hv-category-detail-page">
 
@@ -144,8 +146,6 @@
     </div>
 </section>
 
-{% endblock %}
-
 <style>
 /* Category detail — polished marketplace UI */
 .hv-category-detail-page{width:100%;max-width:100%;overflow-x:clip;background:#fff;}
@@ -179,6 +179,5 @@
   .hv-category-detail-stats{gap:14px 10px!important;}
 }
 </style>
-</div>
 
-{% endblock %}
+{% endblock content %}
