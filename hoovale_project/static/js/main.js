@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormValidation();
     initializeFastNavigation();
     initializePageTransitions();
+    initializeProductEnquiry();
+    initializeInstantNavigation();
 });
 
 /**
@@ -22,9 +24,10 @@ function initializeMenuHighlight() {
     const navLinks = document.querySelectorAll('.nav-link');
     
     navLinks.forEach(link => {
-        if (link.getAttribute('href') === currentLocation) {
-            link.classList.add('active');
-        }
+        const href = link.getAttribute('href');
+        const normalizedHref = href ? href.replace(/\/$/, '') || '/' : '';
+        const normalizedLocation = currentLocation.replace(/\/$/, '') || '/';
+        link.classList.toggle('active', normalizedHref === normalizedLocation);
     });
 }
 
