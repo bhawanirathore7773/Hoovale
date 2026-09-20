@@ -19,6 +19,22 @@ def backfill_banner_slugs(apps, schema_editor):
         used.add(slug)
 
 
+def backfill_banner_optional_fields(apps, schema_editor):
+    Banner = apps.get_model('products', 'Banner')
+    for banner in Banner.objects.all():
+        changed = False
+        for field in (
+            'page_heading', 'page_subheading', 'page_intro', 'page_content',
+            'seo_title', 'seo_description', 'seo_keywords',
+            'fallback_desktop', 'fallback_mobile',
+        ):
+            if getattr(banner, field, None) is None:
+                setattr(banner, field, '')
+                changed = True
+        if changed:
+            banner.save()
+
+
 def seed_hoovale_catalog(apps, schema_editor):
     Category = apps.get_model('products', 'Category')
     Product = apps.get_model('products', 'Product')
@@ -498,6 +514,12 @@ class Migration(migrations.Migration):
             model_name='banner',
             name='slug',
             field=models.SlugField(blank=True, max_length=220, unique=True),
+        ),
+        migrations.RunPython(backfill_banner_optional_fields, migrations.RunPython.noop),
+        migrations.AlterField(
+            model_name='banner',
+            name='page_heading',
+            field=models.CharField(blank=True, max_length=220),
         ),
         migrations.AlterField(
             model_name='banner',
