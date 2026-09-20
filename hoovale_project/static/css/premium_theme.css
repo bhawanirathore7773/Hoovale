@@ -1635,3 +1635,47 @@ img[loading="lazy"][src] {
         padding: 16px !important;
     }
 }
+
+
+/* ============================================================
+   HEADER — KEEP HAMBURGER AT THE FAR RIGHT
+   ============================================================ */
+
+.hv-navbar > .container-lg {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.hv-navbar .navbar-brand {
+    flex: 0 0 auto;
+    margin-right: 0 !important;
+}
+
+.hv-navbar .hv-menu-toggle {
+    margin-left: auto !important;
+    flex: 0 0 54px !important;
+}
+
+@media (max-width: 991px) {
+    .hv-navbar > .container-lg {
+        justify-content: space-between;
+    }
+
+    .hv-navbar .navbar-brand {
+        margin-right: auto !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle {
+        margin-left: auto !important;
+        margin-right: 0 !important;
+        position: relative;
+        right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .hv-navbar .navbar-toggler.hv-menu-toggle {
+        flex-basis: 52px !important;
+    }
+}
