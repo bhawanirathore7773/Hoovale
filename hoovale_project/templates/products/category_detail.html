@@ -27,9 +27,7 @@
 
 {# HERO #}
 <section class="hv-category-detail-hero" style="position:relative; padding:70px 0; background:linear-gradient(135deg,#0b1724 0%, #0051A3 100%); color:white; overflow:hidden;">
-    {% if category.image %}
-    <div style="position:absolute; inset:0; background-image:url('{{ category.image.url }}'); background-size:cover; background-position:center; opacity:0.2;"></div>
-    {% endif %}
+    {% if category.image %}<div style="position:absolute; inset:0; background-image:url('{{ category.image.url }}'); background-size:cover; background-position:center; opacity:0.2;"></div>{% elif category.static_image_path %}<div style="position:absolute; inset:0; background-image:url('{{ category.static_image_path }}'); background-size:cover; background-position:center; opacity:0.16;"></div>{% endif %}
     <div class="container-lg" style="position:relative; z-index:2;">
         <div class="row align-items-center">
             <div class="col-lg-8">
