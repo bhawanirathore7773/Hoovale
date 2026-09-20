@@ -412,7 +412,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='banner',
             name='slug',
-            field=models.SlugField(blank=True, max_length=220),
+            field=models.SlugField(blank=True, max_length=220, null=True),
         ),
         migrations.AddField(
             model_name='banner',
