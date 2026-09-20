@@ -581,6 +581,344 @@
     }
 }
 
+/* =========================================================
+   FINAL HOMEPAGE CAROUSEL + CATEGORY GRID
+   ========================================================= */
+.hv-home-banner-wrap{
+    width:100%;
+    padding:18px 0 12px;
+    background:#fff;
+}
+.hv-home-banner{
+    width:100%;
+    max-width:1220px;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:16px;
+}
+.hv-home-banner .carousel-inner{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+    border-radius:16px;
+    background:#111518;
+}
+.hv-banner-link{
+    display:block;
+    position:relative;
+    width:100%;
+    aspect-ratio:2.35 / 1;
+    min-height:280px;
+    overflow:hidden;
+    background:#111518;
+}
+.hv-banner-link picture,
+.hv-banner-link img{
+    display:block;
+    width:100%;
+    height:100%;
+}
+.hv-banner-link img{
+    object-fit:cover;
+}
+.hv-banner-content{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    padding:clamp(24px,5vw,62px);
+    background:linear-gradient(90deg,rgba(0,0,0,.64) 0%,rgba(0,0,0,.27) 48%,rgba(0,0,0,.02) 82%);
+    color:#fff;
+    pointer-events:none;
+}
+.hv-banner-content h2{
+    color:#fff!important;
+    font-family:"Playfair Display",serif;
+    font-size:clamp(1.55rem,3.5vw,3.2rem);
+    line-height:1.06;
+    max-width:620px;
+    margin:0 0 9px;
+    text-shadow:0 2px 15px rgba(0,0,0,.25);
+}
+.hv-banner-content p{
+    color:rgba(255,255,255,.94);
+    margin:0 0 13px;
+    max-width:600px;
+    font-size:clamp(.78rem,1.35vw,1rem);
+    line-height:1.45;
+}
+.hv-banner-content span{
+    color:#111;
+    background:#fff;
+    border-radius:9px;
+    padding:9px 15px;
+    font-size:.78rem;
+    font-weight:900;
+    box-shadow:0 5px 18px rgba(0,0,0,.14);
+}
+.hv-home-banner .carousel-item{
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+}
+.hv-home-banner.carousel-fade .carousel-item{
+    opacity:0;
+    transition:opacity .75s ease-in-out;
+    transform:none!important;
+}
+.hv-home-banner.carousel-fade .carousel-item.active,
+.hv-home-banner.carousel-fade .carousel-item-next.carousel-item-start,
+.hv-home-banner.carousel-fade .carousel-item-prev.carousel-item-end{
+    opacity:1;
+    transform:none!important;
+    z-index:1;
+}
+.hv-home-banner.carousel-fade .carousel-item-next,
+.hv-home-banner.carousel-fade .carousel-item-prev,
+.hv-home-banner.carousel-fade .active.carousel-item-start,
+.hv-home-banner.carousel-fade .active.carousel-item-end{
+    opacity:0;
+    transform:none!important;
+}
+.hv-home-banner .carousel-control-prev,
+.hv-home-banner .carousel-control-next{
+    z-index:4;
+    width:44px;
+    height:44px;
+    top:50%;
+    transform:translateY(-50%);
+    margin:0 12px;
+    border-radius:50%;
+    background:rgba(255,255,255,.94);
+    opacity:.95;
+    box-shadow:0 4px 16px rgba(0,0,0,.16);
+}
+.hv-home-banner .carousel-control-prev-icon,
+.hv-home-banner .carousel-control-next-icon{
+    filter:invert(1);
+    width:18px;
+    height:18px;
+}
+.hv-banner-indicators{
+    position:absolute;
+    z-index:5;
+    left:50%;
+    bottom:12px;
+    transform:translateX(-50%);
+    display:flex;
+    gap:7px;
+    padding:5px 8px;
+    border-radius:999px;
+    background:rgba(0,0,0,.25);
+}
+.hv-banner-indicators button{
+    width:7px;
+    height:7px;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.6);
+    opacity:1;
+}
+.hv-banner-indicators button.active{
+    width:22px;
+    border-radius:999px;
+    background:#fff;
+}
+.hv-category-section{
+    padding:52px 0 58px;
+    background:#f7f9fc;
+}
+.hv-category-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:25px;
+    margin-bottom:24px;
+}
+.hv-category-head>div{min-width:0}
+.hv-category-head h2{
+    margin:5px 0 8px;
+    color:#101114;
+    font-family:"Playfair Display",serif;
+    font-size:clamp(2rem,4vw,3rem);
+    line-height:1.05;
+    letter-spacing:-.025em;
+}
+.hv-category-head p{
+    margin:0;
+    max-width:720px;
+    color:#667085;
+    font-size:.98rem;
+    line-height:1.55;
+}
+.hv-category-seeall{
+    flex:0 0 auto;
+    color:#0757a6!important;
+    text-decoration:none!important;
+    font-weight:900;
+    white-space:nowrap;
+    font-size:.95rem;
+}
+.hv-category-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+    align-items:start;
+}
+.hv-category-tile{
+    display:block;
+    min-width:0;
+    color:inherit!important;
+    text-decoration:none!important;
+    background:#fff;
+    border:1px solid #e3e8ef;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(15,23,42,.04);
+    transition:transform .25s ease,box-shadow .25s ease;
+}
+.hv-category-tile:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 32px rgba(15,23,42,.1);
+}
+.hv-category-tile .image{
+    width:100%;
+    aspect-ratio:1/1;
+    height:auto!important;
+    overflow:hidden;
+    background:#f3efe6;
+}
+.hv-category-tile .image img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+}
+.hv-category-tile .body{
+    min-height:76px;
+    padding:11px 10px 12px;
+    text-align:center;
+    background:#fff;
+}
+.hv-category-tile .body h3{
+    margin:0 0 5px;
+    color:#16181c;
+    font-family:"Playfair Display",serif;
+    font-size:1.02rem;
+    line-height:1.2;
+    font-weight:900;
+}
+.hv-category-tile .body p{
+    margin:0;
+    color:#667085;
+    font-size:.73rem;
+    line-height:1.25;
+}
+.hv-category-tile .body p span{padding:0 3px}
+@media(max-width:991px){
+    .hv-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+}
+@media(max-width:767px){
+    .hv-home-banner-wrap{
+        padding:12px 16px 10px;
+    }
+    .hv-home-banner,
+    .hv-home-banner .carousel-inner,
+    .hv-banner-link{
+        border-radius:12px;
+    }
+    .hv-banner-link{
+        aspect-ratio:2.35/1;
+        min-height:0;
+    }
+    .hv-banner-content{
+        padding:18px 21px 24px;
+        background:linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.08) 86%);
+    }
+    .hv-banner-content h2{
+        max-width:66%;
+        font-size:clamp(1.05rem,5vw,1.48rem);
+        line-height:1.05;
+        margin-bottom:5px;
+    }
+    .hv-banner-content p{
+        max-width:63%;
+        font-size:.65rem;
+        line-height:1.3;
+        margin-bottom:7px;
+    }
+    .hv-banner-content span{
+        padding:6px 9px;
+        font-size:.61rem;
+        border-radius:7px;
+    }
+    .hv-home-banner .carousel-control-prev,
+    .hv-home-banner .carousel-control-next{
+        width:30px;
+        height:30px;
+        margin:0 7px;
+    }
+    .hv-home-banner .carousel-control-prev-icon,
+    .hv-home-banner .carousel-control-next-icon{
+        width:13px;
+        height:13px;
+    }
+    .hv-banner-indicators{
+        bottom:7px;
+        gap:5px;
+        padding:4px 7px;
+    }
+    .hv-banner-indicators button{
+        width:6px;
+        height:6px;
+    }
+    .hv-banner-indicators button.active{width:17px}
+    .hv-category-section{
+        padding:38px 16px 48px;
+    }
+    .hv-category-head{
+        align-items:flex-end;
+        gap:10px;
+        margin-bottom:18px;
+    }
+    .hv-category-head h2{
+        font-size:1.72rem;
+        line-height:1.08;
+        margin:5px 0 7px;
+    }
+    .hv-category-head p{
+        font-size:.76rem;
+        line-height:1.42;
+    }
+    .hv-category-seeall{
+        font-size:.78rem;
+        padding-bottom:2px;
+    }
+    .hv-category-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:14px 12px;
+    }
+    .hv-category-tile{
+        border-radius:13px;
+    }
+    .hv-category-tile .body{
+        min-height:67px;
+        padding:9px 6px 10px;
+    }
+    .hv-category-tile .body h3{
+        font-size:.82rem;
+        line-height:1.18;
+        margin-bottom:4px;
+    }
+    .hv-category-tile .body p{
+        font-size:.61rem;
+        white-space:normal;
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -641,43 +979,46 @@
 </section>
 
 <!-- SHORT FULL-WIDTH ROTATING BANNER -->
-{% if website_banners %}
-<section class="hv-home-banner-wrap" aria-label="HOOVALE offers and collections">
+<section class="hv-home-banner-wrap" aria-label="HOOVALE featured collections">
  <div class="hv-home-banner">
-  <div id="hvHomeBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+  <div id="hvHomeBanner" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5200" data-bs-pause="false" data-bs-touch="true">
    <div class="carousel-inner">
-    {% for banner in website_banners %}
+    {% for banner in homepage_campaigns %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{{ banner.get_absolute_url }}" class="hv-banner-link" aria-label="{{ banner.title }} — open collection">
+     <a href="{{ banner.url }}" class="hv-banner-link" aria-label="{{ banner.title }}">
       <picture>
-       {% if banner.mobile_image or banner.fallback_mobile %}
-       <source media="(max-width: 767px)" srcset="{{ banner.homepage_mobile_url }}">
-       {% endif %}
-       <img src="{{ banner.homepage_desktop_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+       <source media="(max-width: 767px)" srcset="{{ banner.mobile_url }}">
+       <img src="{{ banner.desktop_url }}" alt="{{ banner.heading|default:banner.title }} — HOOVALE wall clocks" {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
       </picture>
-      {% if banner.heading or banner.subheading or banner.cta_text %}
       <div class="hv-banner-content">
        {% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}
        {% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}
        {% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}
       </div>
-      {% endif %}
      </a>
     </div>
     {% endfor %}
    </div>
-   {% if website_banners|length > 1 %}
-   <button class="carousel-control-prev" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="prev" aria-label="Previous banner"><span class="carousel-control-prev-icon"></span></button>
-   <button class="carousel-control-next" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="next" aria-label="Next banner"><span class="carousel-control-next-icon"></span></button>
-   {% endif %}
+
+   <button class="carousel-control-prev" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="prev" aria-label="Previous banner">
+    <span class="carousel-control-prev-icon"></span>
+   </button>
+   <button class="carousel-control-next" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="next" aria-label="Next banner">
+    <span class="carousel-control-next-icon"></span>
+   </button>
+
+   <div class="hv-banner-indicators" aria-label="Banner navigation">
+    {% for banner in homepage_campaigns %}
+    <button type="button" data-bs-target="#hvHomeBanner" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Go to banner {{ forloop.counter }}"></button>
+    {% endfor %}
+   </div>
   </div>
  </div>
 </section>
-{% endif %}
 
 <!-- CATEGORIES -->
 {% if categories %}
-<section class="hv-home-section tinted">
+<section class="hv-home-section tinted hv-category-section">
  <div class="container-lg">
   <div class="hv-category-head">
    <div>
@@ -687,15 +1028,20 @@
    </div>
    <a class="hv-category-seeall" href="{% url 'categories_index' %}">View All <i class="fas fa-arrow-right"></i></a>
   </div>
+
   <div class="hv-category-grid">
    {% for cat in categories %}
    <a href="{{ cat.get_absolute_url }}" class="hv-category-tile">
-     <div class="image">
-      {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }} wall clock manufacturer Jaipur" loading="lazy">{% elif cat.static_image_path %}<img src="{{ cat.static_image_path }}" alt="{{ cat.name }} wall clock category" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ cat.name }} category" loading="lazy">{% endif %}
-     </div>
-     <div class="body"><h3>{{ cat.name }}</h3><p>{{ cat.products.count }} products • View collection <i class="fas fa-arrow-right"></i></p></div>
-    </a>
-   </div>
+    <div class="image">
+     {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }} wall clock manufacturer Jaipur" loading="lazy">
+     {% elif cat.static_image_path %}<img src="{{ cat.static_image_path }}" alt="{{ cat.name }} wall clock category" loading="lazy">
+     {% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ cat.name }} category" loading="lazy">{% endif %}
+    </div>
+    <div class="body">
+     <h3>{{ cat.name }}</h3>
+     <p>{{ cat.products.count }} products <span>•</span> View collection <i class="fas fa-arrow-right"></i></p>
+    </div>
+   </a>
    {% endfor %}
   </div>
  </div>
