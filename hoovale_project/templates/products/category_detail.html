@@ -11,9 +11,44 @@
 
 {% block page_schema %}
     {% breadcrumb_schema breadcrumb_items %}
+<style>
+/* Category detail — polished marketplace UI */
+.hv-category-detail-page{width:100%;max-width:100%;overflow-x:clip;background:#fff;}
+.hv-category-detail-page .hv-category-detail-hero{min-height:350px;display:flex;align-items:center;}
+.hv-category-detail-title{color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.2);}
+.hv-category-detail-description{color:rgba(255,255,255,.9)!important;}
+.hv-category-detail-stats strong{color:#ffc04d!important;}
+.hv-category-products{background:#f8fafc;}
+.hv-category-products h2{font-size:1.55rem;}
+@media(max-width:767px){
+  .hv-category-detail-page .container-lg{max-width:100%;padding-left:16px;padding-right:16px;}
+  .hv-category-detail-page .hv-category-detail-hero{min-height:0;padding:42px 0!important;}
+  .hv-category-detail-page .hv-category-detail-hero .container-lg{padding-left:18px;padding-right:18px;}
+  .hv-category-detail-title{font-size:2rem!important;line-height:1.12!important;margin-bottom:12px!important;}
+  .hv-category-detail-description{font-size:.94rem!important;line-height:1.55!important;margin-bottom:20px!important;}
+  .hv-category-detail-stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px!important;margin-top:12px!important;}
+  .hv-category-detail-stats>div{min-width:0;}
+  .hv-category-detail-stats strong{font-size:1.2rem!important;}
+  .hv-category-detail-stats span{font-size:.72rem!important;}
+  .hv-category-products{padding:30px 0 55px!important;}
+  .hv-category-products> .container-lg > div:first-child{align-items:flex-start!important;}
+  .hv-category-products h2{font-size:1.15rem!important;line-height:1.25;}
+  .hv-category-products .row{--bs-gutter-x:10px;--bs-gutter-y:12px;}
+  .hv-category-products .col-6{padding-left:5px;padding-right:5px;}
+  .hv-category-products .col-6 > div{border-radius:11px!important;box-shadow:0 3px 12px rgba(15,23,42,.06);}
+  .hv-category-products img{height:155px!important;object-fit:cover;}
+  .hv-category-products .pagination{flex-wrap:wrap;gap:4px;}
+}
+@media(max-width:380px){
+  .hv-category-products img{height:135px!important;}
+  .hv-category-detail-stats{gap:14px 10px!important;}
+}
+</style>
+</div>
 {% endblock %}
 
 {% block content %}
+<div class="hv-category-detail-page">
 
 {# BREADCRUMBS #}
 <div style="background:#f8f9fa; padding:14px 0; font-size:0.9rem;">
@@ -27,7 +62,7 @@
 </div>
 
 {# HERO #}
-<section style="position:relative; padding:70px 0; background:linear-gradient(135deg,#1a1a1a 0%, #0051A3 100%); color:white; overflow:hidden;">
+<section class="hv-category-detail-hero" style="position:relative; padding:70px 0; background:linear-gradient(135deg,#0b1724 0%, #0051A3 100%); color:white; overflow:hidden;">
     {% if category.image %}
     <div style="position:absolute; inset:0; background-image:url('{{ category.image.url }}'); background-size:cover; background-position:center; opacity:0.2;"></div>
     {% endif %}
@@ -37,13 +72,13 @@
                 <div style="display:inline-block; background:rgba(255,165,0,0.2); color:#FFA500; padding:6px 16px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:16px; border:1px solid #FFA500;">
                     <i class="fas fa-tag"></i> CATEGORY
                 </div>
-                <h1 style="font-family:'Montserrat',sans-serif; font-size:2.8rem; font-weight:900; line-height:1.1; margin-bottom:18px;">
+                <h1 class="hv-category-detail-title" style="font-family:'Montserrat',sans-serif; font-size:2.8rem; font-weight:900; line-height:1.1; margin-bottom:18px;">
                     {{ category.h1_heading|default:category.name }}
                 </h1>
                 {% if category.description %}
-                <p style="font-size:1.15rem; opacity:0.95; line-height:1.6; max-width:700px; margin-bottom:30px;">{{ category.description|truncatewords:35 }}</p>
+                <p class="hv-category-detail-description" style="font-size:1.15rem; opacity:0.95; line-height:1.6; max-width:700px; margin-bottom:30px;">{{ category.description|truncatewords:35 }}</p>
                 {% endif %}
-                <div style="display:flex; gap:30px; flex-wrap:wrap; margin-top:20px;">
+                <div class="hv-category-detail-stats" style="display:flex; gap:30px; flex-wrap:wrap; margin-top:20px;">
                     <div><strong style="color:#FFA500; font-size:1.4rem;">{{ products.paginator.count }}</strong><br><span style="font-size:0.85rem; opacity:0.8;">Products</span></div>
                     <div><strong style="color:#FFA500; font-size:1.4rem;">MOQ 5+</strong><br><span style="font-size:0.85rem; opacity:0.8;">Min Order</span></div>
                     <div><strong style="color:#FFA500; font-size:1.4rem;">PAN India</strong><br><span style="font-size:0.85rem; opacity:0.8;">Delivery</span></div>
@@ -56,7 +91,7 @@
 
 {# PRODUCTS GRID #}
 {% if products %}
-<section style="padding:50px 0;">
+<section class="hv-category-products" style="padding:50px 0;">
     <div class="container-lg">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:14px;">
             <h2 style="font-family:'Montserrat',sans-serif; font-weight:800; color:#1a1a1a; margin:0;">{{ category.name }} — All Products</h2>
