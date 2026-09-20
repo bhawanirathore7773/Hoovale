@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFastNavigation();
     initializePageTransitions();
     initializeProductEnquiry();
+    initializeContactForm();
+    initializeProductFilters();
+    initializeProductCardLinks();
     initializeInstantNavigation();
 });
 
