@@ -329,6 +329,18 @@
         border-radius:12px;
     }
 }
+
+/* Category catalogue: square image first, name underneath. */
+.hv-category-tile .image{aspect-ratio:1/1!important;height:auto!important;overflow:hidden;border-radius:14px;background:#f4f1ea}
+.hv-category-tile .image img{width:100%;height:100%;object-fit:cover;display:block}
+.hv-category-tile .body{padding:12px 4px 4px;text-align:center}
+.hv-category-tile .body h3{font-size:1rem;margin:0 0 4px}
+.hv-category-tile .body p{font-size:.72rem;color:#667085;margin:0}
+@media(max-width:767px){
+ .hv-home-section-head>div[style*="display:flex"]{align-items:flex-end!important}
+ .hv-category-tile .body h3{font-size:.86rem;line-height:1.2}
+ .hv-category-tile .body p{font-size:.64rem}
+}
 </style>
 {% endblock %}
 
@@ -392,8 +404,8 @@
    <div class="carousel-inner">
     {% for banner in website_banners %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link">
-      <img src="{{ banner.image.url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+     <a href="{% if banner.cta_url %}{{ banner.cta_url }}{% else %}{{ banner.get_absolute_url }}{% endif %}" class="hv-banner-link">
+      <img src="{{ banner.homepage_desktop_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
       {% if banner.heading or banner.subheading %}
       <div class="hv-banner-content">
        {% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}
@@ -415,7 +427,7 @@
     {% for banner in mobile_banners %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
      <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link">
-      <img src="{{ banner.image.url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      <img src="{{ banner.homepage_mobile_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
       {% if banner.heading or banner.subheading %}<div class="hv-banner-content">{% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}{% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}{% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}</div>{% endif %}
      </a>
     </div>
@@ -447,10 +459,10 @@
     <article class="hv-product-card">
      <a href="{{ product.get_absolute_url }}" class="hv-product-main-link">
       <div class="image">
-       <img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">
+       {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}
        <span class="hv-product-badge new">New</span>
       </div>
-      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
+      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">From ₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
      </a>
      <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
     </article>
@@ -467,15 +479,18 @@
  <div class="container-lg">
   <div class="hv-home-section-head">
    <div class="hv-home-kicker">Explore Collection</div>
-   <h2>Shop Wall Clocks by Category</h2>
-   <p>Find the right clock for home décor, offices, retail counters, corporate gifting, promotions and bulk requirements.</p>
+   <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+    <div><h2>Shop Wall Clocks by Category</h2>
+    <p>Find the right clock for home décor, offices, retail counters, corporate gifting, promotions and bulk requirements.</p></div>
+    <a class="hv-shelf-link" href="{% url 'categories_index' %}">See All <i class="fas fa-arrow-right"></i></a>
+   </div>
   </div>
   <div class="row g-3">
    {% for cat in categories %}
    <div class="col-6 col-md-4">
     <a href="{{ cat.get_absolute_url }}" class="hv-category-tile">
      <div class="image">
-      {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }} wall clock manufacturer Jaipur" loading="lazy">{% else %}<div style="height:100%;display:flex;align-items:center;justify-content:center;background:#111;color:#c9a961;font-size:2.5rem"><i class="fas fa-clock"></i></div>{% endif %}
+      {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }} wall clock manufacturer Jaipur" loading="lazy">{% elif cat.static_image_path %}<img src="{{ cat.static_image_path }}" alt="{{ cat.name }} wall clock category" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ cat.name }} category" loading="lazy">{% endif %}
      </div>
      <div class="body"><h3>{{ cat.name }}</h3><p>{{ cat.products.count }} products • View collection <i class="fas fa-arrow-right"></i></p></div>
     </a>
@@ -504,7 +519,7 @@
     <article class="hv-product-card">
      <a href="{{ product.get_absolute_url }}" style="text-decoration:none;color:inherit">
       <div class="image">
-       <img src="{{ product.image.url }}" alt="{{ product.name }} — {{ shelf.category.name }} wall clock, Jaipur manufacturer" loading="lazy">
+       {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} — {{ shelf.category.name }} wall clock, Jaipur manufacturer" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}
        {% if product.is_bestseller %}<span class="badge bg-success position-absolute top-0 start-0 m-2">Bestseller</span>{% endif %}
        {% if product.is_new_arrival %}<span class="badge bg-dark position-absolute top-0 end-0 m-2">New</span>{% endif %}
       </div>
@@ -535,7 +550,7 @@
    {% for product in custom_products %}
    <div class="col-6 col-lg-3">
     <article class="hv-product-card">
-     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link"><div class="image"><img src="{{ product.image.url }}" alt="{{ product.name }} custom promotional wall clock" loading="lazy"></div><div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div></a><a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I need a quote for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> Get Quote</a>
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link"><div class="image">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} custom promotional wall clock" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}</div><div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div></a><a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I need a quote for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> Get Quote</a>
     </article>
    </div>
    {% endfor %}
@@ -553,7 +568,7 @@
    {% for product in bestseller_products %}
    <div class="col-6 col-lg-3">
     <article class="hv-product-card">
-     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link"><div class="image"><img src="{{ product.image.url }}" alt="{{ product.name }} bestselling wall clock" loading="lazy"><span class="hv-product-badge best">Bestseller</span></div><div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div></a><a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the best price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link"><div class="image">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} bestselling wall clock" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}<span class="hv-product-badge best">Bestseller</span></div><div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div></a><a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the best price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
     </article>
    </div>
    {% endfor %}
