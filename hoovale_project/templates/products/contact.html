@@ -12,6 +12,7 @@
 
 {% block content %}
 
+<div class="contact-page">
 {# HERO #}
 <section style="padding:70px 0; background:linear-gradient(135deg,#1a1a1a,#0051A3); color:white;">
     <div class="container-lg">
@@ -44,7 +45,7 @@
     <div class="container-lg">
         <div class="row g-4">
 
-            <div class="ccol-6 col-md-6 col-lg-3">
+            <div class="col-6 col-md-6 col-lg-3">
                 <a href="{% whatsapp_link 'Hi HOOVALE, I have a wall clock enquiry.' %}"
                    target="_blank"
                    style="text-decoration:none;">
@@ -212,6 +213,7 @@
 </section>
 {% endif %}
 
+</div>
 {% endblock %}
 
 {% block extra_js %}
