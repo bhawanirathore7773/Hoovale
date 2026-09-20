@@ -14,6 +14,7 @@ urlpatterns = [
     path('categories/', views.categories_index, name='categories_index'),
     path('product/<slug:slug>/', views.product_detail, name='product_detail'),
     path('category/<slug:slug>/', views.category_products, name='category_products'),
+    path('collection/<slug:slug>/', views.banner_page, name='banner_page'),
 
     # CITY LANDING PAGES (Programmatic SEO — high priority)
     path('locations/', views.cities_index, name='cities_index'),
