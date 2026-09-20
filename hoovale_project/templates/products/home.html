@@ -465,6 +465,122 @@
  .hv-category-tile .body h3{font-size:.86rem;line-height:1.2}
  .hv-category-tile .body p{font-size:.64rem}
 }
+/* Final category catalogue polish */
+.hv-category-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:26px;
+}
+.hv-category-head>div{min-width:0}
+.hv-category-head h2{
+    margin:5px 0 8px;
+    color:#101114;
+    font-family:"Playfair Display",serif;
+    font-size:clamp(2rem,4vw,3.35rem);
+    line-height:1.04;
+    letter-spacing:-.03em;
+}
+.hv-category-head p{
+    margin:0;
+    max-width:700px;
+    color:#667085;
+    font-size:1rem;
+    line-height:1.6;
+}
+.hv-category-seeall{
+    flex:0 0 auto;
+    color:#0757a6!important;
+    text-decoration:none!important;
+    font-weight:800;
+    white-space:nowrap;
+    font-size:1rem;
+    padding-bottom:4px;
+}
+.hv-category-seeall i{margin-left:5px}
+.hv-category-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+}
+.hv-category-grid .hv-category-tile{
+    display:block;
+    min-width:0;
+    color:inherit;
+    text-decoration:none;
+    border-radius:16px;
+}
+.hv-category-tile .image{
+    aspect-ratio:1/1!important;
+    height:auto!important;
+    overflow:hidden;
+    border-radius:14px;
+    background:linear-gradient(145deg,#f7f2e8,#ebe5d9);
+}
+.hv-category-tile .image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .35s ease;
+}
+.hv-category-tile:hover .image img{transform:scale(1.035)}
+.hv-category-tile .body{
+    padding:11px 3px 3px;
+    text-align:center;
+}
+.hv-category-tile .body h3{
+    font-size:1rem;
+    line-height:1.25;
+    font-weight:800;
+    color:#15171b;
+    margin:0 0 3px;
+}
+.hv-category-tile .body p{
+    font-size:.76rem;
+    line-height:1.3;
+    color:#667085;
+    margin:0;
+}
+@media(max-width:991px){
+    .hv-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+}
+@media(max-width:767px){
+    .hv-category-head{
+        align-items:flex-end;
+        gap:10px;
+        margin-bottom:18px;
+    }
+    .hv-category-head h2{
+        font-size:1.75rem;
+        line-height:1.08;
+        margin-top:4px;
+    }
+    .hv-category-head p{
+        font-size:.78rem;
+        line-height:1.45;
+        max-width:100%;
+    }
+    .hv-category-seeall{
+        font-size:.8rem;
+        padding-bottom:2px;
+    }
+    .hv-category-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:16px 12px;
+    }
+    .hv-category-tile .image{border-radius:12px}
+    .hv-category-tile .body{padding-top:8px}
+    .hv-category-tile .body h3{
+        font-size:.82rem;
+        line-height:1.2;
+    }
+    .hv-category-tile .body p{
+        font-size:.64rem;
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -563,18 +679,17 @@
 {% if categories %}
 <section class="hv-home-section tinted">
  <div class="container-lg">
-  <div class="hv-home-section-head">
-   <div class="hv-home-kicker">Explore Collection</div>
-   <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
-    <div><h2>Shop Wall Clocks by Category</h2>
-    <p>Find the right clock for home décor, offices, retail counters, corporate gifting, promotions and bulk requirements.</p></div>
-    <a class="hv-shelf-link" href="{% url 'categories_index' %}">See All <i class="fas fa-arrow-right"></i></a>
+  <div class="hv-category-head">
+   <div>
+    <div class="hv-home-kicker">Explore Collection</div>
+    <h2>Shop Wall Clocks by Category</h2>
+    <p>Explore clocks for home décor, offices, retail spaces, corporate gifting and custom requirements.</p>
    </div>
+   <a class="hv-category-seeall" href="{% url 'categories_index' %}">View All <i class="fas fa-arrow-right"></i></a>
   </div>
-  <div class="row g-3">
+  <div class="hv-category-grid">
    {% for cat in categories %}
-   <div class="col-6 col-md-4">
-    <a href="{{ cat.get_absolute_url }}" class="hv-category-tile">
+   <a href="{{ cat.get_absolute_url }}" class="hv-category-tile">
      <div class="image">
       {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }} wall clock manufacturer Jaipur" loading="lazy">{% elif cat.static_image_path %}<img src="{{ cat.static_image_path }}" alt="{{ cat.name }} wall clock category" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ cat.name }} category" loading="lazy">{% endif %}
      </div>
