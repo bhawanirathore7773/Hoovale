@@ -19,8 +19,15 @@ from .models import (
 # ============================================================
 def home(request):
     site = SiteSettings.load()
-    website_banners = Banner.objects.filter(is_active=True, banner_type='website').order_by('order')
-    mobile_banners = Banner.objects.filter(is_active=True, banner_type='mobile').order_by('order')
+    all_banners = Banner.objects.filter(is_active=True).order_by('order', 'created_at')
+    website_banners = all_banners.filter(banner_type='website')
+    mobile_banners = all_banners.filter(banner_type='mobile')
+    # New campaign records carry both desktop and mobile images. Keep the
+    # legacy banner_type split compatible, but never render an empty carousel.
+    if not website_banners.exists():
+        website_banners = all_banners
+    if not mobile_banners.exists():
+        mobile_banners = website_banners
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:8]
     new_arrivals = Product.objects.filter(is_active=True, is_new_arrival=True).order_by('-created_at')[:8]
     if not new_arrivals.exists():
