@@ -624,20 +624,62 @@ class ServicePage(models.Model):
 # 8. BANNER (NEW — Homepage carousel)
 # ============================================================
 class Banner(models.Model):
-    """Homepage banner carousel. Separate desktop + mobile banners."""
+    """Marketplace banner + dynamic campaign landing page."""
     BANNER_TYPE_CHOICES = [
         ('website', '💻 Desktop / Website Banner'),
         ('mobile', '📱 Mobile Banner'),
     ]
 
-    title = models.CharField(max_length=200, help_text="For admin reference")
-    banner_type = models.CharField(max_length=20, choices=BANNER_TYPE_CHOICES, default='website')
-    image = models.ImageField(upload_to='banners/', help_text="Desktop: 1920×600px • Mobile: 600×800px")
+    title = models.CharField(max_length=200, help_text="Internal/admin banner name")
+    slug = models.SlugField(max_length=220, unique=True, blank=True)
 
+    # Legacy single-image field kept for existing records.
+    banner_type = models.CharField(max_length=20, choices=BANNER_TYPE_CHOICES, default='website')
+    image = models.ImageField(upload_to='banners/', blank=True, null=True)
+
+    # Recommended: upload both sizes on ONE banner.
+    desktop_image = models.ImageField(
+        upload_to='banners/desktop/', blank=True, null=True,
+        help_text="Recommended 1920×600 (or 1600×500)."
+    )
+    mobile_image = models.ImageField(
+        upload_to='banners/mobile/', blank=True, null=True,
+        help_text="Recommended 800×1000 (or 600×750)."
+    )
+    fallback_desktop = models.CharField(
+        max_length=300, blank=True,
+        help_text="Optional static fallback path, e.g. /static/images/banners/wedding-desktop.svg"
+    )
+    fallback_mobile = models.CharField(
+        max_length=300, blank=True,
+        help_text="Optional static fallback path for mobile."
+    )
+
+    # Homepage slide copy.
     heading = models.CharField(max_length=200, blank=True)
     subheading = models.CharField(max_length=400, blank=True)
-    cta_text = models.CharField(max_length=100, blank=True, default='Shop Now')
-    cta_url = models.CharField(max_length=500, blank=True, default='/products/')
+    cta_text = models.CharField(max_length=100, blank=True, default='Explore')
+    cta_url = models.CharField(max_length=500, blank=True, default='')
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    # Dynamic landing page opened when the banner is clicked.
+    page_heading = models.CharField(max_length=220, blank=True)
+    page_subheading = models.CharField(max_length=400, blank=True)
+    page_intro = models.TextField(blank=True)
+    page_content = models.TextField(
+        blank=True,
+        help_text="Main campaign content. Keep it useful and specific to the banner."
+    )
+    page_image = models.ImageField(upload_to='banner_pages/', blank=True, null=True)
+    seo_title = models.CharField(max_length=70, blank=True)
+    seo_description = models.CharField(max_length=160, blank=True)
+    seo_keywords = models.CharField(max_length=400, blank=True)
+    page_products = models.ManyToManyField(
+        'Product', blank=True, related_name='campaign_banners',
+        help_text="Only selected products appear on this campaign page."
+    )
+    is_page_published = models.BooleanField(default=True)
 
     text_color = models.CharField(max_length=7, default='#FFFFFF')
     text_position = models.CharField(max_length=20, default='center-center', choices=[
@@ -646,17 +688,39 @@ class Banner(models.Model):
         ('bottom-left','Bottom Left'),('bottom-center','Bottom Center'),('bottom-right','Bottom Right'),
     ])
     overlay_opacity = models.FloatField(default=0.4, help_text="0.0 (clear) to 1.0 (black)")
-
-    order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['banner_type', 'order']
-        verbose_name_plural = 'Homepage Banners'
+        ordering = ['order', 'created_at']
+        verbose_name = 'Homepage / Campaign Banner'
+        verbose_name_plural = 'Homepage / Campaign Banners'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.get_banner_type_display()} — {self.title}"
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('banner_page', kwargs={'slug': self.slug})
+
+    @property
+    def homepage_desktop_url(self):
+        if self.desktop_image:
+            return self.desktop_image.url
+        if self.image and self.banner_type == 'website':
+            return self.image.url
+        return self.fallback_desktop or '/static/images/banners/default-desktop.svg'
+
+    @property
+    def homepage_mobile_url(self):
+        if self.mobile_image:
+            return self.mobile_image.url
+        if self.image and self.banner_type == 'mobile':
+            return self.image.url
+        return self.fallback_mobile or self.fallback_desktop or '/static/images/banners/default-mobile.svg'
 
 
 # ============================================================
