@@ -87,13 +87,15 @@
         right: 0;
         bottom: 0;
         width: 100%;
-        height: calc(64px + env(safe-area-inset-bottom));
+        height: 64px;
+        min-height: 64px;
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
         align-items: start;
         gap: 0;
-        padding: 0 0 env(safe-area-inset-bottom);
+        padding: 0;
         margin: 0;
+        box-sizing: border-box;
         background: rgba(255,255,255,.98);
         border: 0;
         border-top: 1px solid rgba(15,23,42,.10);
@@ -174,14 +176,22 @@
         color: #344054;
     }
 
+    html,
     body {
-        padding-bottom: calc(76px + env(safe-area-inset-bottom));
+        margin: 0;
+        min-height: 100%;
+        background: #fff;
+        overscroll-behavior-y: none;
+    }
+
+    body {
+        padding-bottom: 64px;
     }
 
     /* WhatsApp stays as a floating circular action above the bottom nav. */
     .sticky-whatsapp {
         display: block;
-        bottom: calc(82px + env(safe-area-inset-bottom));
+        bottom: 82px;
         right: 18px;
         pointer-events: auto;
     }
