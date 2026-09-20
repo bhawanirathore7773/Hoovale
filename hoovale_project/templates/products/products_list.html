@@ -42,7 +42,7 @@
                         <div class="filter-options">
                             <a href="{% url 'products_list' %}" 
                                class="filter-option {% if not selected_category %}active{% endif %}">
-                       a         All Categories
+                                All Categories
                             </a>
                             {% for category in categories %}
                             <a href="?category={{ category.slug }}" 
