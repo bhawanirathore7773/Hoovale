@@ -28,6 +28,66 @@ def home(request):
         website_banners = all_banners
     if not mobile_banners.exists():
         mobile_banners = website_banners
+
+    # Always keep the homepage campaign carousel populated with four
+    # production-safe banners. Admin-managed banners are used first; if fewer
+    # than four are configured, curated static campaign artwork fills the gaps.
+    homepage_campaigns = []
+    for banner in website_banners[:4]:
+        homepage_campaigns.append({
+            'url': banner.get_absolute_url(),
+            'title': banner.title,
+            'heading': banner.heading,
+            'subheading': banner.subheading,
+            'cta_text': banner.cta_text,
+            'desktop_url': banner.homepage_desktop_url,
+            'mobile_url': banner.homepage_mobile_url,
+            'is_dynamic': True,
+        })
+
+    static_campaigns = [
+        {
+            'url': '/products/',
+            'title': 'Wedding Gifts',
+            'heading': 'Personalized Wall Clocks',
+            'subheading': 'Customized clocks for weddings, gifting and special moments.',
+            'cta_text': 'Explore Collection',
+            'desktop_url': '/static/images/banners/wedding-desktop.svg',
+            'mobile_url': '/static/images/banners/wedding-mobile.svg',
+        },
+        {
+            'url': '/products/',
+            'title': 'Corporate Clocks',
+            'heading': 'Corporate & Branded Wall Clocks',
+            'subheading': 'Professional clocks with your logo for offices, gifting and brand promotion.',
+            'cta_text': 'Explore Corporate',
+            'desktop_url': '/static/images/banners/corporate-desktop.svg',
+            'mobile_url': '/static/images/banners/corporate-mobile.svg',
+        },
+        {
+            'url': '/products/',
+            'title': 'Custom Wall Clocks',
+            'heading': 'Custom Wall Clocks for Your Brand',
+            'subheading': 'Choose designs, branding and quantities for your business requirements.',
+            'cta_text': 'Customize Now',
+            'desktop_url': '/static/images/banners/custom-desktop.svg',
+            'mobile_url': '/static/images/banners/custom-mobile.svg',
+        },
+        {
+            'url': '/products/',
+            'title': 'Promotional Clocks',
+            'heading': 'Promotional Wall Clocks',
+            'subheading': 'Logo-branded clocks for marketing campaigns, dealers and business promotion.',
+            'cta_text': 'Get a Quote',
+            'desktop_url': '/static/images/banners/promotion-desktop.svg',
+            'mobile_url': '/static/images/banners/promotion-mobile.svg',
+        },
+    ]
+    for campaign in static_campaigns:
+        if len(homepage_campaigns) >= 4:
+            break
+        homepage_campaigns.append({**campaign, 'is_dynamic': False})
+
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:8]
     new_arrivals = Product.objects.filter(is_active=True, is_new_arrival=True).order_by('-created_at')[:8]
     if not new_arrivals.exists():
@@ -70,6 +130,7 @@ def home(request):
         'site': site,
         'website_banners': website_banners,
         'mobile_banners': mobile_banners,
+        'homepage_campaigns': homepage_campaigns,
         'featured_products': featured_products,
         'new_arrivals': new_arrivals,
         'bestseller_products': bestseller_products,
