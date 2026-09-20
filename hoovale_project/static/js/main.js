@@ -401,3 +401,63 @@ window.HOOVALE = {
     debounce,
     displayPrice
 };
+
+/* ============================================================
+   PRODUCT FILTER DRAWER
+   ============================================================ */
+function initializeProductFilters() {
+    const toggle = document.getElementById('productsFilterToggle');
+    const drawer = document.getElementById('productsFilterDrawer');
+    const backdrop = document.getElementById('productsFilterBackdrop');
+    const close = document.getElementById('productsFilterClose');
+    if (!toggle || !drawer || !backdrop) return;
+    if (toggle.dataset.hvFilterBound === '1') return;
+
+    toggle.dataset.hvFilterBound = '1';
+
+    const open = () => {
+        document.body.classList.add('hv-filter-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        backdrop.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+    };
+
+    const hide = () => {
+        document.body.classList.remove('hv-filter-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        backdrop.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.addEventListener('click', open);
+    backdrop.addEventListener('click', hide);
+    if (close) close.addEventListener('click', hide);
+
+    drawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', hide);
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && document.body.classList.contains('hv-filter-open')) {
+            hide();
+        }
+    });
+}
+
+/* ============================================================
+   PRODUCT CARD KEYBOARD NAVIGATION
+   ============================================================ */
+function initializeProductCardLinks() {
+    document.querySelectorAll('.product-card-link[role="link"]').forEach(card => {
+        if (card.dataset.hvCardBound === '1') return;
+        card.dataset.hvCardBound = '1';
+        card.addEventListener('keydown', event => {
+            if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a,button')) {
+                event.preventDefault();
+                const url = card.dataset.productUrl;
+                if (url) window.location.href = url;
+            }
+        });
+    });
+}
+
