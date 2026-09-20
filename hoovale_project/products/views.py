@@ -43,7 +43,7 @@ def home(request):
     # Marketplace-style homepage product shelves: each featured category
     # gets its own small product rail so buyers can scan products quickly.
     category_product_sections = []
-    for category in categories:
+    for category in categories[:5]:
         section_products = Product.objects.filter(
             is_active=True, category=category
         ).order_by('-is_featured', '-is_bestseller', '-created_at')[:4]
@@ -188,6 +188,38 @@ def product_detail(request, slug):
         'base_price_json':    json.dumps(base_price),
     }
     return render(request, 'products/product_detail.html', context)
+
+
+def banner_page(request, slug):
+    """Render the dynamic page behind a homepage campaign banner."""
+    banner = get_object_or_404(
+        Banner,
+        slug=slug,
+        is_active=True,
+        is_page_published=True,
+    )
+    products = banner.page_products.filter(is_active=True).order_by(
+        '-is_featured', '-is_bestseller', '-created_at'
+    )
+    if not products.exists():
+        # A banner without explicit selections still works; admin can later
+        # curate the exact products for that campaign.
+        products = Product.objects.filter(is_active=True).order_by(
+            '-is_featured', '-is_bestseller', '-created_at'
+        )[:8]
+
+    context = {
+        'banner': banner,
+        'products': products[:12],
+        'page_title': banner.seo_title or banner.page_heading or banner.title,
+        'page_description': banner.seo_description,
+        'breadcrumb_items': [
+            ('Home', '/'),
+            ('Collections', '/#collections'),
+            (banner.page_heading or banner.title, None),
+        ],
+    }
+    return render(request, 'products/banner_page.html', context)
 
 
 def category_products(request, slug):
