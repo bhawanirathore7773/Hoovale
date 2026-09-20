@@ -18,6 +18,7 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    static_image_path = models.CharField(max_length=300, blank=True, help_text="Optional static fallback image path, e.g. /static/images/categories/home-decor.svg")
 
     # SEO fields
     meta_title = models.CharField(max_length=70, blank=True)
