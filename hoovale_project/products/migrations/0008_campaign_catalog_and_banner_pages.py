@@ -414,138 +414,255 @@ def seed_hoovale_catalog(apps, schema_editor):
         ])
 
 
+
+def ensure_0008_database_schema(apps, schema_editor):
+    """
+    Reconcile the production database with migration 0008 without dropping data.
+
+    Some Render deployments created part of these columns before Django recorded
+    migration 0008. We therefore add only columns/tables that are actually
+    missing, while keeping the Django migration state complete.
+    """
+    connection = schema_editor.connection
+
+    models_and_fields = [
+        ('Category', ['static_image_path']),
+        ('Banner', [
+            'slug', 'desktop_image', 'mobile_image', 'fallback_desktop',
+            'fallback_mobile', 'page_heading', 'page_subheading',
+            'page_intro', 'page_content', 'page_image', 'seo_title',
+            'seo_description', 'seo_keywords', 'is_page_published',
+        ]),
+    ]
+
+    for model_name, field_names in models_and_fields:
+        Model = apps.get_model('products', model_name)
+        table = Model._meta.db_table
+        with connection.cursor() as cursor:
+            existing_columns = {
+                col.name
+                for col in connection.introspection.get_table_description(
+                    cursor, table
+                )
+            }
+
+        for field_name in field_names:
+            field = Model._meta.get_field(field_name)
+            if field.column not in existing_columns:
+                schema_editor.add_field(Model, field)
+
+    # Ensure the campaign-product M2M table exists as well.
+    Banner = apps.get_model('products', 'Banner')
+    page_products = Banner._meta.get_field('page_products')
+    through_model = page_products.remote_field.through
+    through_table = through_model._meta.db_table
+
+    if through_table not in connection.introspection.table_names():
+        schema_editor.create_model(through_model)
+
+
+def ensure_banner_slug_unique(apps, schema_editor):
+    """Create a unique index only when the production DB does not already have one."""
+    Banner = apps.get_model('products', 'Banner')
+    connection = schema_editor.connection
+    table = Banner._meta.db_table
+    field = Banner._meta.get_field('slug')
+
+    with connection.cursor() as cursor:
+        constraints = connection.introspection.get_constraints(cursor, table)
+
+    has_unique_slug = any(
+        constraint.get('unique')
+        and constraint.get('columns') == [field.column]
+        for constraint in constraints.values()
+    )
+
+    if not has_unique_slug:
+        index_name = 'products_banner_slug_unique_idx'
+        quoted_index = schema_editor.quote_name(index_name)
+        quoted_table = schema_editor.quote_name(table)
+        quoted_column = schema_editor.quote_name(field.column)
+        schema_editor.execute(
+            f'CREATE UNIQUE INDEX IF NOT EXISTS {quoted_index} '
+            f'ON {quoted_table} ({quoted_column})'
+        )
+
+
 class Migration(migrations.Migration):
+
     dependencies = [
         ('products', '0007_pricingtiertemplate_product_custom_pricing_tiers_and_more'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='category',
-            name='static_image_path',
-            field=models.CharField(blank=True, default='', help_text='Optional static fallback image path, e.g. /static/images/categories/home-decor.svg', max_length=300),
-            preserve_default=False,
-        ),
-        # Some earlier production deployments created Banner.slug manually.
-        # Keep the migration state in sync without attempting to add the column twice.
+        # Keep migration state complete even when some columns were created by
+        # an earlier/manual production deployment.
         migrations.SeparateDatabaseAndState(
             database_operations=[],
             state_operations=[
+                migrations.AddField(
+                    model_name='category',
+                    name='static_image_path',
+                    field=models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='Optional static fallback image path, e.g. /static/images/categories/home-decor.svg',
+                        max_length=300,
+                    ),
+                ),
                 migrations.AddField(
                     model_name='banner',
                     name='slug',
                     field=models.SlugField(blank=True, max_length=220, null=True),
                 ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='desktop_image',
+                    field=models.ImageField(blank=True, null=True, upload_to='banners/desktop/'),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='mobile_image',
+                    field=models.ImageField(blank=True, null=True, upload_to='banners/mobile/'),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='fallback_desktop',
+                    field=models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='Optional static fallback path, e.g. /static/images/banners/wedding-desktop.svg',
+                        max_length=300,
+                    ),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='fallback_mobile',
+                    field=models.CharField(
+                        blank=True,
+                        default='',
+                        help_text='Optional static fallback path for mobile.',
+                        max_length=300,
+                    ),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_heading',
+                    field=models.CharField(blank=True, max_length=220, null=True),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_subheading',
+                    field=models.CharField(blank=True, default='', max_length=400),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_intro',
+                    field=models.TextField(blank=True, default=''),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_content',
+                    field=models.TextField(
+                        blank=True,
+                        default='',
+                        help_text='Main campaign content. Keep it useful and specific to the banner.',
+                    ),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_image',
+                    field=models.ImageField(blank=True, null=True, upload_to='banner_pages/'),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='seo_title',
+                    field=models.CharField(blank=True, default='', max_length=70),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='seo_description',
+                    field=models.CharField(blank=True, default='', max_length=160),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='seo_keywords',
+                    field=models.CharField(blank=True, default='', max_length=400),
+                ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='is_page_published',
+                    field=models.BooleanField(default=True),
+                ),
             ],
         ),
-        migrations.AddField(
-            model_name='banner',
-            name='desktop_image',
-            field=models.ImageField(blank=True, null=True, upload_to='banners/desktop/'),
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='mobile_image',
-            field=models.ImageField(blank=True, null=True, upload_to='banners/mobile/'),
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='fallback_desktop',
-            field=models.CharField(blank=True, default='', help_text='Optional static fallback path, e.g. /static/images/banners/wedding-desktop.svg', max_length=300),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='fallback_mobile',
-            field=models.CharField(blank=True, default='', help_text='Optional static fallback path for mobile.', max_length=300),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='page_heading',
-            field=models.CharField(blank=True, max_length=220, null=True),
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='page_subheading',
-            field=models.CharField(blank=True, default='', max_length=400),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='page_intro',
-            field=models.TextField(blank=True, default=''),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='page_content',
-            field=models.TextField(blank=True, default='', help_text='Main campaign content. Keep it useful and specific to the banner.'),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='page_image',
-            field=models.ImageField(blank=True, null=True, upload_to='banner_pages/'),
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='seo_title',
-            field=models.CharField(blank=True, default='', max_length=70),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='seo_description',
-            field=models.CharField(blank=True, default='', max_length=160),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='seo_keywords',
-            field=models.CharField(blank=True, default='', max_length=400),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='is_page_published',
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AlterField(
-            model_name='banner',
-            name='cta_text',
-            field=models.CharField(blank=True, default='Explore', max_length=100),
-        ),
+
+        # Reconcile the actual PostgreSQL schema only where something is missing.
+        migrations.RunPython(ensure_0008_database_schema, migrations.RunPython.noop),
+
+        # Backfill values after the state/database columns exist.
         migrations.RunPython(backfill_banner_slugs, migrations.RunPython.noop),
-        migrations.AlterField(
-            model_name='banner',
-            name='slug',
-            field=models.SlugField(blank=True, max_length=220, unique=True),
+
+        # State-only because these columns may already have the correct
+        # production representation. The DB is reconciled above.
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.AlterField(
+                    model_name='banner',
+                    name='slug',
+                    field=models.SlugField(blank=True, max_length=220, unique=True),
+                ),
+                migrations.AlterField(
+                    model_name='banner',
+                    name='cta_text',
+                    field=models.CharField(blank=True, default='Explore', max_length=100),
+                ),
+                migrations.AlterField(
+                    model_name='banner',
+                    name='image',
+                    field=models.ImageField(blank=True, null=True, upload_to='banners/'),
+                ),
+                migrations.AlterField(
+                    model_name='banner',
+                    name='cta_url',
+                    field=models.CharField(blank=True, default='', max_length=500),
+                ),
+                migrations.AlterField(
+                    model_name='banner',
+                    name='page_heading',
+                    field=models.CharField(blank=True, max_length=220),
+                ),
+                migrations.AlterModelOptions(
+                    name='banner',
+                    options={
+                        'ordering': ['order', 'created_at'],
+                        'verbose_name': 'Homepage / Campaign Banner',
+                        'verbose_name_plural': 'Homepage / Campaign Banners',
+                    },
+                ),
+            ],
         ),
+
+        migrations.RunPython(ensure_banner_slug_unique, migrations.RunPython.noop),
         migrations.RunPython(backfill_banner_optional_fields, migrations.RunPython.noop),
-        migrations.AlterField(
-            model_name='banner',
-            name='page_heading',
-            field=models.CharField(blank=True, max_length=220),
+
+        # page_products is a state operation because the actual through table
+        # is created safely by ensure_0008_database_schema above.
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_products',
+                    field=models.ManyToManyField(
+                        blank=True,
+                        related_name='campaign_banners',
+                        to='products.product',
+                    ),
+                ),
+            ],
         ),
-        migrations.AlterField(
-            model_name='banner',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='banners/'),
-        ),
-        migrations.AlterField(
-            model_name='banner',
-            name='cta_url',
-            field=models.CharField(blank=True, default='', max_length=500),
-        ),
-        migrations.AlterModelOptions(
-            name='banner',
-            options={'ordering': ['order', 'created_at'], 'verbose_name': 'Homepage / Campaign Banner', 'verbose_name_plural': 'Homepage / Campaign Banners'},
-        ),
-        migrations.AddField(
-            model_name='banner',
-            name='page_products',
-            field=models.ManyToManyField(blank=True, related_name='campaign_banners', to='products.product'),
-        ),
+
         migrations.RunPython(seed_hoovale_catalog, migrations.RunPython.noop),
     ]
