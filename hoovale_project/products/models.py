@@ -297,7 +297,13 @@ class Product(models.Model):
         return reverse('product_detail', kwargs={'slug': self.slug})
 
     def get_image_url(self):
-        return self.image.url if self.image else '/static/images/placeholder.jpg'
+        """Return a safe product image URL without ever raising on a blank ImageField."""
+        try:
+            if self.image:
+                return self.image.url
+        except (ValueError, AttributeError):
+            pass
+        return '/static/images/product-placeholder.svg'
 
     # ── Pricing Tier Methods ──────────────────────────────── # ← NEW
     def get_pricing_tiers(self):                              # ← NEW
