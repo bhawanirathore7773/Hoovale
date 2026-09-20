@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ page_title }}{% endblock %}
-{% block meta_description %}{{ page_description }}{% endblock %}
+{% block meta_title %}{{ page_title }}{% endblock %}
+{% block meta_description %}{{ page_description|default:"Explore HOOVALE wall clock collections and request current bulk pricing from Jaipur." }}{% endblock %}
+{% block meta_keywords %}{{ banner.seo_keywords|default:"wall clocks Jaipur, wholesale wall clocks, customized wall clocks, HOOVALE" }}{% endblock %}
+{% block og_type %}website{% endblock %}
+{% block og_title %}{{ page_title }}{% endblock %}
+{% block og_description %}{{ page_description }}{% endblock %}
 
 {% block content %}
 <main class="hv-campaign-page">
