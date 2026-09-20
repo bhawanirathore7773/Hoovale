@@ -10,7 +10,7 @@ services:
   - type: web
     name: hoovale
     runtime: python
-    startCommand: gunicorn hoovale.wsgi:application --bind 0.0.0.0:$PORT --workers 1
+    startCommand: python manage.py migrate --noinput && gunicorn hoovale.wsgi:application --bind 0.0.0.0:$PORT --workers 1
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.14"
