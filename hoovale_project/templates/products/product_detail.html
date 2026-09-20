@@ -14,9 +14,54 @@
     {% product_schema product %}
     {% breadcrumb_schema breadcrumb_items %}
     {% if faqs %}{% faq_schema faqs %}{% endif %}
+<style>
+/* Product detail — stable, contained and mobile-first */
+.hv-product-detail-page{width:100%;max-width:100%;overflow-x:clip;background:#fff;color:#1a1a1a;}
+.hv-product-detail-page *{max-width:100%;}
+.hv-product-breadcrumb{background:#f8f9fa;padding:12px 0;font-size:.88rem;border-bottom:1px solid #edf0f4;}
+.hv-product-breadcrumb .container-lg{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hv-product-main{padding:34px 0 60px;}
+.hv-product-main .row{align-items:flex-start;}
+.hv-product-image-card{background:#fff;border:1px solid #e7ebf0;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 5px 20px rgba(15,23,42,.06);}
+.hv-product-image-card img{width:100%;height:auto;display:block;object-fit:contain;}
+.hv-product-detail-page .qty-pricing-section{width:100%;max-width:100%;overflow:hidden;}
+.hv-product-detail-page .tier-row{min-width:0;}
+.hv-product-detail-page .pricing-cta-row{width:100%;max-width:100%;}
+@media(max-width:991px){
+  .hv-product-main{padding:22px 0 50px;}
+  .hv-product-main .row{--bs-gutter-x:18px;--bs-gutter-y:22px;}
+  .hv-product-image-card{position:relative!important;top:auto!important;}
+}
+@media(max-width:600px){
+  .hv-product-breadcrumb{padding:10px 14px;font-size:.78rem;}
+  .hv-product-breadcrumb .container-lg{padding:0;max-width:100%;}
+  .hv-product-main{padding:16px 0 44px;}
+  .hv-product-main .container-lg{padding-left:14px;padding-right:14px;}
+  .hv-product-main .row{--bs-gutter-x:0;--bs-gutter-y:18px;}
+  .hv-product-image-card{border-radius:12px;box-shadow:0 3px 14px rgba(15,23,42,.06);}
+  .hv-product-detail-page h1{font-size:1.65rem!important;line-height:1.18!important;margin-bottom:10px!important;}
+  .hv-product-detail-page .short-description,
+  .hv-product-detail-page p{overflow-wrap:anywhere;}
+  .qty-pricing-header{padding:15px 14px!important;}
+  .qty-pricing-header h3{font-size:.95rem!important;}
+  .qty-pricing-header p{font-size:.72rem!important;}
+  .tier-row{grid-template-columns:minmax(0,1fr) 82px!important;padding:10px 12px!important;}
+  .tier-label{font-size:.78rem!important;}
+  .tier-badge{font-size:.62rem!important;}
+  .tier-unit-price{font-size:.85rem!important;}
+  .qty-selector-wrap{padding:14px!important;}
+  .qty-shortcuts{gap:6px;}
+  .qty-shortcut{padding:6px 10px;font-size:.72rem;}
+  .live-price-unit{font-size:1.7rem;}
+  .pricing-cta-row{flex-direction:column;}
+  .pricing-cta-row a{width:100%;min-width:0;}
+}
+</style>
+</div>
 {% endblock %}
 
 {% block content %}
+<div class="hv-product-detail-page">
 
 {# ─── QUANTITY PRICING TIER CSS ─────────────────────────────────────────── #}
 <style>
@@ -106,7 +151,7 @@
 </style>
 
 {# ─── BREADCRUMBS ────────────────────────────────────────────────────────── #}
-<div style="background:#f8f9fa; padding:14px 0; font-size:0.9rem;">
+<div class="hv-product-breadcrumb">
     <div class="container-lg">
         {% for name, url in breadcrumb_items %}
             {% if url %}
@@ -120,13 +165,13 @@
 </div>
 
 {# ─── PRODUCT MAIN SECTION ───────────────────────────────────────────────── #}
-<section style="padding:40px 0;">
+<section class="hv-product-main">
     <div class="container-lg">
         <div class="row g-5">
 
             {# ── Left: Image ─────────────────────────────────────────────── #}
             <div class="col-lg-6">
-                <div style="background:white; border:1px solid #eee; border-radius:12px; overflow:hidden; position:sticky; top:90px;">
+                <div class="hv-product-image-card">
                     <img src="{{ product.image.url }}" alt="{{ product.name }} — Wall clock manufacturer Jaipur"
                          itemprop="image" style="width:100%; height:auto; display:block;">
                     <div style="position:absolute; top:14px; left:14px; display:flex; gap:6px; flex-direction:column;">
