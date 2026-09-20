@@ -435,7 +435,7 @@
     {% else %}
     {% for banner in website_banners %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link"><img src="{{ banner.image.url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"></a>
+     <a href="{% if banner.cta_url %}{{ banner.cta_url }}{% else %}{{ banner.get_absolute_url }}{% endif %}" class="hv-banner-link"><img src="{{ banner.homepage_mobile_url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"></a>
     </div>
     {% endfor %}
     {% endif %}
