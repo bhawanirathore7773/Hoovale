@@ -7,7 +7,7 @@
 
 {% block og_title %}{{ category.meta_title|default:category.name }}{% endblock %}
 {% block og_description %}{{ category.meta_description|default:category.description|truncatechars:160 }}{% endblock %}
-{% if category.image and category.image.name  %}{% block og_image %}https://hoovale.com{{ category.image.url }}{% endblock %} {% endif %}
+{% block og_image %}https://hoovale.com{% if category.image %}{{ category.image.url }}{% elif category.static_image_path %}{{ category.static_image_path }}{% else %}{% static 'images/product-placeholder.svg' %}{% endif %}{% endblock %}
 
 {% block page_schema %}
     {% breadcrumb_schema breadcrumb_items %}
