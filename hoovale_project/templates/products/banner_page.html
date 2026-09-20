@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static seo_tags %}
 
 {% block meta_title %}{{ page_title }}{% endblock %}
 {% block meta_description %}{{ page_description|default:"Explore HOOVALE wall clock collections and request current bulk pricing from Jaipur." }}{% endblock %}
@@ -10,7 +10,7 @@
 {% block og_description %}{{ page_description }}{% endblock %}
 
 {% block content %}
-<main class="hv-campaign-page">
+<div class="hv-campaign-page">
   <section class="hv-campaign-hero">
     <div class="hv-campaign-hero-media">
       {% if banner.page_image %}
@@ -92,7 +92,7 @@
       <a class="btn btn-dark px-4 py-2" href="{% url 'contact' %}">Send Enquiry <i class="fas fa-arrow-right ms-1"></i></a>
     </div>
   </section>
-</main>
+</div>
 
 <style>
 .hv-campaign-hero{position:relative;min-height:390px;display:flex;align-items:center;overflow:hidden;background:#111}
