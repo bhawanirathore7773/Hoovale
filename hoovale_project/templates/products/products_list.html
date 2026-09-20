@@ -73,8 +73,7 @@
                              aria-label="View {{ product.name }}"
                              onclick="if(!event.target.closest('a,button')) window.location.href=this.dataset.productUrl;">
                             <div class="product-image-container">
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}" 
-                                     class="product-image" loading="lazy">
+                                {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" class="product-image" loading="lazy">{% endif %}
                                 {% if product.is_featured %}
                                 <span class="badge bg-danger position-absolute top-0 end-0 m-3">Featured</span>
                                 {% endif %}
@@ -84,7 +83,7 @@
                                 <p class="product-description">{{ product.description|truncatewords:12 }}</p>
                                 {% if product.price %}
                                 <div class="product-price mb-3">
-                                    <span class="price-tag">₹{{ product.price }}</span>
+                                    <span class="price-tag">From ₹{{ product.price }}</span>
                                 </div>
                                 {% endif %}
                                 <div class="product-actions d-grid gap-2" onclick="event.stopPropagation();">
