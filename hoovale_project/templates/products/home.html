@@ -202,6 +202,39 @@
     }
 }
 
+/* Homepage marketplace shelves + responsive rotating banners */
+.hv-home-product-priority { padding-top: 42px; }
+.hv-product-main-link { display:block; color:inherit; text-decoration:none; }
+.hv-product-main-link:hover { color:inherit; }
+.hv-product-badge { position:absolute; top:10px; left:10px; z-index:2; padding:5px 9px; border-radius:7px; font-size:.64rem; font-weight:900; text-transform:uppercase; letter-spacing:.4px; }
+.hv-product-badge.new { background:#111827; color:#fff; }
+.hv-product-badge.best { background:#c9a961; color:#111; }
+.hv-shelf-tinted { background:#f7f9fc; }
+.hv-home-banner-wrap { width:100%; padding:18px 0; background:#fff; }
+.hv-home-banner { width:100%; overflow:hidden; }
+.hv-home-banner .carousel,
+.hv-home-banner .carousel-inner,
+.hv-home-banner .carousel-item { width:100%; }
+.hv-banner-link { display:block; position:relative; width:100%; height:180px; overflow:hidden; background:#111; }
+.hv-banner-link img { display:block; width:100%; height:100%; object-fit:cover; }
+.hv-banner-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:25px clamp(20px,7vw,100px); background:linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.08)); color:#fff; pointer-events:none; }
+.hv-banner-content h2 { color:#fff!important; font-family:"Playfair Display",serif; font-size:clamp(1.4rem,3vw,2.4rem); margin:0 0 5px; }
+.hv-banner-content p { color:rgba(255,255,255,.88); margin:0 0 8px; max-width:650px; font-size:.9rem; }
+.hv-banner-content span { color:#d9bb72; font-weight:800; font-size:.78rem; }
+.mobile-banner { display:none; }
+@media(max-width:767px){
+ .hv-home-banner-wrap { padding:10px 0; }
+ .desktop-banner { display:none; }
+ .mobile-banner { display:block; }
+ .hv-banner-link { height:118px; }
+ .hv-banner-content { padding:15px 22px; background:linear-gradient(90deg,rgba(0,0,0,.68),rgba(0,0,0,.12)); }
+ .hv-banner-content h2 { font-size:1.25rem; }
+ .hv-banner-content p { font-size:.72rem; line-height:1.35; max-width:75%; }
+ .hv-banner-content span { font-size:.68rem; }
+ .hv-product-card .image { height:175px; }
+ .hv-product-card h3 { min-height:2.25em; }
+}
+
 </style>
 {% endblock %}
 
@@ -263,6 +296,83 @@
   </div>
  </div>
 </section>
+
+<!-- TOP PRODUCT SHELF: NEW ARRIVALS -->
+{% if new_arrivals %}
+<section class="hv-shelf hv-home-product-priority">
+ <div class="container-lg">
+  <div class="hv-shelf-head">
+   <div><div class="hv-home-kicker">Fresh Collection</div><h2>New Arrival Wall Clocks</h2><p>Latest designs added to the HOOVALE collection.</p></div>
+   <a class="hv-shelf-link" href="{% url 'products_list' %}">View All <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="row g-3">
+   {% for product in new_arrivals %}
+   <div class="col-6 col-lg-3">
+    <article class="hv-product-card">
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link">
+      <div class="image">
+       <img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">
+       <span class="hv-product-badge new">New</span>
+      </div>
+      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
+     </a>
+     <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
+    </article>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
+</section>
+{% endif %}
+
+<!-- SHORT FULL-WIDTH ROTATING BANNER -->
+{% if website_banners or mobile_banners %}
+<section class="hv-home-banner-wrap" aria-label="HOOVALE offers and collections">
+ <div class="hv-home-banner desktop-banner">
+  <div id="hvDesktopBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+   <div class="carousel-inner">
+    {% for banner in website_banners %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+     <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link">
+      <img src="{{ banner.image.url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      {% if banner.heading or banner.subheading %}
+      <div class="hv-banner-content">
+       {% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}
+       {% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}
+       {% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}
+      </div>
+      {% endif %}
+     </a>
+    </div>
+    {% endfor %}
+   </div>
+   {% if website_banners|length > 1 %}<button class="carousel-control-prev" type="button" data-bs-target="#hvDesktopBanner" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#hvDesktopBanner" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>{% endif %}
+  </div>
+ </div>
+ <div class="hv-home-banner mobile-banner">
+  <div id="hvMobileBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+   <div class="carousel-inner">
+    {% if mobile_banners %}
+    {% for banner in mobile_banners %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+     <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link">
+      <img src="{{ banner.image.url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      {% if banner.heading or banner.subheading %}<div class="hv-banner-content">{% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}{% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}{% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}</div>{% endif %}
+     </a>
+    </div>
+    {% endfor %}
+    {% else %}
+    {% for banner in website_banners %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+     <a href="{{ banner.cta_url|default:'/products/' }}" class="hv-banner-link"><img src="{{ banner.image.url }}" alt="{{ banner.heading|default:banner.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"></a>
+    </div>
+    {% endfor %}
+    {% endif %}
+   </div>
+  </div>
+ </div>
+</section>
+{% endif %}
 
 <!-- CATEGORIES -->
 {% if categories %}
@@ -328,6 +438,42 @@
  </div>
 </section>
 {% endfor %}
+
+<!-- CUSTOM / PROMOTIONAL -->
+{% if custom_products %}
+<section class="hv-shelf hv-shelf-tinted">
+ <div class="container-lg">
+  <div class="hv-shelf-head"><div><div class="hv-home-kicker">Branding & Promotion</div><h2>Custom & Promotional Wall Clocks</h2><p>Clock options for logo branding, promotions and business requirements.</p></div><a class="hv-shelf-link" href="{% url 'products_list' %}">Explore All <i class="fas fa-arrow-right"></i></a></div>
+  <div class="row g-3">
+   {% for product in custom_products %}
+   <div class="col-6 col-lg-3">
+    <article class="hv-product-card">
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link"><div class="image"><img src="{{ product.image.url }}" alt="{{ product.name }} custom promotional wall clock" loading="lazy"></div><div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div></a><a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I need a quote for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> Get Quote</a>
+    </article>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
+</section>
+{% endif %}
+
+<!-- BESTSELLERS -->
+{% if bestseller_products %}
+<section class="hv-shelf">
+ <div class="container-lg">
+  <div class="hv-shelf-head"><div><div class="hv-home-kicker">Popular Picks</div><h2>Bestselling Wall Clocks</h2><p>Popular designs selected for retail and bulk enquiries.</p></div><a class="hv-shelf-link" href="{% url 'products_list' %}">View All <i class="fas fa-arrow-right"></i></a></div>
+  <div class="row g-3">
+   {% for product in bestseller_products %}
+   <div class="col-6 col-lg-3">
+    <article class="hv-product-card">
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link"><div class="image"><img src="{{ product.image.url }}" alt="{{ product.name }} bestselling wall clock" loading="lazy"><span class="hv-product-badge best">Bestseller</span></div><div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div></a><a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the best price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
+    </article>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
+</section>
+{% endif %}
 
 <!-- SOLUTIONS -->
 <section class="hv-home-section dark">
