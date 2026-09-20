@@ -1078,6 +1078,141 @@
         padding-bottom:48px;
     }
 }
+
+/* =========================================================
+   FINAL BANNER SPEC — 3:2 RATIO + CONTENT-ALIGNED GUTTERS
+   ========================================================= */
+.hv-home-banner-wrap{
+    width:100%;
+    padding:28px 24px 30px;
+    background:#fff;
+}
+.hv-home-banner{
+    width:100%;
+    max-width:1220px;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:18px;
+    border:1px solid #e4e8ee;
+    box-shadow:0 12px 34px rgba(15,23,42,.10);
+}
+.hv-home-banner .carousel-inner{
+    width:100%;
+    overflow:hidden;
+    border-radius:18px;
+}
+.hv-banner-link{
+    display:block;
+    position:relative;
+    width:100%;
+    aspect-ratio:3 / 2;
+    min-height:0;
+    overflow:hidden;
+    border-radius:18px;
+    background:#111518;
+}
+.hv-banner-link picture,
+.hv-banner-link img{
+    display:block;
+    width:100%;
+    height:100%;
+}
+.hv-banner-link img{
+    object-fit:cover;
+    object-position:center;
+}
+.hv-banner-content{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    padding:clamp(24px,5vw,58px);
+    background:linear-gradient(90deg,rgba(0,0,0,.68) 0%,rgba(0,0,0,.34) 46%,rgba(0,0,0,.02) 82%);
+    pointer-events:none;
+}
+.hv-home-banner .carousel-control-prev,
+.hv-home-banner .carousel-control-next{
+    z-index:5;
+    width:44px;
+    height:44px;
+    top:50%;
+    transform:translateY(-50%);
+    margin:0 14px;
+    border-radius:50%;
+    background:rgba(255,255,255,.96);
+    box-shadow:0 6px 18px rgba(15,23,42,.16);
+    opacity:.98;
+}
+.hv-home-banner .carousel-control-prev-icon,
+.hv-home-banner .carousel-control-next-icon{
+    width:17px;
+    height:17px;
+    filter:invert(1);
+}
+.hv-banner-indicators{
+    bottom:14px;
+    padding:6px 9px;
+    gap:7px;
+    background:rgba(17,24,39,.28);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+}
+@media(max-width:767px){
+    .hv-home-banner-wrap{
+        padding:16px 16px 20px;
+    }
+    .hv-home-banner,
+    .hv-home-banner .carousel-inner,
+    .hv-banner-link{
+        border-radius:14px;
+    }
+    .hv-home-banner{
+        box-shadow:0 9px 26px rgba(15,23,42,.09);
+    }
+    .hv-banner-link{
+        aspect-ratio:3 / 2;
+    }
+    .hv-banner-content{
+        padding:20px 18px 24px;
+        background:linear-gradient(90deg,rgba(0,0,0,.67) 0%,rgba(0,0,0,.34) 52%,rgba(0,0,0,.03) 90%);
+    }
+    .hv-banner-content h2{
+        max-width:72%;
+        font-size:clamp(1.2rem,6vw,1.6rem);
+        line-height:1.06;
+        margin-bottom:7px;
+    }
+    .hv-banner-content p{
+        max-width:70%;
+        font-size:.68rem;
+        line-height:1.35;
+        margin-bottom:9px;
+    }
+    .hv-banner-content span{
+        padding:8px 11px;
+        border-radius:8px;
+        font-size:.64rem;
+    }
+    .hv-home-banner .carousel-control-prev,
+    .hv-home-banner .carousel-control-next{
+        width:34px;
+        height:34px;
+        margin:0 8px;
+    }
+    .hv-home-banner .carousel-control-prev-icon,
+    .hv-home-banner .carousel-control-next-icon{
+        width:13px;
+        height:13px;
+    }
+    .hv-banner-indicators{
+        bottom:9px;
+        padding:4px 7px;
+        gap:5px;
+    }
+}
 </style>
 {% endblock %}
 
