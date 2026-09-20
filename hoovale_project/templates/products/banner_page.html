@@ -15,8 +15,10 @@
     <div class="hv-campaign-hero-media">
       {% if banner.page_image %}
         <img src="{{ banner.page_image.url }}" alt="{{ banner.page_heading|default:banner.title }}">
-      {% else %}
+      {% elif banner.homepage_desktop_url %}
         <img src="{{ banner.homepage_desktop_url }}" alt="{{ banner.page_heading|default:banner.title }}">
+      {% else %}
+        <img src="{% static 'images/banners/wedding-desktop.svg' %}" alt="{{ banner.page_heading|default:banner.title }}">
       {% endif %}
     </div>
     <div class="hv-campaign-hero-overlay"></div>
