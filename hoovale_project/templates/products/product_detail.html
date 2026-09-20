@@ -172,8 +172,7 @@
             {# ── Left: Image ─────────────────────────────────────────────── #}
             <div class="col-lg-6">
                 <div class="hv-product-image-card">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }} — Wall clock manufacturer Jaipur"
-                         itemprop="image" style="width:100%; height:auto; display:block;">
+                    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} — Wall clock manufacturer Jaipur" itemprop="image" style="width:100%; height:auto; display:block;">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" itemprop="image" style="width:100%; height:auto; display:block;">{% endif %}
                     <div style="position:absolute; top:14px; left:14px; display:flex; gap:6px; flex-direction:column;">
                         {% if product.is_bestseller %}<span style="background:#10b981; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">🔥 BESTSELLER</span>{% endif %}
                         {% if product.is_new_arrival %}<span style="background:#3b82f6; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">🆕 NEW</span>{% endif %}
@@ -208,7 +207,7 @@
                     {# Header #}
                     <div class="qty-pricing-header">
                         <h3 style="color:white; font-weight:700;">💰 Wholesale Pricing — Order More, Save More</h3>
-                        <p style="color:white; opacity:0.8; font-weight:700;">Base price ₹{{ product.price }}/piece · Tap a tier or enter your quantity below</p>
+                        <p style="color:white; opacity:0.8; font-weight:700;">Published starting price ₹{{ product.price }}/piece · Confirm current quote before ordering · Tap a tier or enter your quantity below</p>
                     </div>
 
                     {# 5-Tier table #}
