@@ -445,34 +445,6 @@
 </section>
 {% endif %}
 
-<!-- TOP PRODUCT SHELF: NEW ARRIVALS -->
-{% if new_arrivals %}
-<section class="hv-shelf hv-home-product-priority">
- <div class="container-lg">
-  <div class="hv-shelf-head">
-   <div><div class="hv-home-kicker">Fresh Collection</div><h2>New Arrival Wall Clocks</h2><p>Latest designs added to the HOOVALE collection.</p></div>
-   <a class="hv-shelf-link" href="{% url 'products_list' %}">View All <i class="fas fa-arrow-right"></i></a>
-  </div>
-  <div class="row g-3">
-   {% for product in new_arrivals %}
-   <div class="col-6 col-lg-3">
-    <article class="hv-product-card">
-     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link">
-      <div class="image">
-       {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}
-       <span class="hv-product-badge new">New</span>
-      </div>
-      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">From ₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
-     </a>
-     <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
-    </article>
-   </div>
-   {% endfor %}
-  </div>
- </div>
-</section>
-{% endif %}
-
 <!-- CATEGORIES -->
 {% if categories %}
 <section class="hv-home-section tinted">
@@ -494,6 +466,34 @@
      </div>
      <div class="body"><h3>{{ cat.name }}</h3><p>{{ cat.products.count }} products • View collection <i class="fas fa-arrow-right"></i></p></div>
     </a>
+   </div>
+   {% endfor %}
+  </div>
+ </div>
+</section>
+{% endif %}
+
+<!-- TOP PRODUCT SHELF: NEW ARRIVALS -->
+{% if new_arrivals %}
+<section class="hv-shelf hv-home-product-priority">
+ <div class="container-lg">
+  <div class="hv-shelf-head">
+   <div><div class="hv-home-kicker">Fresh Collection</div><h2>New Arrival Wall Clocks</h2><p>Latest designs added to the HOOVALE collection.</p></div>
+   <a class="hv-shelf-link" href="{% url 'products_list' %}">View All <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="row g-3">
+   {% for product in new_arrivals %}
+   <div class="col-6 col-lg-3">
+    <article class="hv-product-card">
+     <a href="{{ product.get_absolute_url }}" class="hv-product-main-link">
+      <div class="image">
+       {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} wall clock by HOOVALE" loading="{% if forloop.counter < 3 %}eager{% else %}lazy{% endif %}">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}
+       <span class="hv-product-badge new">New</span>
+      </div>
+      <div class="body"><div class="category">{{ product.category.name }}</div><h3>{{ product.name }}</h3><div class="hv-product-meta">{% if product.price %}<span class="hv-product-price">From ₹{{ product.price }}</span>{% else %}<span class="hv-product-price">Get Price</span>{% endif %}<span class="hv-product-moq">MOQ {{ product.moq }}</span></div></div>
+     </a>
+     <a class="wa" href="{% whatsapp_link 'Hi HOOVALE, I want the price for: ' %}{{ product.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Price</a>
+    </article>
    </div>
    {% endfor %}
   </div>
