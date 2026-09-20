@@ -1679,3 +1679,83 @@ img[loading="lazy"][src] {
         flex-basis: 52px !important;
     }
 }
+
+/* ============================================================
+   COMPACT PROFESSIONAL MOBILE HEADER
+   Keep the header clean and app/website-like on phones.
+   ============================================================ */
+@media (max-width: 991px) {
+    .navbar.hv-navbar {
+        min-height: 68px !important;
+        height: 68px !important;
+        padding: 6px 0 !important;
+    }
+
+    .hv-navbar .container-lg {
+        min-height: 56px;
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .hv-navbar .navbar-brand {
+        font-size: 1.65rem !important;
+        letter-spacing: 2px !important;
+        line-height: 1 !important;
+        padding: 4px 0 8px !important;
+    }
+
+    .hv-navbar .navbar-brand::after {
+        height: 2px;
+        bottom: 1px;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle {
+        width: 46px !important;
+        height: 46px !important;
+        flex-basis: 46px !important;
+        border-radius: 12px !important;
+        padding: 0 !important;
+    }
+
+    .hv-navbar .hv-menu-icon {
+        width: 21px;
+        height: 17px;
+    }
+
+    .hv-navbar .hv-menu-icon span {
+        height: 2.5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar.hv-navbar {
+        min-height: 64px !important;
+        height: 64px !important;
+        padding: 5px 0 !important;
+    }
+
+    .hv-navbar .container-lg {
+        min-height: 54px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .hv-navbar .navbar-brand {
+        font-size: 1.55rem !important;
+        letter-spacing: 1.8px !important;
+        padding: 3px 0 7px !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle {
+        width: 44px !important;
+        height: 44px !important;
+        flex-basis: 44px !important;
+        border-radius: 11px !important;
+    }
+
+    .hv-navbar .hv-menu-icon {
+        width: 20px;
+        height: 16px;
+    }
+}
+\n
