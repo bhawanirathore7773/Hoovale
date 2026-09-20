@@ -8,7 +8,7 @@
 {% block og_type %}product{% endblock %}
 {% block og_title %}{{ product.og_title|default:product.name }}{% endblock %}
 {% block og_description %}{{ product.og_description|default:product.meta_description }}{% endblock %}
-{% block og_image %}https://hoovale.com{% if product.og_image %}{{ product.og_image.url }}{% else %}{{ product.image.url }}{% endif %}{% endblock %}
+{% block og_image %}https://hoovale.com{% if product.og_image %}{{ product.og_image.url }}{% elif product.image %}{{ product.image.url }}{% else %}{% static 'images/product-placeholder.svg' %}{% endif %}{% endblock %}
 
 {% block page_schema %}
     {% product_schema product %}
