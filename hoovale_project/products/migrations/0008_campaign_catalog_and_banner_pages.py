@@ -594,6 +594,15 @@ class Migration(migrations.Migration):
                     name='is_page_published',
                     field=models.BooleanField(default=True),
                 ),
+                migrations.AddField(
+                    model_name='banner',
+                    name='page_products',
+                    field=models.ManyToManyField(
+                        blank=True,
+                        related_name='campaign_banners',
+                        to='products.product',
+                    ),
+                ),
             ],
         ),
 
@@ -646,23 +655,6 @@ class Migration(migrations.Migration):
 
         migrations.RunPython(ensure_banner_slug_unique, migrations.RunPython.noop),
         migrations.RunPython(backfill_banner_optional_fields, migrations.RunPython.noop),
-
-        # page_products is a state operation because the actual through table
-        # is created safely by ensure_0008_database_schema above.
-        migrations.SeparateDatabaseAndState(
-            database_operations=[],
-            state_operations=[
-                migrations.AddField(
-                    model_name='banner',
-                    name='page_products',
-                    field=models.ManyToManyField(
-                        blank=True,
-                        related_name='campaign_banners',
-                        to='products.product',
-                    ),
-                ),
-            ],
-        ),
 
         migrations.RunPython(seed_hoovale_catalog, migrations.RunPython.noop),
     ]
