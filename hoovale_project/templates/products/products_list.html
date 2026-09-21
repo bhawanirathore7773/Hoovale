@@ -163,27 +163,80 @@
 <!-- Mobile filter drawer -->
 <div class="products-filter-backdrop" id="productsFilterBackdrop" aria-hidden="true"></div>
 <aside class="products-filter-drawer" id="productsFilterDrawer" aria-hidden="true" aria-label="Product filters">
-    <div class="products-filter-drawer-head">
-        <div>
-            <span class="products-filter-kicker">REFINE</span>
-            <h2>Filters</h2>
+    <form method="get" class="products-filter-form">
+        {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+        <div class="products-filter-drawer-head">
+            <div>
+                <span class="products-filter-kicker">REFINE YOUR SEARCH</span>
+                <h2>Filters</h2>
+            </div>
+            <button type="button" class="products-filter-close" id="productsFilterClose" aria-label="Close filters">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <button type="button" class="products-filter-close" id="productsFilterClose" aria-label="Close filters">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    <div class="products-filter-drawer-body">
-        <div class="filter-group">
-            <h6 class="filter-subtitle">Categories</h6>
-            <div class="filter-options">
-                <a href="{% url 'products_list' %}" class="filter-option {% if not selected_category %}active{% endif %}">All Categories</a>
-                {% for category in categories %}
-                <a href="?category={{ category.slug }}" class="filter-option {% if selected_category == category.slug %}active{% endif %}">{{ category.name }}</a>
-                {% endfor %}
+
+        <div class="products-filter-drawer-body">
+            <div class="filter-section">
+                <div class="filter-section-title"><span>Category</span><span class="filter-count">1</span></div>
+                <div class="filter-options">
+                    <label class="filter-choice {% if not selected_category %}active{% endif %}">
+                        <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %}>
+                        <span>All Categories</span>
+                    </label>
+                    {% for category in categories %}
+                    <label class="filter-choice {% if selected_category == category.slug %}active{% endif %}">
+                        <input type="radio" name="category" value="{{ category.slug }}" {% if selected_category == category.slug %}checked{% endif %}>
+                        <span>{{ category.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-section-title"><span>Price Range</span></div>
+                <div class="price-range-row">
+                    <div class="price-field"><span>₹</span><input type="number" name="min_price" min="0" placeholder="{{ catalogue_min_price|default:0 }}" value="{{ min_price }}"></div>
+                    <span class="price-dash">—</span>
+                    <div class="price-field"><span>₹</span><input type="number" name="max_price" min="0" placeholder="{{ catalogue_max_price|default:0 }}" value="{{ max_price }}"></div>
+                </div>
+                <div class="price-hint">Set a minimum and maximum budget</div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-section-title"><span>Product Type</span></div>
+                <div class="filter-chips">
+                    <label class="filter-chip {% if badge == 'featured' %}active{% endif %}"><input type="radio" name="badge" value="featured" {% if badge == 'featured' %}checked{% endif %}> Featured</label>
+                    <label class="filter-chip {% if badge == 'bestseller' %}active{% endif %}"><input type="radio" name="badge" value="bestseller" {% if badge == 'bestseller' %}checked{% endif %}> Best Sellers</label>
+                    <label class="filter-chip {% if badge == 'new' %}active{% endif %}"><input type="radio" name="badge" value="new" {% if badge == 'new' %}checked{% endif %}> New Arrivals</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-section-title"><span>Availability</span></div>
+                <div class="filter-chips">
+                    <label class="filter-chip {% if availability == 'InStock' %}active{% endif %}"><input type="radio" name="availability" value="InStock" {% if availability == 'InStock' %}checked{% endif %}> In Stock</label>
+                    <label class="filter-chip {% if availability == 'PreOrder' %}active{% endif %}"><input type="radio" name="availability" value="PreOrder" {% if availability == 'PreOrder' %}checked{% endif %}> Pre-Order</label>
+                    <label class="filter-chip {% if availability == 'OutOfStock' %}active{% endif %}"><input type="radio" name="availability" value="OutOfStock" {% if availability == 'OutOfStock' %}checked{% endif %}> Out of Stock</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-section-title"><span>Sort By</span></div>
+                <select name="sort" class="filter-sort-select">
+                    <option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured first</option>
+                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest first</option>
+                    <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="name" {% if sort == 'name' %}selected{% endif %}>Name: A–Z</option>
+                </select>
             </div>
         </div>
-        <a href="{% url 'products_list' %}" class="btn btn-outline-primary w-100 mt-3">Clear All Filters</a>
-    </div>
+
+        <div class="products-filter-drawer-footer">
+            <a href="{% url 'products_list' %}" class="filter-clear-btn">Clear all</a>
+            <button type="submit" class="filter-apply-btn">Apply Filters</button>
+        </div>
+    </form>
 </aside>
 
 <!-- Enquiry Modal -->
