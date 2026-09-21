@@ -159,16 +159,68 @@ def categories_index(request):
 # PRODUCTS
 # ============================================================
 def products_list(request):
+    """Marketplace-style product catalogue with search + practical filters."""
+    from django.db.models import Min, Max
+
     products = Product.objects.filter(is_active=True)
-    categories = Category.objects.all()
+    categories = Category.objects.all().order_by('display_order', 'name')
 
-    search_query = request.GET.get('q', '')
+    search_query = request.GET.get('q', '').strip()
     if search_query:
-        products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+        products = products.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(short_description__icontains=search_query)
+        )
 
-    selected_category = request.GET.get('category', '')
+    selected_category = request.GET.get('category', '').strip()
     if selected_category:
         products = products.filter(category__slug=selected_category)
+
+    # Price range. Keep empty values valid so "Clear all" is always safe.
+    price_bounds = products.aggregate(min_price=Min('price'), max_price=Max('price'))
+    catalogue_min_price = int(price_bounds['min_price'] or 0)
+    catalogue_max_price = int(price_bounds['max_price'] or 0)
+
+    min_price_raw = request.GET.get('min_price', '').strip()
+    max_price_raw = request.GET.get('max_price', '').strip()
+    try:
+        min_price = max(0, int(float(min_price_raw))) if min_price_raw else ''
+    except (TypeError, ValueError):
+        min_price = ''
+    try:
+        max_price = max(0, int(float(max_price_raw))) if max_price_raw else ''
+    except (TypeError, ValueError):
+        max_price = ''
+
+    if min_price != '':
+        products = products.filter(price__gte=min_price)
+    if max_price != '':
+        products = products.filter(price__lte=max_price)
+
+    availability = request.GET.get('availability', '').strip()
+    if availability in {'InStock', 'OutOfStock', 'PreOrder'}:
+        products = products.filter(availability=availability)
+
+    badge = request.GET.get('badge', '').strip()
+    if badge == 'featured':
+        products = products.filter(is_featured=True)
+    elif badge == 'bestseller':
+        products = products.filter(is_bestseller=True)
+    elif badge == 'new':
+        products = products.filter(is_new_arrival=True)
+
+    sort = request.GET.get('sort', 'featured').strip()
+    sort_map = {
+        'featured': ['-is_featured', '-created_at'],
+        'newest': ['-created_at'],
+        'price_low': ['price', '-created_at'],
+        'price_high': ['-price', '-created_at'],
+        'name': ['name'],
+    }
+    if sort not in sort_map:
+        sort = 'featured'
+    products = products.order_by(*sort_map[sort])
 
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page', 1)
@@ -179,6 +231,13 @@ def products_list(request):
         'categories': categories,
         'search_query': search_query,
         'selected_category': selected_category,
+        'min_price': min_price,
+        'max_price': max_price,
+        'catalogue_min_price': catalogue_min_price,
+        'catalogue_max_price': catalogue_max_price,
+        'availability': availability,
+        'badge': badge,
+        'sort': sort,
         'current_page': int(page_number) if str(page_number).isdigit() else 1,
         'total_pages': paginator.num_pages,
     }
