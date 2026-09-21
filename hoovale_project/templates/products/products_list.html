@@ -339,4 +339,199 @@
 <script>
 document.addEventListener('DOMContentLoaded', initializeProductEnquiry);
 </script>
+<style>
+/* ============================================================
+   PREMIUM MOBILE FILTER DRAWER — final marketplace UX
+   ============================================================ */
+@media(max-width:767px){
+  .products-filter-drawer{
+    max-height:88dvh!important;
+    height:88dvh;
+    display:flex!important;
+    flex-direction:column;
+    z-index:2005!important;
+  }
+  .products-filter-backdrop{z-index:2004!important;}
+  .products-filter-form{
+    height:100%;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .products-filter-drawer-head{
+    flex:0 0 auto;
+    padding:18px 20px 15px!important;
+    background:#fff;
+  }
+  .products-filter-drawer-head h2{
+    font-size:1.45rem!important;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .products-filter-drawer-body{
+    flex:1 1 auto;
+    min-height:0;
+    max-height:none!important;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding:16px 20px 24px!important;
+    background:#fff;
+  }
+  .filter-section{
+    padding:0 0 19px;
+    margin:0 0 18px;
+    border-bottom:1px solid #edf0f4;
+  }
+  .filter-section:last-child{border-bottom:0;margin-bottom:0;}
+  .filter-section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:11px;
+    color:#172033;
+    font-size:.96rem;
+    font-weight:800;
+  }
+  .filter-count{
+    min-width:22px;
+    height:22px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#eaf2ff;
+    color:#0051A3;
+    font-size:.7rem;
+  }
+  .filter-options{display:grid;gap:7px;}
+  .filter-choice{
+    position:relative;
+    display:flex;
+    align-items:center;
+    min-height:48px;
+    padding:0 13px;
+    border:1px solid #e7ebf0;
+    border-radius:11px;
+    background:#f8fafc;
+    color:#334155;
+    font-size:.9rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:.18s ease;
+  }
+  .filter-choice:has(input:checked){
+    border-color:#0b5db7;
+    background:#eef6ff;
+    color:#0755a0;
+  }
+  .filter-choice input{
+    width:18px;
+    height:18px;
+    margin:0 11px 0 0;
+    accent-color:#0b5db7;
+    flex:0 0 auto;
+  }
+  .price-range-row{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:9px;
+  }
+  .price-field{
+    display:flex;
+    align-items:center;
+    height:46px;
+    border:1px solid #dfe5ec;
+    border-radius:10px;
+    background:#fff;
+    padding:0 11px;
+  }
+  .price-field span{
+    color:#64748b;
+    font-weight:700;
+    margin-right:5px;
+  }
+  .price-field input{
+    width:100%;
+    min-width:0;
+    border:0;
+    outline:0;
+    font-size:.9rem;
+    color:#172033;
+    background:transparent;
+  }
+  .price-dash{color:#94a3b8;font-weight:700;}
+  .price-hint{margin-top:7px;color:#94a3b8;font-size:.72rem;}
+  .filter-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .filter-chip{
+    display:inline-flex;
+    align-items:center;
+    min-height:40px;
+    padding:0 13px;
+    border:1px solid #dfe5ec;
+    border-radius:999px;
+    background:#fff;
+    color:#475569;
+    font-size:.78rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.18s ease;
+  }
+  .filter-chip input{position:absolute;opacity:0;pointer-events:none;}
+  .filter-chip:has(input:checked){
+    background:#eaf3ff;
+    border-color:#0b5db7;
+    color:#0755a0;
+  }
+  .filter-sort-select{
+    width:100%;
+    min-height:46px;
+    border:1px solid #dfe5ec;
+    border-radius:10px;
+    background:#fff;
+    padding:0 12px;
+    color:#334155;
+    font-weight:600;
+    outline:none;
+  }
+  .products-filter-drawer-footer{
+    flex:0 0 auto;
+    display:grid;
+    grid-template-columns:1fr 1.45fr;
+    gap:10px;
+    padding:12px 20px calc(12px + env(safe-area-inset-bottom));
+    background:#fff;
+    border-top:1px solid #e8edf2;
+    box-shadow:0 -8px 24px rgba(15,23,42,.08);
+  }
+  .filter-clear-btn,
+  .filter-apply-btn{
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    font-weight:800;
+    text-decoration:none;
+  }
+  .filter-clear-btn{
+    border:1px solid #d8e0e8;
+    background:#fff;
+    color:#334155;
+  }
+  .filter-apply-btn{
+    border:0;
+    background:#0051A3;
+    color:#fff;
+    box-shadow:0 5px 14px rgba(0,81,163,.2);
+  }
+  .filter-clear-btn:active,.filter-apply-btn:active{transform:scale(.98);}
+  body.hv-filter-open{overflow:hidden!important;}
+}
+</style>
 {% endblock %}
