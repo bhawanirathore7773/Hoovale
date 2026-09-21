@@ -417,6 +417,85 @@ function initializeProductFilters() {
 
     toggle.dataset.hvFilterBound = '1';
 
+    const setOpen = (open) => {
+        document.body.classList.toggle('hv-filter-open', open);
+        drawer.setAttribute('aria-hidden', String(!open));
+        backdrop.setAttribute('aria-hidden', String(!open));
+        toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        setOpen(true);
+    });
+
+    backdrop.addEventListener('click', function(event) {
+        event.preventDefault();
+        setOpen(false);
+    });
+
+    close?.addEventListener('click', function(event) {
+        event.preventDefault();
+        setOpen(false);
+    });
+
+    drawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && document.body.classList.contains('hv-filter-open')) {
+            setOpen(false);
+        }
+    });
+}
+
+/* Fallback delegated handler:
+   keeps the mobile filter working even if the page is restored from cache
+   or another script initializes after the normal DOM-ready pass. */
+if (!window.__hoovaleFilterDelegationBound) {
+    window.__hoovaleFilterDelegationBound = true;
+
+    document.addEventListener('click', function(event) {
+        const toggle = event.target.closest('#productsFilterToggle');
+        if (toggle) {
+            const drawer = document.getElementById('productsFilterDrawer');
+            const backdrop = document.getElementById('productsFilterBackdrop');
+            if (!drawer || !backdrop) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            document.body.classList.add('hv-filter-open');
+            drawer.setAttribute('aria-hidden', 'false');
+            backdrop.setAttribute('aria-hidden', 'false');
+            toggle.setAttribute('aria-expanded', 'true');
+            return;
+        }
+
+        if (event.target.closest('#productsFilterClose, #productsFilterBackdrop')) {
+            const drawer = document.getElementById('productsFilterDrawer');
+            const backdrop = document.getElementById('productsFilterBackdrop');
+            const toggle = document.getElementById('productsFilterToggle');
+
+            document.body.classList.remove('hv-filter-open');
+            drawer?.setAttribute('aria-hidden', 'true');
+            backdrop?.setAttribute('aria-hidden', 'true');
+            toggle?.setAttribute('aria-expanded', 'false');
+        }
+    }, true);
+}
+
+    const toggle = document.getElementById('productsFilterToggle');
+    const drawer = document.getElementById('productsFilterDrawer');
+    const backdrop = document.getElementById('productsFilterBackdrop');
+    const close = document.getElementById('productsFilterClose');
+    if (!toggle || !drawer || !backdrop) return;
+    if (toggle.dataset.hvFilterBound === '1') return;
+
+    toggle.dataset.hvFilterBound = '1';
+
     const open = () => {
         document.body.classList.add('hv-filter-open');
         drawer.setAttribute('aria-hidden', 'false');
