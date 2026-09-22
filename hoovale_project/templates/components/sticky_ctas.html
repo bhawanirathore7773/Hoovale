@@ -448,25 +448,4 @@
     </a>
 </nav>
 
-<script>
-(function () {
-    function enhanceHoovaleHome() {
-        const home = document.querySelector('.hv-home');
-        if (!home) return;
 
-        // The promotional carousel is managed by the Django banner model.
-        // Put it directly before the first product shelf, like a marketplace.
-        const banner = home.querySelector('.hv-home-banner-wrap');
-        const firstProducts = home.querySelector('.hv-home-product-priority');
-        if (banner && firstProducts && banner !== firstProducts.previousElementSibling) {
-            firstProducts.parentNode.insertBefore(banner, firstProducts);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', enhanceHoovaleHome);
-    } else {
-        enhanceHoovaleHome();
-    }
-})();
-</script>
