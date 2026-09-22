@@ -382,11 +382,14 @@ class BlogAdmin(ModelAdmin):
     list_editable = ['is_published']
     fieldsets = (
         ('Article', {'fields': ('title', 'slug', 'category', 'description', 'content_html', 'featured_image')}),
-        ('Inline Images', {'fields': (
-            'inline_image_1', 'inline_image_1_caption',
-            'inline_image_2', 'inline_image_2_caption',
-            'inline_image_3', 'inline_image_3_caption',
-        )}),
+        ('Inline Images', {
+            'fields': (
+                'inline_image_1', 'inline_image_1_caption',
+                'inline_image_2', 'inline_image_2_caption',
+                'inline_image_3', 'inline_image_3_caption',
+            ),
+            'description': 'Image 1 appears after the article introduction, Image 2 in the middle of the guide, and Image 3 near the end. Use original, relevant product/process photos with descriptive captions.',
+        }),
         ('SEO', {'fields': ('meta_title', 'meta_description', 'meta_keywords')}),
         ('Publishing', {'fields': ('is_published',)}),
     )
