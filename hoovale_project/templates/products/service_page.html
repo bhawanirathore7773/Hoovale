@@ -7,127 +7,79 @@
 {% block og_title %}{{ service.meta_title }}{% endblock %}
 {% block og_description %}{{ service.meta_description|default:service.short_description }}{% endblock %}
 
-{% block page_schema %}
-    {% breadcrumb_schema breadcrumb_items %}
-{% endblock %}
+{% block page_schema %}{% breadcrumb_schema breadcrumb_items %}{% endblock %}
 
 {% block content %}
-
-{# BREADCRUMBS #}
-<div style="background:#f8f9fa; padding:14px 0; font-size:0.9rem;">
-    <div class="container-lg">
-        <a href="/" style="color:#666; text-decoration:none;">Home</a>
-        <span style="color:#999;"> › </span>
-        <a href="{% url 'services_index' %}" style="color:#666; text-decoration:none;">Services</a>
-        <span style="color:#999;"> › </span>
-        <span style="color:#0051A3; font-weight:600;">{{ service.name }}</span>
+<section class="hv-service-hero">
+  <div class="container-lg">
+    <a href="{% url 'services_index' %}" class="hv-service-back"><i class="fas fa-arrow-left"></i> All Services</a>
+    <div class="hv-service-icon"><i class="{{ service.icon_class|default:'fas fa-cogs' }}"></i></div>
+    <div class="hv-home-kicker">HOOVALE SERVICE • JAIPUR</div>
+    <h1>{{ service.h1_heading }}</h1>
+    <p>{{ service.hero_subheading|default:service.short_description }}</p>
+    <div class="hv-service-actions">
+      <a class="btn-hv-gold" href="{% whatsapp_link 'Hi HOOVALE, I need details and pricing for ' %}{{ service.name }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Enquiry</a>
+      <a class="btn-hv-outline" href="{% url 'contact' %}">Send Requirement <i class="fas fa-arrow-right"></i></a>
     </div>
-</div>
-
-{# HERO #}
-<section style="position:relative; padding:80px 0; background:linear-gradient(135deg,#0051A3 0%, #0066cc 100%); color:white; overflow:hidden;">
-    <div class="container-lg">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <div style="display:inline-block; background:rgba(255,255,255,0.2); color:white; padding:6px 16px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:16px;">
-                    <i class="{{ service.icon_class|default:'fas fa-cog' }}"></i> SERVICE
-                </div>
-                <h1 style="font-family:'Montserrat',sans-serif; font-size:2.8rem; font-weight:900; line-height:1.1; margin-bottom:18px;">{{ service.h1_heading }}</h1>
-                <p style="font-size:1.15rem; opacity:0.95; line-height:1.6; margin-bottom:30px;">{{ service.hero_subheading|default:service.short_description }}</p>
-
-                <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <a href="{% whatsapp_link 'Hi, I want to know about ' %}{{ service.name }}" target="_blank" style="background:#25D366; color:white; padding:14px 30px; border-radius:8px; font-weight:700; text-decoration:none;">
-                        <i class="fab fa-whatsapp"></i> Get Started
-                    </a>
-                    <a href="{% call_link %}" style="background:rgba(255,255,255,0.15); border:2px solid white; color:white; padding:12px 30px; border-radius:8px; font-weight:700; text-decoration:none;">
-                        <i class="fas fa-phone-alt"></i> Call Us
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </section>
 
-{# FULL DESCRIPTION #}
-<section style="padding:60px 0;">
-    <div class="container-lg">
-        <div class="row">
-            <div class="col-lg-9">
-                <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:20px;">About Our {{ service.name }} Service</h2>
-                <div style="font-size:1.05rem; color:#444; line-height:1.8;">{{ service.full_description|linebreaks }}</div>
-            </div>
-        </div>
+<section class="hv-service-content">
+  <div class="container-lg">
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-8">
+        <article class="hv-service-card">
+          <div class="hv-home-kicker">Service Overview</div>
+          <h2>{{ service.name }}</h2>
+          <p class="hv-service-lead">{{ service.short_description }}</p>
+          <div class="hv-rich-copy">{{ service.full_description|linebreaks }}</div>
+          {% if service.process_content %}<div class="hv-service-section"><h2>How it works</h2><div class="hv-rich-copy">{{ service.process_content|linebreaks }}</div></div>{% endif %}
+          {% if service.benefits_content %}<div class="hv-service-section"><h2>What buyers can expect</h2><div class="hv-rich-copy">{{ service.benefits_content|linebreaks }}</div></div>{% endif %}
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <aside class="hv-service-side">
+          <div class="hv-home-kicker">Need a quote?</div>
+          <h3>Share your quantity, design and delivery requirement.</h3>
+          <p>We can help you shortlist suitable wall clocks and discuss branding, pricing and dispatch.</p>
+          <a class="btn-hv-primary w-100" href="{% url 'contact' %}">Send Enquiry <i class="fas fa-arrow-right"></i></a>
+          <a class="btn-hv-whatsapp w-100 mt-2" href="{% whatsapp_link 'Hi HOOVALE, I need a quote for ' %}{{ service.name }}" target="_blank">WhatsApp Us</a>
+        </aside>
+      </div>
     </div>
+  </div>
 </section>
 
-{# PROCESS #}
-{% if service.process_content %}
-<section style="padding:60px 0; background:#f8f9fa;">
-    <div class="container-lg">
-        <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:30px; text-align:center;">
-            <i class="fas fa-list-check" style="color:#FFA500;"></i> How {{ service.name }} Works
-        </h2>
-        <div class="row">
-            <div class="col-lg-9 mx-auto">
-                <div style="background:white; padding:40px; border-radius:12px; font-size:1.05rem; color:#444; line-height:1.8; border-left:4px solid #FFA500;">
-                    {{ service.process_content|linebreaks }}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{# BENEFITS #}
-{% if service.benefits_content %}
-<section style="padding:60px 0;">
-    <div class="container-lg">
-        <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:30px;">
-            <i class="fas fa-star" style="color:#FFA500;"></i> Benefits & Features
-        </h2>
-        <div class="row">
-            <div class="col-lg-9">
-                <div style="font-size:1.05rem; color:#444; line-height:1.8;">{{ service.benefits_content|linebreaks }}</div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endif %}
-
-{# RELATED SERVICES #}
 {% if related_services %}
-<section style="padding:60px 0; background:#f8f9fa;">
-    <div class="container-lg">
-        <h2 style="font-family:'Montserrat',sans-serif; color:#1a1a1a; font-weight:800; margin-bottom:30px; text-align:center;">Other Services</h2>
-        <div class="row g-4">
-            {% for s in related_services %}
-            <div class="col-md-6 col-lg-3">
-                <a href="{{ s.get_absolute_url }}" style="text-decoration:none; color:inherit;">
-                    <div style="background:white; padding:30px 20px; border-radius:12px; text-align:center; height:100%; transition:all 0.3s;"
-                         onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 30px rgba(0,81,163,0.15)';"
-                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                        <i class="{{ s.icon_class|default:'fas fa-cog' }}" style="font-size:2.5rem; color:#FFA500; margin-bottom:14px;"></i>
-                        <h3 style="font-size:1rem; font-weight:700; color:#1a1a1a; margin-bottom:8px;">{{ s.name }}</h3>
-                        <p style="font-size:0.85rem; color:#666; margin:0;">{{ s.short_description|truncatewords:14 }}</p>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+<section class="hv-service-related">
+  <div class="container-lg">
+    <div class="hv-home-kicker">More From HOOVALE</div>
+    <h2>Related services</h2>
+    <div class="row g-3 mt-2">
+      {% for related in related_services %}
+      <div class="col-6 col-lg-3"><a class="hv-related-service" href="{{ related.get_absolute_url }}"><i class="{{ related.icon_class|default:'fas fa-arrow-right' }}"></i><strong>{{ related.name }}</strong><span>Explore <i class="fas fa-arrow-right"></i></span></a></div>
+      {% endfor %}
     </div>
+  </div>
 </section>
 {% endif %}
+{% endblock %}
 
-{# CLOSING CTA #}
-<section style="padding:60px 0; background:linear-gradient(135deg,#FFA500,#FF8C00); color:white; text-align:center;">
-    <div class="container-lg">
-        <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:2.4rem; margin-bottom:16px;">Ready to Get Started?</h2>
-        <p style="font-size:1.1rem; max-width:700px; margin:0 auto 30px; opacity:0.95;">Talk to our team to discuss your requirement and get a custom quote.</p>
-        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-            <a href="{% whatsapp_link 'Hi, I want to know more about ' %}{{ service.name }}" target="_blank" style="background:#25D366; color:white; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
-            <a href="{% call_link %}" style="background:white; color:#FF8C00; padding:16px 40px; border-radius:8px; font-weight:800; text-decoration:none;"><i class="fas fa-phone-alt"></i> Call Now</a>
-        </div>
-    </div>
-</section>
-
+{% block extra_css %}
+<style>
+.hv-service-hero{padding:58px 0 70px;background:linear-gradient(135deg,#0b1724,#075aa4);color:#fff}
+.hv-service-back{display:inline-flex;gap:8px;color:#d8e7f5;font-weight:700;margin-bottom:24px}
+.hv-service-back:hover{color:#fff}
+.hv-service-icon{width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(201,169,97,.15);border:1px solid rgba(201,169,97,.55);color:#e2bf70;font-size:1.4rem;margin-bottom:20px}
+.hv-service-hero h1{color:#fff!important;max-width:850px;margin:10px 0 18px}
+.hv-service-hero p{color:rgba(255,255,255,.88);font-size:1.1rem;max-width:780px}
+.hv-service-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hv-service-content{padding:58px 0;background:#f7f9fc}
+.hv-service-card,.hv-service-side{background:#fff;border:1px solid #e4e9ef;border-radius:18px;padding:30px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+.hv-service-card h2{margin-bottom:14px}.hv-service-lead{font-size:1.08rem;color:#44546a;line-height:1.8}.hv-rich-copy{color:#465365;line-height:1.85}
+.hv-service-section{margin-top:32px;padding-top:28px;border-top:1px solid #e7ebf0}.hv-service-side{position:sticky;top:105px}.hv-service-side h3{font-size:1.35rem;margin:8px 0 12px}.hv-service-related{padding:58px 0;background:#fff}
+.hv-related-service{display:flex;flex-direction:column;gap:9px;height:100%;padding:20px;border:1px solid #e4e9ef;border-radius:14px;color:#172033;background:#fff}.hv-related-service:hover{color:#075aa4;box-shadow:0 12px 28px rgba(15,23,42,.08)}
+.hv-related-service>i{color:#c9a961}.hv-related-service span{font-size:.82rem;color:#697586;margin-top:auto}
+@media(max-width:767px){.hv-service-hero{padding:44px 0 54px}.hv-service-hero h1{font-size:2.35rem}.hv-service-content{padding:38px 0}.hv-service-card,.hv-service-side{padding:22px}.hv-service-side{position:static}.hv-service-actions>*{width:100%}}
+</style>
 {% endblock %}
