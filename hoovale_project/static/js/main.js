@@ -594,6 +594,105 @@ if (!window.__hoovaleFilterDelegationBound) {
 /* ============================================================
    PRODUCT CARD KEYBOARD NAVIGATION
    ============================================================ */
+/* ============================================================
+   PRODUCT ENQUIRY MODAL
+   Opens the existing Bootstrap enquiry modal from product cards.
+   ============================================================ */
+function initializeProductEnquiry() {
+    const modalEl = document.getElementById('enquiryModal');
+    if (!modalEl) return;
+
+    const buttons = document.querySelectorAll('.enquiry-btn');
+    if (!buttons.length) return;
+
+    buttons.forEach(button => {
+        if (button.dataset.hvEnquiryBound === '1') return;
+        button.dataset.hvEnquiryBound = '1';
+
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const productId = this.getAttribute('data-product-id') || '';
+            const productName = this.getAttribute('data-product-name') || '';
+
+            const productInput = document.getElementById('productId');
+            const messageInput = document.getElementById('message');
+
+            if (productInput) productInput.value = productId;
+            if (messageInput && !messageInput.value.trim()) {
+                messageInput.value = productName
+                    ? 'I am interested in: ' + productName
+                    : '';
+            }
+
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        });
+    });
+
+    const form = document.getElementById('enquiryForm');
+    if (form && form.dataset.hvEnquiryFormBound !== '1') {
+        form.dataset.hvEnquiryFormBound = '1';
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            }
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {'X-Requested-With': 'XMLHttpRequest'}
+                });
+                const data = await response.json();
+
+                let message = document.getElementById('enquiryResponse');
+                if (!message) {
+                    message = document.createElement('div');
+                    message.id = 'enquiryResponse';
+                    form.prepend(message);
+                }
+
+                if (response.ok && data.success) {
+                    message.innerHTML = '<div class="alert alert-success mb-3"><i class="fas fa-check-circle"></i> ' +
+                        (data.message || 'Enquiry submitted successfully!') + '</div>';
+                    form.reset();
+
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+                        message.innerHTML = '';
+                    }, 1800);
+                } else {
+                    message.innerHTML = '<div class="alert alert-danger mb-3"><i class="fas fa-exclamation-circle"></i> ' +
+                        (data.error || 'Please check the details and try again.') + '</div>';
+                }
+            } catch (error) {
+                let message = document.getElementById('enquiryResponse');
+                if (!message) {
+                    message = document.createElement('div');
+                    message.id = 'enquiryResponse';
+                    form.prepend(message);
+                }
+                message.innerHTML = '<div class="alert alert-danger mb-3"><i class="fas fa-exclamation-circle"></i> Network error. Please try again or WhatsApp us.</div>';
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            }
+        });
+    }
+}
+
 function initializeProductCardLinks() {
     document.querySelectorAll('.product-card-link[role="link"]').forEach(card => {
         if (card.dataset.hvCardBound === '1') return;
