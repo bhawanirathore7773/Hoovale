@@ -163,80 +163,96 @@
 <!-- Mobile filter drawer -->
 <div class="products-filter-backdrop" id="productsFilterBackdrop" aria-hidden="true"></div>
 <aside class="products-filter-drawer" id="productsFilterDrawer" aria-hidden="true" aria-label="Product filters">
-    <form method="get" class="products-filter-form">
-        {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
-        <div class="products-filter-drawer-head">
-            <div>
-                <span class="products-filter-kicker">REFINE YOUR SEARCH</span>
-                <h2>Filters</h2>
-            </div>
-            <button type="button" class="products-filter-close" id="productsFilterClose" aria-label="Close filters">
-                <i class="fas fa-times"></i>
-            </button>
+  <form method="get" class="products-filter-form" id="productsFilterForm">
+    {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+
+    <div class="products-filter-drawer-head">
+      <div>
+        <span class="products-filter-kicker">FILTER BY</span>
+        <h2>Refine Products</h2>
+      </div>
+      <button type="button" class="products-filter-close" id="productsFilterClose" aria-label="Close filters">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="products-filter-drawer-body">
+      <section class="filter-section">
+        <div class="filter-section-title"><span>Category</span><button type="button" class="filter-reset-section" data-reset-group="category">Reset</button></div>
+        <div class="filter-options">
+          <label class="filter-choice">
+            <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %}>
+            <span>All Categories</span>
+          </label>
+          {% for category in categories %}
+          <label class="filter-choice">
+            <input type="radio" name="category" value="{{ category.slug }}" {% if selected_category == category.slug %}checked{% endif %}>
+            <span>{{ category.name }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="filter-section filter-price-section">
+        <div class="filter-section-title"><span>Price Range</span><button type="button" class="filter-reset-section" data-reset-group="price">Reset</button></div>
+
+        <div class="price-range-values">
+          <div><span>From</span><strong>₹<output id="minPriceOutput">{{ min_price|default:catalogue_min_price|default:0 }}</output></strong></div>
+          <div><span>To</span><strong>₹<output id="maxPriceOutput">{{ max_price|default:catalogue_max_price|default:0 }}</output></strong></div>
         </div>
 
-        <div class="products-filter-drawer-body">
-            <div class="filter-section">
-                <div class="filter-section-title"><span>Category</span><span class="filter-count">1</span></div>
-                <div class="filter-options">
-                    <label class="filter-choice {% if not selected_category %}active{% endif %}">
-                        <input type="radio" name="category" value="" {% if not selected_category %}checked{% endif %}>
-                        <span>All Categories</span>
-                    </label>
-                    {% for category in categories %}
-                    <label class="filter-choice {% if selected_category == category.slug %}active{% endif %}">
-                        <input type="radio" name="category" value="{{ category.slug }}" {% if selected_category == category.slug %}checked{% endif %}>
-                        <span>{{ category.name }}</span>
-                    </label>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="filter-section">
-                <div class="filter-section-title"><span>Price Range</span></div>
-                <div class="price-range-row">
-                    <div class="price-field"><span>₹</span><input type="number" name="min_price" min="0" placeholder="{{ catalogue_min_price|default:0 }}" value="{{ min_price }}"></div>
-                    <span class="price-dash">—</span>
-                    <div class="price-field"><span>₹</span><input type="number" name="max_price" min="0" placeholder="{{ catalogue_max_price|default:0 }}" value="{{ max_price }}"></div>
-                </div>
-                <div class="price-hint">Set a minimum and maximum budget</div>
-            </div>
-
-            <div class="filter-section">
-                <div class="filter-section-title"><span>Product Type</span></div>
-                <div class="filter-chips">
-                    <label class="filter-chip {% if badge == 'featured' %}active{% endif %}"><input type="radio" name="badge" value="featured" {% if badge == 'featured' %}checked{% endif %}> Featured</label>
-                    <label class="filter-chip {% if badge == 'bestseller' %}active{% endif %}"><input type="radio" name="badge" value="bestseller" {% if badge == 'bestseller' %}checked{% endif %}> Best Sellers</label>
-                    <label class="filter-chip {% if badge == 'new' %}active{% endif %}"><input type="radio" name="badge" value="new" {% if badge == 'new' %}checked{% endif %}> New Arrivals</label>
-                </div>
-            </div>
-
-            <div class="filter-section">
-                <div class="filter-section-title"><span>Availability</span></div>
-                <div class="filter-chips">
-                    <label class="filter-chip {% if availability == 'InStock' %}active{% endif %}"><input type="radio" name="availability" value="InStock" {% if availability == 'InStock' %}checked{% endif %}> In Stock</label>
-                    <label class="filter-chip {% if availability == 'PreOrder' %}active{% endif %}"><input type="radio" name="availability" value="PreOrder" {% if availability == 'PreOrder' %}checked{% endif %}> Pre-Order</label>
-                    <label class="filter-chip {% if availability == 'OutOfStock' %}active{% endif %}"><input type="radio" name="availability" value="OutOfStock" {% if availability == 'OutOfStock' %}checked{% endif %}> Out of Stock</label>
-                </div>
-            </div>
-
-            <div class="filter-section">
-                <div class="filter-section-title"><span>Sort By</span></div>
-                <select name="sort" class="filter-sort-select">
-                    <option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured first</option>
-                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest first</option>
-                    <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
-                    <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
-                    <option value="name" {% if sort == 'name' %}selected{% endif %}>Name: A–Z</option>
-                </select>
-            </div>
+        <div class="dual-price-slider" id="dualPriceSlider"
+             data-min="{{ catalogue_min_price|default:0 }}"
+             data-max="{{ catalogue_max_price|default:0 }}">
+          <div class="dual-price-track"></div>
+          <div class="dual-price-fill" id="dualPriceFill"></div>
+          <input type="range" id="minPriceRange" min="{{ catalogue_min_price|default:0 }}" max="{{ catalogue_max_price|default:0 }}" step="10" value="{{ min_price|default:catalogue_min_price|default:0 }}" aria-label="Minimum price">
+          <input type="range" id="maxPriceRange" min="{{ catalogue_min_price|default:0 }}" max="{{ catalogue_max_price|default:0 }}" step="10" value="{{ max_price|default:catalogue_max_price|default:0 }}" aria-label="Maximum price">
         </div>
 
-        <div class="products-filter-drawer-footer">
-            <a href="{% url 'products_list' %}" class="filter-clear-btn">Clear all</a>
-            <button type="submit" class="filter-apply-btn">Apply Filters</button>
+        <div class="price-input-row">
+          <label class="price-input-box"><span>₹</span><input type="number" id="minPriceInput" name="min_price" min="0" value="{{ min_price }}" placeholder="{{ catalogue_min_price|default:0 }}" inputmode="numeric"></label>
+          <span class="price-between">to</span>
+          <label class="price-input-box"><span>₹</span><input type="number" id="maxPriceInput" name="max_price" min="0" value="{{ max_price }}" placeholder="{{ catalogue_max_price|default:0 }}" inputmode="numeric"></label>
         </div>
-    </form>
+        <p class="price-hint">Drag either handle to set your budget.</p>
+      </section>
+
+      <section class="filter-section">
+        <div class="filter-section-title"><span>Product Type</span><button type="button" class="filter-reset-section" data-reset-group="badge">Reset</button></div>
+        <div class="filter-chips">
+          <label class="filter-chip"><input type="radio" name="badge" value="featured" {% if badge == 'featured' %}checked{% endif %}><span>Featured</span></label>
+          <label class="filter-chip"><input type="radio" name="badge" value="bestseller" {% if badge == 'bestseller' %}checked{% endif %}><span>Best Sellers</span></label>
+          <label class="filter-chip"><input type="radio" name="badge" value="new" {% if badge == 'new' %}checked{% endif %}><span>New Arrivals</span></label>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <div class="filter-section-title"><span>Availability</span><button type="button" class="filter-reset-section" data-reset-group="availability">Reset</button></div>
+        <div class="filter-chips">
+          <label class="filter-chip"><input type="radio" name="availability" value="InStock" {% if availability == 'InStock' %}checked{% endif %}><span>In Stock</span></label>
+          <label class="filter-chip"><input type="radio" name="availability" value="PreOrder" {% if availability == 'PreOrder' %}checked{% endif %}><span>Pre-Order</span></label>
+          <label class="filter-chip"><input type="radio" name="availability" value="OutOfStock" {% if availability == 'OutOfStock' %}checked{% endif %}><span>Out of Stock</span></label>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <div class="filter-section-title"><span>Sort By</span></div>
+        <select name="sort" class="filter-sort-select">
+          <option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured first</option>
+          <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest first</option>
+          <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+          <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+          <option value="name" {% if sort == 'name' %}selected{% endif %}>Name: A–Z</option>
+        </select>
+      </section>
+    </div>
+
+    <div class="products-filter-drawer-footer">
+      <a href="{% url 'products_list' %}" class="filter-clear-btn" id="filterResetAll">Reset All</a>
+      <button type="submit" class="filter-apply-btn" id="filterApplyButton">Apply Filters</button>
+    </div>
+  </form>
 </aside>
 
 <!-- Enquiry Modal -->
