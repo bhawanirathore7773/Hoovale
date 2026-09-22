@@ -185,9 +185,9 @@
     <div class="container-lg">
         <div class="row g-4">
             <div class="col-lg-4 col-md-6">
-                <h5 style="color:white; font-weight:700; margin-bottom:20px;">{{ site.business_name }}</h5>
-                <p style="font-size:0.9rem; line-height:1.7;">
-                    {{ site.tagline }}. Trusted wall clock manufacturer serving retailers, distributors, corporates and bulk buyers across India since {{ site.establishment_year }}.
+                <h5 style="color:white; font-weight:700; margin-bottom:8px;">{{ site.business_name }}</h5>
+                <p class="hv-footer-subtitle">
+                    Jaipur-based wall clock manufacturing and supply for homes, retailers, businesses and bulk buyers across India. Explore custom, promotional, corporate and wholesale wall clocks with direct enquiry support.
                 </p>
                 {% if site.gst_number %}
                 <p style="font-size:0.85rem; color:#FFA500;"><strong>GST:</strong> {{ site.gst_number }}</p>
@@ -196,23 +196,24 @@
 
             <div class="col-lg-2 col-md-6">
                 <h6 style="color:white; font-weight:700; margin-bottom:15px;">Quick Links</h6>
-                <ul style="list-style:none; padding:0; font-size:0.9rem; line-height:2;">
-                    <li><a href="{% url 'home' %}" style="color:#ccc; text-decoration:none;">Home</a></li>
-                    <li><a href="{% url 'products_list' %}" style="color:#ccc; text-decoration:none;">Products</a></li>
-                    <li><a href="{% url 'about' %}" style="color:#ccc; text-decoration:none;">About</a></li>
-                    <li><a href="{% url 'blog_list' %}" style="color:#ccc; text-decoration:none;">Blog</a></li>
-                    <li><a href="{% url 'contact' %}" style="color:#ccc; text-decoration:none;">Contact</a></li>
+                <ul class="hv-footer-link-grid">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'products_list' %}">Products</a></li>
+                    <li><a href="{% url 'categories_index' %}">Categories</a></li>
+                    <li><a href="{% url 'about' %}">About HOOVALE</a></li>
+                    <li><a href="{% url 'blog_list' %}">Wall Clock Guides</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
             </div>
 
             <div class="col-lg-3 col-md-6">
                 <h6 style="color:white; font-weight:700; margin-bottom:15px;">Top Services</h6>
-                <ul style="list-style:none; padding:0; font-size:0.9rem; line-height:2;">
-                    <li><a href="#" style="color:#ccc; text-decoration:none;">Bulk Wall Clock Supply</a></li>
-                    <li><a href="#" style="color:#ccc; text-decoration:none;">Custom Logo Printing</a></li>
-                    <li><a href="#" style="color:#ccc; text-decoration:none;">OEM Manufacturing</a></li>
-                    <li><a href="#" style="color:#ccc; text-decoration:none;">Corporate Gifting</a></li>
-                    <li><a href="#" style="color:#ccc; text-decoration:none;">Promotional Clocks</a></li>
+                <ul class="hv-footer-link-grid">
+                    <li><a href="{% url 'service_page' slug='bulk-wall-clock-supply' %}">Bulk Wall Clock Supply</a></li>
+                    <li><a href="{% url 'service_page' slug='custom-logo-printing' %}">Custom Logo Printing</a></li>
+                    <li><a href="{% url 'service_page' slug='oem-manufacturing' %}">OEM Manufacturing</a></li>
+                    <li><a href="{% url 'service_page' slug='corporate-gifting' %}">Corporate Gifting</a></li>
+                    <li><a href="{% url 'service_page' slug='promotional-clocks' %}">Promotional Clocks</a></li>
                 </ul>
             </div>
 
