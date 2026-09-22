@@ -450,6 +450,8 @@ function initializeProductFilters() {
             setOpen(false);
         }
     });
+
+    initializeProductPriceRange();
 }
 
 
