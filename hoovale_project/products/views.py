@@ -475,7 +475,13 @@ def blog_detail(request, slug):
     blog = get_object_or_404(Blog, slug=slug, is_published=True)
     related_blogs = Blog.objects.filter(is_published=True).exclude(id=blog.id)[:3]
     return render(request, 'products/blog_detail.html', {
-        'blog': blog, 'related_blogs': related_blogs,
+        'blog': blog,
+        'related_blogs': related_blogs,
+        'blog_breadcrumb_items': [
+            ('Home', '/'),
+            ('Wall Clock Guides', '/blog/'),
+            (blog.title, None),
+        ],
     })
 
 
