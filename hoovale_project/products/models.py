@@ -811,7 +811,14 @@ class Blog(models.Model):
     null=True,
     default='default/blog-default.jpg'
 )
-    description = models.TextField(help_text="SEO optimized content")
+    description = models.TextField(help_text="Short/plain-text summary for listings and SEO")
+    content_html = models.TextField(blank=True, help_text="Optional article body HTML. Use headings, lists and links; keep content useful for readers.")
+    inline_image_1 = models.ImageField(upload_to='blog/%Y/%m/', blank=True, null=True)
+    inline_image_2 = models.ImageField(upload_to='blog/%Y/%m/', blank=True, null=True)
+    inline_image_3 = models.ImageField(upload_to='blog/%Y/%m/', blank=True, null=True)
+    inline_image_1_caption = models.CharField(max_length=180, blank=True)
+    inline_image_2_caption = models.CharField(max_length=180, blank=True)
+    inline_image_3_caption = models.CharField(max_length=180, blank=True)
 
     meta_title = models.CharField(max_length=70, blank=True)
     meta_description = models.CharField(max_length=160, blank=True)
