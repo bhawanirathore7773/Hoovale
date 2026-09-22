@@ -6,7 +6,7 @@
 {% block meta_keywords %}{{ blog.meta_keywords }}{% endblock %}
 {% block og_title %}{{ blog.meta_title|default:blog.title }}{% endblock %}
 {% block og_description %}{{ blog.meta_description|default:blog.description|truncatechars:155 }}{% endblock %}
-{% block og_image %}{% if blog.featured_image %}{{ blog.featured_image.url }}{% else %}{% static 'images/product-placeholder.svg' %}{% endif %}{% endblock %}
+{% block og_image %}{% if blog.featured_image and blog.featured_image.name != 'default/blog-default.jpg' %}{{ blog.featured_image.url }}{% else %}{% static 'images/product-placeholder.svg' %}{% endif %}{% endblock %}
 
 {% block page_schema %}
 <script type="application/ld+json">
@@ -20,7 +20,7 @@
   "mainEntityOfPage":{"@type":"WebPage","@id":"{{ request.build_absolute_uri }}"},
   "author":{"@type":"Organization","name":"HOOVALE"},
   "publisher":{"@type":"Organization","name":"HOOVALE"},
-  "image":"{% if blog.featured_image %}{{ request.scheme }}://{{ request.get_host }}{{ blog.featured_image.url }}{% endif %}"
+  "image":"{% if blog.featured_image and blog.featured_image.name != 'default/blog-default.jpg' %}{{ request.scheme }}://{{ request.get_host }}{{ blog.featured_image.url }}{% endif %}"
 }
 </script>
 {% breadcrumb_schema blog_breadcrumb_items %}
