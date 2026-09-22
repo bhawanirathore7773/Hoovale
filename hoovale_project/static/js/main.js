@@ -517,6 +517,7 @@ function initializeProductPriceRange() {
             minInput.value = '';
             maxInput.value = '';
             sync();
+            updateCount();
         });
     });
 
@@ -524,13 +525,14 @@ function initializeProductPriceRange() {
         btn.addEventListener('click', () => {
             const radio = document.querySelector('input[name="category"][value=""]');
             if (radio) radio.checked = true;
+            updateCount();
         });
     });
     document.querySelectorAll('[data-reset-group="badge"]').forEach(btn => {
-        btn.addEventListener('click', () => document.querySelectorAll('input[name="badge"]').forEach(i => i.checked = false));
+        btn.addEventListener('click', () => { document.querySelectorAll('input[name="badge"]').forEach(i => i.checked = false); updateCount(); });
     });
     document.querySelectorAll('[data-reset-group="availability"]').forEach(btn => {
-        btn.addEventListener('click', () => document.querySelectorAll('input[name="availability"]').forEach(i => i.checked = false));
+        btn.addEventListener('click', () => { document.querySelectorAll('input[name="availability"]').forEach(i => i.checked = false); updateCount(); });
     });
 
     const updateCount = () => {
