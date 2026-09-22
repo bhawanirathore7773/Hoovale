@@ -13,8 +13,8 @@
 {
   "@context":"https://schema.org",
   "@type":"Article",
-  "headline":{{ blog.title|escapejs|json_script:"blog-headline" }},
-  "description":{{ blog.meta_description|default:blog.description|truncatechars:155|escapejs|json_script:"blog-description" }},
+  "headline":"{{ blog.title|escapejs }}",
+  "description":"{{ blog.meta_description|default:blog.description|truncatechars:155|escapejs }}",
   "datePublished":"{{ blog.created_at|date:'c' }}",
   "dateModified":"{{ blog.updated_at|date:'c' }}",
   "mainEntityOfPage":{"@type":"WebPage","@id":"{{ request.build_absolute_uri }}"},
