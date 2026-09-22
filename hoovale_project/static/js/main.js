@@ -538,11 +538,14 @@ function initializeProductPriceRange() {
     const updateCount = () => {
         let count = 0;
         if (document.querySelector('input[name="category"]:checked')?.value) count++;
-        if (minInput.value || maxInput.value) count++;
+        const minBound = Number(slider?.dataset.min || minRange?.min || 0);
+        const maxBound = Number(slider?.dataset.max || maxRange?.max || 0);
+        const selectedMin = Number(minInput.value || minBound);
+        const selectedMax = Number(maxInput.value || maxBound);
+        if (selectedMin > minBound || selectedMax < maxBound) count++;
         if (document.querySelector('input[name="badge"]:checked')) count++;
         if (document.querySelector('input[name="availability"]:checked')) count++;
-        const sort = document.querySelector('select[name="sort"]')?.value;
-        if (sort && sort !== 'featured') count++;
+
         const apply = document.getElementById('filterApplyButton');
         if (apply) apply.textContent = count ? `Apply Filters(${count})` : 'Apply Filters';
     };
