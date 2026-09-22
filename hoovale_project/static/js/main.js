@@ -451,6 +451,102 @@ function initializeProductFilters() {
     });
 }
 
+
+function initializeProductPriceRange() {
+    const slider = document.getElementById('dualPriceSlider');
+    const minRange = document.getElementById('minPriceRange');
+    const maxRange = document.getElementById('maxPriceRange');
+    const minInput = document.getElementById('minPriceInput');
+    const maxInput = document.getElementById('maxPriceInput');
+    const minOutput = document.getElementById('minPriceOutput');
+    const maxOutput = document.getElementById('maxPriceOutput');
+    const fill = document.getElementById('dualPriceFill');
+    const form = document.getElementById('productsFilterForm');
+    if (!slider || !minRange || !maxRange || !minInput || !maxInput) return;
+    if (slider.dataset.bound === '1') return;
+    slider.dataset.bound = '1';
+
+    const min = Number(slider.dataset.min || minRange.min || 0);
+    const max = Number(slider.dataset.max || maxRange.max || 0);
+    const step = Number(minRange.step || 10);
+    const clamp = v => Math.min(max, Math.max(min, Number(v) || min));
+
+    const sync = source => {
+        let lo = clamp(minRange.value);
+        let hi = clamp(maxRange.value);
+        if (lo > hi) {
+            if (source === 'min') lo = hi;
+            else hi = lo;
+        }
+        minRange.value = lo;
+        maxRange.value = hi;
+        minInput.value = lo === min ? '' : Math.round(lo);
+        maxInput.value = hi === max ? '' : Math.round(hi);
+        if (minOutput) minOutput.textContent = Math.round(lo).toLocaleString('en-IN');
+        if (maxOutput) maxOutput.textContent = Math.round(hi).toLocaleString('en-IN');
+        const span = Math.max(1, max - min);
+        const left = ((lo - min) / span) * 100;
+        const right = ((hi - min) / span) * 100;
+        if (fill) {
+            fill.style.left = left + '%';
+            fill.style.right = (100 - right) + '%';
+        }
+    };
+
+    minRange.addEventListener('input', () => sync('min'));
+    maxRange.addEventListener('input', () => sync('max'));
+
+    minInput.addEventListener('input', () => {
+        if (minInput.value === '') { minRange.value = min; sync('min'); return; }
+        minRange.value = clamp(Math.round(Number(minInput.value) / step) * step);
+        sync('min');
+    });
+    maxInput.addEventListener('input', () => {
+        if (maxInput.value === '') { maxRange.value = max; sync('max'); return; }
+        maxRange.value = clamp(Math.round(Number(maxInput.value) / step) * step);
+        sync('max');
+    });
+
+    document.querySelectorAll('[data-reset-group="price"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            minRange.value = min;
+            maxRange.value = max;
+            minInput.value = '';
+            maxInput.value = '';
+            sync();
+        });
+    });
+
+    document.querySelectorAll('[data-reset-group="category"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const radio = document.querySelector('input[name="category"][value=""]');
+            if (radio) radio.checked = true;
+        });
+    });
+    document.querySelectorAll('[data-reset-group="badge"]').forEach(btn => {
+        btn.addEventListener('click', () => document.querySelectorAll('input[name="badge"]').forEach(i => i.checked = false));
+    });
+    document.querySelectorAll('[data-reset-group="availability"]').forEach(btn => {
+        btn.addEventListener('click', () => document.querySelectorAll('input[name="availability"]').forEach(i => i.checked = false));
+    });
+
+    const updateCount = () => {
+        let count = 0;
+        if (document.querySelector('input[name="category"]:checked')?.value) count++;
+        if (minInput.value || maxInput.value) count++;
+        if (document.querySelector('input[name="badge"]:checked')) count++;
+        if (document.querySelector('input[name="availability"]:checked')) count++;
+        const sort = document.querySelector('select[name="sort"]')?.value;
+        if (sort && sort !== 'featured') count++;
+        const apply = document.getElementById('filterApplyButton');
+        if (apply) apply.textContent = count ? `Apply Filters(${count})` : 'Apply Filters';
+    };
+    form?.addEventListener('input', updateCount);
+    form?.addEventListener('change', updateCount);
+    sync();
+    updateCount();
+}
+
 /* Fallback delegated handler:
    keeps the mobile filter working even if the page is restored from cache
    or another script initializes after the normal DOM-ready pass. */
