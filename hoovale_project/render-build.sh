@@ -15,4 +15,7 @@ python manage.py collectstatic --noinput
 echo "==> Creating/checking Django admin user"
 python create_admin.py
 
+echo "==> Seeding service pages and SEO blog guides"
+python manage.py seed_content
+
 echo "==> Build completed successfully"
