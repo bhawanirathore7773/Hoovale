@@ -377,9 +377,19 @@ class SiteSettingsAdmin(ModelAdmin):
 class BlogAdmin(ModelAdmin):
     list_display = ['title', 'category', 'is_published', 'created_at']
     list_filter = ['category', 'is_published']
-    search_fields = ['title', 'description']
+    search_fields = ['title', 'description', 'content_html']
     prepopulated_fields = {'slug': ('title',)}
     list_editable = ['is_published']
+    fieldsets = (
+        ('Article', {'fields': ('title', 'slug', 'category', 'description', 'content_html', 'featured_image')}),
+        ('Inline Images', {'fields': (
+            'inline_image_1', 'inline_image_1_caption',
+            'inline_image_2', 'inline_image_2_caption',
+            'inline_image_3', 'inline_image_3_caption',
+        )}),
+        ('SEO', {'fields': ('meta_title', 'meta_description', 'meta_keywords')}),
+        ('Publishing', {'fields': ('is_published',)}),
+    )
 
 
 # ============================================================
