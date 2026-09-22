@@ -21,7 +21,7 @@
       <div class="col-md-6 col-lg-4">
         <article class="hv-blog-index-card">
           <a href="{{ blog.get_absolute_url }}" class="hv-blog-index-image">
-            {% if blog.featured_image %}
+            {% if blog.featured_image and blog.featured_image.name != 'default/blog-default.jpg' %}
               <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" loading="lazy">
             {% else %}
               <div class="hv-blog-index-placeholder"><i class="far fa-clock"></i></div>
