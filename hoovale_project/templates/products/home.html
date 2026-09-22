@@ -1391,8 +1391,13 @@
      <a href="{{ product.get_absolute_url }}" style="text-decoration:none;color:inherit">
       <div class="image">
        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }} — {{ shelf.category.name }} wall clock, Jaipur manufacturer" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" loading="lazy">{% endif %}
-       {% if product.is_bestseller %}<span class="badge bg-success position-absolute top-0 start-0 m-2">Bestseller</span>{% endif %}
-       {% if product.is_new_arrival %}<span class="badge bg-dark position-absolute top-0 end-0 m-2">New</span>{% endif %}
+       {% if product.is_featured %}
+       <span class="hv-single-status featured">Featured</span>
+       {% elif product.is_bestseller %}
+       <span class="hv-single-status best">Bestseller</span>
+       {% elif product.is_new_arrival %}
+       <span class="hv-single-status new">New</span>
+       {% endif %}
       </div>
       <div class="body">
        <div class="category">{{ shelf.category.name }}</div>
