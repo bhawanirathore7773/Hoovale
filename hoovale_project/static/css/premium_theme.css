@@ -1800,12 +1800,12 @@ img[loading="lazy"][src] {
 /* Bulk quote modal: never hide text behind the mobile bottom navigation */
 body.modal-open{padding-right:0 !important;}
 .bulk-modal{
-    z-index:1065 !important;
+    z-index:10060 !important;
     padding-left:0 !important;
     padding-right:0 !important;
 }
 .bulk-modal + .modal-backdrop,
-.modal-backdrop.show{z-index:1060 !important;}
+.modal-backdrop.show{z-index:10050 !important;}
 .bulk-modal .modal-dialog{
     max-height:calc(100dvh - 28px);
     margin:14px auto;
@@ -1914,7 +1914,7 @@ body.modal-open{padding-right:0 !important;}
 }
 
 /* Product enquiry modal */
-#enquiryModal{z-index:1065 !important;}
-#enquiryModal + .modal-backdrop{z-index:1060 !important;}
+#enquiryModal{z-index:10060 !important;}
+#enquiryModal + .modal-backdrop{z-index:10050 !important;}
 #enquiryModal .modal-body{max-height:calc(100dvh - 190px);overflow-y:auto;}
 #enquiryResponse{margin-bottom:10px;}
