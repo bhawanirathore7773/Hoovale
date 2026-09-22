@@ -1759,3 +1759,162 @@ img[loading="lazy"][src] {
     }
 }
 \n
+
+/* ============================================================
+   FINAL MOBILE UX / CONVERSION POLISH
+   ============================================================ */
+
+/* Footer: readable SEO copy + two-column link groups */
+.hv-footer-subtitle{
+    color:#bfc5cc !important;
+    font-size:.92rem;
+    line-height:1.75;
+    max-width:440px;
+    margin:0 0 12px;
+}
+.hv-footer-link-grid{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:20px;
+    row-gap:4px;
+    font-size:.92rem;
+}
+.hv-footer-link-grid li{min-width:0;}
+.hv-footer-link-grid a{
+    color:#c9cdd2 !important;
+    text-decoration:none !important;
+    display:block;
+    padding:2px 0;
+    line-height:1.7;
+}
+.hv-footer-link-grid a:hover{color:#fff !important;}
+
+@media(max-width:767px){
+    .hv-footer-subtitle{font-size:.9rem;line-height:1.7;}
+    .hv-footer-link-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;}
+}
+
+/* Bulk quote modal: never hide text behind the mobile bottom navigation */
+body.modal-open{padding-right:0 !important;}
+.bulk-modal{
+    z-index:1065 !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+}
+.bulk-modal + .modal-backdrop,
+.modal-backdrop.show{z-index:1060 !important;}
+.bulk-modal .modal-dialog{
+    max-height:calc(100dvh - 28px);
+    margin:14px auto;
+}
+.bulk-modal .modal-content{
+    max-height:calc(100dvh - 28px);
+    display:flex;
+    flex-direction:column;
+}
+.bulk-modal-header{
+    flex:0 0 auto;
+    color:#fff !important;
+}
+.bulk-modal-header h2,
+.bulk-modal-header p,
+.bulk-modal-header .modal-title{
+    color:#fff !important;
+}
+.bulk-modal-body{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:36px;
+}
+@media(max-width:767px){
+    .bulk-modal .modal-dialog{
+        max-width:none;
+        width:calc(100% - 24px);
+        margin:12px auto;
+    }
+    .bulk-modal .modal-content{
+        border-radius:18px;
+        max-height:calc(100dvh - 24px);
+    }
+    .bulk-modal-header{padding:24px 22px 22px;}
+    .bulk-modal-header h2{font-size:1.65rem !important;line-height:1.15;}
+    .bulk-modal-header p{font-size:.95rem !important;line-height:1.5;}
+    .bulk-modal-body{padding:22px 22px 42px;}
+    .bulk-modal-form .form-control,
+    .bulk-modal-form .form-select{min-height:48px;}
+}
+
+/* Product badges: one compact status tag only */
+.hv-product-card .image{position:relative;}
+.hv-product-card .hv-product-badge,
+.hv-product-card .badge.position-absolute{
+    font-size:.68rem !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    padding:6px 9px !important;
+    border-radius:999px !important;
+    margin:10px !important;
+    letter-spacing:.15px;
+    box-shadow:0 3px 10px rgba(15,23,42,.12);
+}
+.hv-product-card .hv-single-status{
+    position:absolute;
+    top:10px;
+    left:10px;
+    z-index:3;
+    font-size:.68rem;
+    line-height:1;
+    font-weight:800;
+    padding:6px 9px;
+    border-radius:999px;
+    color:#fff;
+    background:#1f2937;
+    box-shadow:0 3px 10px rgba(15,23,42,.12);
+}
+.hv-product-card .hv-single-status.best{background:#168a57;}
+.hv-product-card .hv-single-status.new{background:#20252b;}
+.hv-product-card .hv-single-status.featured{background:#c93f4b;}
+
+/* About page: premium blue/white/gold instead of flat orange blocks */
+.hv-about-page{overflow:hidden;}
+.hv-about-hero{
+    padding:clamp(58px,8vw,92px) 0 !important;
+    background:
+        radial-gradient(circle at 82% 25%,rgba(201,169,97,.18),transparent 28%),
+        linear-gradient(135deg,#0b1724 0%,#0b3968 52%,#075aa4 100%) !important;
+    color:#fff !important;
+    position:relative;
+}
+.hv-about-hero::after{
+    content:'';
+    position:absolute;
+    left:0;right:0;bottom:0;height:3px;
+    background:linear-gradient(90deg,transparent,#c9a961,transparent);
+}
+.hv-about-hero h1{color:#fff !important;}
+.hv-about-hero p{color:rgba(255,255,255,.9) !important;max-width:850px;}
+.hv-about-story{padding:clamp(48px,7vw,72px) 0 !important;background:#fff;}
+.hv-about-trust{padding:clamp(48px,7vw,72px) 0 !important;background:#f6f8fb !important;}
+.hv-about-process{padding:clamp(48px,7vw,72px) 0 !important;background:#fff;}
+@media(max-width:767px){
+    .hv-about-hero h1{font-size:clamp(2.8rem,14vw,4rem) !important;line-height:.98;}
+    .hv-about-hero p{font-size:1.08rem !important;line-height:1.65 !important;}
+}
+
+/* Keep mobile content clear of the fixed bottom navigation */
+@media(max-width:767px){
+    main{padding-bottom:72px;}
+    .hv-footer{padding-bottom:82px !important;}
+}
+
+/* Product enquiry modal */
+#enquiryModal{z-index:1065 !important;}
+#enquiryModal + .modal-backdrop{z-index:1060 !important;}
+#enquiryModal .modal-body{max-height:calc(100dvh - 190px);overflow-y:auto;}
+#enquiryResponse{margin-bottom:10px;}
