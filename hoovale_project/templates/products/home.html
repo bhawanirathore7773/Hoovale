@@ -1213,6 +1213,37 @@
         gap:5px;
     }
 }
+
+/* FINAL 3:2 HOMEPAGE CAROUSEL — authoritative override */
+.hv-home-banner-wrap{width:100%;padding:18px 24px 14px;background:#fff;box-sizing:border-box}
+.hv-home-banner{width:100%;max-width:1220px;margin:0 auto;overflow:hidden;border-radius:16px;position:relative}
+.hv-home-banner .carousel,.hv-home-banner .carousel-inner,.hv-home-banner .carousel-item{width:100%}
+.hv-banner-link{display:block;position:relative;width:100%;height:auto!important;min-height:0!important;aspect-ratio:3/2!important;overflow:hidden;background:#f4f1ea;border-radius:16px}
+.hv-banner-link picture{display:block;width:100%;height:100%}
+.hv-banner-link img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.hv-banner-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:clamp(20px,4.5vw,58px);box-sizing:border-box;overflow:hidden;background:linear-gradient(90deg,rgba(0,0,0,.58),rgba(0,0,0,.06) 78%);color:#fff;pointer-events:none}
+.hv-banner-content h2,.hv-banner-content p,.hv-banner-content span{max-width:68%;overflow-wrap:anywhere}
+.hv-banner-content h2{color:#fff!important;font-family:"Playfair Display",serif;font-size:clamp(1.45rem,3.2vw,2.8rem);line-height:1.05;margin:0 0 8px}
+.hv-banner-content p{color:rgba(255,255,255,.94);margin:0 0 12px;font-size:clamp(.76rem,1.45vw,1rem);line-height:1.4}
+.hv-banner-content span{display:inline-flex;align-items:center;gap:7px;width:max-content;max-width:68%;color:#fff;background:#b88b32;border-radius:999px;padding:9px 16px;font-size:.76rem;font-weight:800}
+.hv-home-banner .carousel-control-prev,.hv-home-banner .carousel-control-next{width:46px;height:46px;top:50%;transform:translateY(-50%);margin:0 12px;border:0;border-radius:50%;background:rgba(255,255,255,.96);opacity:1;box-shadow:0 5px 18px rgba(0,0,0,.12);z-index:6}
+.hv-home-banner .carousel-control-prev-icon,.hv-home-banner .carousel-control-next-icon{filter:invert(1);width:18px;height:18px}
+.hv-banner-indicators{position:absolute;z-index:7;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:999px;background:rgba(15,23,42,.34)}
+.hv-banner-indicators button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.68);opacity:1}
+.hv-banner-indicators button.active{width:22px;border-radius:999px;background:#c9a961}
+@media(max-width:767px){
+ .hv-home-banner-wrap{padding:12px 16px 8px}
+ .hv-home-banner,.hv-banner-link{border-radius:14px}
+ .hv-banner-link{aspect-ratio:3/2!important}
+ .hv-banner-content{padding:18px 20px 30px;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.04) 82%)}
+ .hv-banner-content h2{max-width:64%;font-size:clamp(1.15rem,5.8vw,1.65rem);line-height:1.04;margin-bottom:5px}
+ .hv-banner-content p{max-width:64%;font-size:.7rem;line-height:1.3;margin-bottom:7px}
+ .hv-banner-content span{max-width:64%;padding:7px 11px;font-size:.62rem}
+ .hv-home-banner .carousel-control-prev,.hv-home-banner .carousel-control-next{width:34px;height:34px;margin:0 7px}
+ .hv-home-banner .carousel-control-prev-icon,.hv-home-banner .carousel-control-next-icon{width:14px;height:14px}
+ .hv-banner-indicators{bottom:10px;gap:6px;padding:4px 8px}
+}
+
 </style>
 {% endblock %}
 
@@ -1286,11 +1317,13 @@
        <source media="(max-width: 767px)" srcset="{{ banner.mobile_url }}">
        <img src="{{ banner.desktop_url }}" alt="{{ banner.heading|default:banner.title }} — HOOVALE wall clocks" {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
       </picture>
+      {% if banner.is_dynamic %}
       <div class="hv-banner-content">
        {% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}
        {% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}
        {% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}
       </div>
+      {% endif %}
      </a>
     </div>
     {% endfor %}
