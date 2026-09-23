@@ -647,11 +647,11 @@ class Banner(models.Model):
     # Recommended: upload both sizes on ONE banner.
     desktop_image = models.ImageField(
         upload_to='banners/desktop/', blank=True, null=True,
-        help_text="Recommended 1920×814 (or 1600×678), approximately 2.36:1 to match the homepage banner card."
+        help_text="Recommended 1200×800 (or 1440×960), exact 3:2 ratio for the homepage carousel card."
     )
     mobile_image = models.ImageField(
         upload_to='banners/mobile/', blank=True, null=True,
-        help_text="Recommended 1080×458 (or 853×362), approximately 2.36:1 to match the homepage banner card."
+        help_text="Recommended 1200×800 (or 1080×720), exact 3:2 ratio for the homepage carousel card; use the same ratio on mobile."
     )
     fallback_desktop = models.CharField(
         max_length=300, blank=True,
