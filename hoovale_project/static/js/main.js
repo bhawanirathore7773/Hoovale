@@ -198,7 +198,6 @@ function setupResponsiveNav() {
     const toggler = document.getElementById('hvMenuToggle');
     const drawer = document.getElementById('nav');
     const overlay = document.getElementById('hvMenuOverlay');
-    const closeButton = document.getElementById('hvMenuClose');
 
     if (!toggler || !drawer) return;
 
@@ -230,7 +229,6 @@ function setupResponsiveNav() {
         setMenu(!drawer.classList.contains('is-open'));
     });
 
-    closeButton?.addEventListener('click', () => setMenu(false));
     overlay?.addEventListener('click', () => setMenu(false));
 
     drawer.querySelectorAll('.nav-link, .nav-item .btn').forEach(link => {
@@ -244,20 +242,6 @@ function setupResponsiveNav() {
     window.addEventListener('resize', () => {
         if (!isMobile()) setMenu(false);
     });
-
-    // The drawer owns the close button state. Do not rebuild/toggle it on
-    // scroll, so the rectangle X remains stable after scrolling.
-    const syncDrawerCloseButton = () => {
-        if (!closeButton) return;
-        closeButton.hidden = false;
-        closeButton.style.removeProperty('display');
-        closeButton.style.removeProperty('visibility');
-        closeButton.style.removeProperty('opacity');
-    };
-
-    syncDrawerCloseButton();
-    drawer.addEventListener('scroll', syncDrawerCloseButton, {passive: true});
-    window.addEventListener('scroll', syncDrawerCloseButton, {passive: true});
 
     setMenu(false);
 }
