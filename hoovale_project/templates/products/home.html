@@ -1608,3 +1608,175 @@
 
 </div>
 {% endblock %}
+
+
+/* =========================================================
+   FINAL COLLECTION BANNER — MATCH SUPPLIED REFERENCE
+   Reference artwork card ratio ≈ 813:345 = 2.36:1.
+   Text/CTA are part of the uploaded artwork, so do not layer
+   a second HTML text treatment over the image.
+   ========================================================= */
+.hv-home-banner-wrap{
+    width:100%;
+    padding:14px 20px 12px;
+    background:#fff;
+}
+
+.hv-home-banner{
+    width:100%;
+    max-width:1220px;
+    margin:0 auto;
+    overflow:visible;
+    border-radius:16px;
+    box-shadow:none;
+    border:0;
+}
+
+.hv-home-banner .carousel,
+.hv-home-banner .carousel-inner,
+.hv-home-banner .carousel-item{
+    width:100%;
+}
+
+.hv-home-banner .carousel-inner{
+    overflow:hidden;
+    border-radius:16px;
+}
+
+.hv-banner-link{
+    display:block;
+    position:relative;
+    width:100%;
+    aspect-ratio:2.36 / 1;
+    height:auto;
+    min-height:0;
+    overflow:hidden;
+    border-radius:16px;
+    background:#f3f4f6;
+}
+
+.hv-banner-link picture,
+.hv-banner-link img{
+    display:block;
+    width:100%;
+    height:100%;
+}
+
+.hv-banner-link img{
+    object-fit:cover;
+    object-position:center;
+}
+
+/* The reference image already contains headline, copy and CTA. */
+.hv-banner-content{
+    display:none !important;
+}
+
+/* Clean circular arrows like the supplied reference. */
+.hv-home-banner .carousel-control-prev,
+.hv-home-banner .carousel-control-next{
+    z-index:8;
+    width:46px;
+    height:46px;
+    top:50%;
+    transform:translateY(-50%);
+    margin:0 10px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.96);
+    box-shadow:0 5px 18px rgba(15,23,42,.14);
+    opacity:1;
+}
+
+.hv-home-banner .carousel-control-prev-icon,
+.hv-home-banner .carousel-control-next-icon{
+    width:16px;
+    height:16px;
+    filter:invert(1);
+}
+
+/* Reference has dots BELOW the banner on a clean white background. */
+.hv-banner-indicators{
+    position:static !important;
+    left:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    height:28px;
+    margin:5px 0 0;
+    padding:0 !important;
+    background:transparent !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+
+.hv-banner-indicators button{
+    width:8px !important;
+    height:8px !important;
+    min-width:8px;
+    min-height:8px;
+    padding:0 !important;
+    margin:0 !important;
+    border:0 !important;
+    border-radius:999px !important;
+    background:#aeb4bd !important;
+    opacity:1 !important;
+    transition:width .2s ease, background-color .2s ease;
+}
+
+.hv-banner-indicators button.active{
+    width:24px !important;
+    height:8px !important;
+    background:#b48a36 !important;
+}
+
+@media(max-width:767px){
+    .hv-home-banner-wrap{
+        padding:10px 10px 8px;
+    }
+
+    .hv-home-banner,
+    .hv-home-banner .carousel-inner,
+    .hv-banner-link{
+        border-radius:12px;
+    }
+
+    .hv-banner-link{
+        aspect-ratio:2.36 / 1;
+    }
+
+    .hv-home-banner .carousel-control-prev,
+    .hv-home-banner .carousel-control-next{
+        width:32px;
+        height:32px;
+        margin:0 7px;
+    }
+
+    .hv-home-banner .carousel-control-prev-icon,
+    .hv-home-banner .carousel-control-next-icon{
+        width:12px;
+        height:12px;
+    }
+
+    .hv-banner-indicators{
+        height:25px;
+        margin-top:4px;
+        gap:6px;
+    }
+
+    .hv-banner-indicators button{
+        width:7px !important;
+        height:7px !important;
+        min-width:7px;
+        min-height:7px;
+    }
+
+    .hv-banner-indicators button.active{
+        width:20px !important;
+        height:7px !important;
+    }
+}
