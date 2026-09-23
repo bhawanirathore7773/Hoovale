@@ -642,6 +642,7 @@ function initializeProductEnquiry() {
         });
     }
 
+    const form = document.getElementById('enquiryForm');
     if (form && form.dataset.hvEnquiryFormBound !== '1') {
         form.dataset.hvEnquiryFormBound = '1';
 
