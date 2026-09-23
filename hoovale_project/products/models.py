@@ -803,7 +803,7 @@ class SiteSettings(models.Model):
 # ============================================================
 class Blog(models.Model):
     title = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(max_length=220, unique=True, blank=True)
     category = models.CharField(max_length=100, default='Wall Clocks')
     featured_image = models.ImageField(
     upload_to='blog/%Y/%m/',
