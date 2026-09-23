@@ -146,66 +146,72 @@
 /* ── Tier 5 Celebration ─────────────────────────────────────────────────── */
 .hv-tier5-celebration{
   position:fixed;
-  inset:0;
+  left:0;
+  right:0;
+  bottom:72px; /* stay above the sticky mobile navigation */
+  height:300px;
   z-index:10050;
   pointer-events:none;
   overflow:hidden;
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
 }
 .hv-tier5-celebration .hv-celebrate-card{
   position:relative;
   z-index:2;
   min-width:min(320px,82vw);
-  padding:20px 24px;
-  border-radius:18px;
+  margin-bottom:82px; /* starts around the Bulk WhatsApp CTA */
+  padding:16px 22px;
+  border-radius:16px;
   text-align:center;
   color:#fff;
   background:linear-gradient(135deg,#0051A3,#0878d1);
-  box-shadow:0 18px 55px rgba(0,81,163,.30);
-  animation:hv-tier5-pop .55s cubic-bezier(.18,.9,.25,1.2) both;
+  box-shadow:0 14px 38px rgba(0,81,163,.25);
+  animation:hv-tier5-rise .65s cubic-bezier(.18,.8,.22,1) both;
 }
 .hv-tier5-celebration .hv-celebrate-icon{
   display:block;
-  font-size:2.4rem;
+  font-size:2rem;
   line-height:1;
-  margin-bottom:7px;
-  animation:hv-trophy-bounce .8s ease-in-out both;
+  margin-bottom:5px;
+  animation:hv-trophy-bounce .75s ease-in-out both;
 }
 .hv-tier5-celebration strong{
   display:block;
-  font-size:1.15rem;
+  font-size:1.05rem;
   font-weight:900;
 }
 .hv-tier5-celebration span{
   display:block;
-  margin-top:3px;
-  font-size:.78rem;
-  opacity:.9;
+  margin-top:2px;
+  font-size:.75rem;
+  opacity:.92;
 }
 .hv-tier5-confetti{
   position:absolute;
-  top:-18px;
-  width:9px;
-  height:15px;
+  left:50%;
+  bottom:55px;
+  width:8px;
+  height:14px;
   border-radius:2px;
   opacity:0;
-  animation:hv-confetti-fall var(--fall-time) cubic-bezier(.15,.65,.25,1) var(--delay) forwards;
+  animation:hv-confetti-rise var(--fall-time) cubic-bezier(.15,.65,.25,1) var(--delay) forwards;
 }
-@keyframes hv-tier5-pop{
-  0%{opacity:0;transform:scale(.72) translateY(14px)}
-  65%{opacity:1;transform:scale(1.04) translateY(0)}
-  100%{opacity:1;transform:scale(1)}
+@keyframes hv-tier5-rise{
+  0%{opacity:0;transform:translateY(58px) scale(.84)}
+  65%{opacity:1;transform:translateY(-8px) scale(1.02)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
 }
 @keyframes hv-trophy-bounce{
-  0%{transform:scale(.5) rotate(-12deg)}
-  55%{transform:scale(1.16) rotate(5deg)}
+  0%{transform:scale(.65) rotate(-10deg)}
+  55%{transform:scale(1.12) rotate(4deg)}
   100%{transform:scale(1) rotate(0)}
 }
-@keyframes hv-confetti-fall{
-  0%{opacity:1;transform:translate3d(0,-30px,0) rotate(0deg)}
-  100%{opacity:0;transform:translate3d(var(--drift),105vh,0) rotate(720deg)}
+@keyframes hv-confetti-rise{
+  0%{opacity:0;transform:translate3d(0,25px,0) rotate(0deg)}
+  12%{opacity:1}
+  100%{opacity:0;transform:translate3d(var(--drift),calc(-1 * var(--rise)),0) rotate(540deg)}
 }
 @media(prefers-reduced-motion:reduce){
   .hv-tier5-celebration .hv-celebrate-card,
@@ -214,10 +220,16 @@
   .hv-tier5-celebration{display:none!important}
 }
 @media(max-width:600px){
+  .hv-tier5-celebration{
+    bottom:66px;
+    height:280px;
+  }
   .hv-tier5-celebration .hv-celebrate-card{
     min-width:260px;
-    padding:17px 20px;
-    border-radius:16px;
+    max-width:calc(100vw - 44px);
+    margin-bottom:82px;
+    padding:15px 18px;
+    border-radius:15px;
   }
 }
 
@@ -562,14 +574,15 @@ function showTier5Celebration() {
     for (var i = 0; i < pieces; i++) {
         var piece = document.createElement('i');
         piece.className = 'hv-tier5-confetti';
-        piece.style.left = (2 + Math.random() * 96) + '%';
+        piece.style.left = (35 + Math.random() * 30) + '%';
         piece.style.width = (6 + Math.random() * 5) + 'px';
         piece.style.height = (9 + Math.random() * 9) + 'px';
         piece.style.borderRadius = shapes[i % shapes.length];
         piece.style.background = ['#0051A3','#0ebc78','#C9A961','#FFB000','#ffffff'][i % 5];
         piece.style.setProperty('--drift', ((Math.random() - .5) * 240) + 'px');
         piece.style.setProperty('--delay', (Math.random() * .22) + 's');
-        piece.style.setProperty('--fall-time', (1.25 + Math.random() * .8) + 's');
+        piece.style.setProperty('--fall-time', (1.1 + Math.random() * .55) + 's');
+        piece.style.setProperty('--rise', (150 + Math.random() * 130) + 'px');
         fragment.appendChild(piece);
     }
     layer.appendChild(fragment);
