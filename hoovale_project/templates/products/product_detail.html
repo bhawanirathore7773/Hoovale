@@ -279,8 +279,8 @@
                                 <span id="progress-label-left">Tier 1 of 5</span>
                                 <span id="progress-label-right" class="tier-next-hint"></span>
                             </div>
-                            <div class="tier-progress-bar-bg">
-                                <div class="tier-progress-bar-fill" id="tier-progress-fill" style="width:5%"></div>
+                            <div class="tier-progress-bar-bg" aria-label="Quantity tier progress">
+                                <div class="tier-progress-bar-fill" id="tier-progress-fill" style="width:4%"></div>
                             </div>
                         </div>
 
@@ -564,10 +564,17 @@ document.addEventListener('DOMContentLoaded', function () {
             progressRight.className      = 'tier-next-hint at-top';
         } else {
             var nextTier   = TIERS[tierIdx + 1];
-            var needed     = nextTier.min_qty - qty;
-            var rangeWidth = nextTier.min_qty - tier.min_qty;
-            var pct        = Math.min(100, Math.round(((qty - tier.min_qty) / rangeWidth) * 100));
-            progressFill.style.width  = Math.max(4, pct) + '%';
+            var needed     = Math.max(0, nextTier.min_qty - qty);
+            var rangeWidth = Math.max(1, nextTier.min_qty - tier.min_qty);
+
+            // Show cumulative progress across the full tier ladder:
+            // Tier 1 ≈ 0%, Tier 2 ≈ 25%, Tier 3 ≈ 50%, Tier 4 ≈ 75%, Tier 5 = 100%.
+            // Within a tier, the fill advances smoothly toward the next tier.
+            var tierSpan = Math.max(1, TIERS.length - 1);
+            var withinTier = Math.min(1, Math.max(0, (qty - tier.min_qty) / rangeWidth));
+            var pct = ((tierIdx + withinTier) / tierSpan) * 100;
+
+            progressFill.style.width = Math.min(100, Math.max(4, Math.round(pct))) + '%';
             progressLeft.textContent  = 'Tier ' + tier.tier + ' of ' + TIERS.length;
             progressRight.textContent = '+ ' + needed + ' pcs → unlock ' + nextTier.label;
             progressRight.className   = 'tier-next-hint';
