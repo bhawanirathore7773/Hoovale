@@ -54,6 +54,7 @@ def home(request):
             'cta_text': 'Explore Collection',
             'desktop_url': '/static/images/banners/wedding-desktop.svg',
             'mobile_url': '/static/images/banners/wedding-mobile.svg',
+            'is_dynamic': False,
         },
         {
             'url': '/products/',
@@ -63,6 +64,7 @@ def home(request):
             'cta_text': 'Explore Corporate',
             'desktop_url': '/static/images/banners/corporate-desktop.svg',
             'mobile_url': '/static/images/banners/corporate-mobile.svg',
+            'is_dynamic': False,
         },
         {
             'url': '/products/',
@@ -72,6 +74,7 @@ def home(request):
             'cta_text': 'Customize Now',
             'desktop_url': '/static/images/banners/custom-desktop.svg',
             'mobile_url': '/static/images/banners/custom-mobile.svg',
+            'is_dynamic': False,
         },
         {
             'url': '/products/',
@@ -81,6 +84,7 @@ def home(request):
             'cta_text': 'Get a Quote',
             'desktop_url': '/static/images/banners/promotion-desktop.svg',
             'mobile_url': '/static/images/banners/promotion-mobile.svg',
+            'is_dynamic': False,
         },
     ]
     for campaign in static_campaigns:
