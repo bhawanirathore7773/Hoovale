@@ -148,7 +148,7 @@
   position:fixed;
   left:0;
   right:0;
-  bottom:72px; /* stay above the sticky mobile navigation */
+  bottom:72px;
   height:300px;
   z-index:10050;
   pointer-events:none;
@@ -159,59 +159,84 @@
 }
 .hv-tier5-celebration .hv-celebrate-card{
   position:relative;
-  z-index:2;
+  z-index:3;
   min-width:min(320px,82vw);
-  margin-bottom:82px; /* starts around the Bulk WhatsApp CTA */
-  padding:16px 22px;
+  margin-bottom:82px;
+  padding:14px 21px;
   border-radius:16px;
   text-align:center;
   color:#fff;
-  background:linear-gradient(135deg,#0051A3,#0878d1);
-  box-shadow:0 14px 38px rgba(0,81,163,.25);
-  animation:hv-tier5-rise .65s cubic-bezier(.18,.8,.22,1) both;
+  background:linear-gradient(135deg,#0051A3,#0a76c9);
+  border:1px solid rgba(255,211,72,.55);
+  box-shadow:0 14px 38px rgba(0,81,163,.24);
+  animation:hv-tier5-rise .55s cubic-bezier(.18,.8,.22,1) both;
 }
 .hv-tier5-celebration .hv-celebrate-icon{
   display:block;
-  font-size:2rem;
+  font-size:1.9rem;
   line-height:1;
-  margin-bottom:5px;
-  animation:hv-trophy-bounce .75s ease-in-out both;
+  margin-bottom:4px;
+  animation:hv-trophy-bounce .7s ease-out both;
 }
 .hv-tier5-celebration strong{
   display:block;
-  font-size:1.05rem;
+  font-size:1.02rem;
   font-weight:900;
 }
 .hv-tier5-celebration span{
   display:block;
   margin-top:2px;
-  font-size:.75rem;
-  opacity:.92;
+  font-size:.74rem;
+  opacity:.94;
 }
 .hv-tier5-confetti{
   position:absolute;
-  left:50%;
-  bottom:55px;
+  bottom:60px;
   width:8px;
-  height:14px;
-  border-radius:2px;
+  height:13px;
   opacity:0;
-  animation:hv-confetti-rise var(--fall-time) cubic-bezier(.15,.65,.25,1) var(--delay) forwards;
+  border-radius:2px;
+  transform:translate3d(0,0,0);
+  animation:hv-side-burst var(--fall-time) cubic-bezier(.18,.7,.25,1) var(--delay) forwards;
 }
 @keyframes hv-tier5-rise{
-  0%{opacity:0;transform:translateY(58px) scale(.84)}
-  65%{opacity:1;transform:translateY(-8px) scale(1.02)}
+  0%{opacity:0;transform:translateY(48px) scale(.9)}
+  70%{opacity:1;transform:translateY(-5px) scale(1.02)}
   100%{opacity:1;transform:translateY(0) scale(1)}
 }
 @keyframes hv-trophy-bounce{
-  0%{transform:scale(.65) rotate(-10deg)}
-  55%{transform:scale(1.12) rotate(4deg)}
+  0%{transform:scale(.7) rotate(-8deg)}
+  60%{transform:scale(1.1) rotate(3deg)}
   100%{transform:scale(1) rotate(0)}
 }
-@keyframes hv-confetti-rise{
-  0%{opacity:0;transform:translate3d(0,25px,0) rotate(0deg)}
+/* Confetti enters from both lower sides, arcs upward, then fades. */
+@keyframes hv-side-burst{
+  0%{
+    opacity:0;
+    transform:translate3d(var(--start-x),35px,0) rotate(0deg) scale(.75);
+  }
   12%{opacity:1}
-  100%{opacity:0;transform:translate3d(var(--drift),calc(-1 * var(--rise)),0) rotate(540deg)}
+  48%{
+    opacity:1;
+    transform:translate3d(var(--mid-x),calc(-1 * var(--rise)),0) rotate(260deg) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(var(--end-x),calc(-1 * var(--rise-end)),0) rotate(620deg) scale(.72);
+  }
+}
+@media(max-width:600px){
+  .hv-tier5-celebration{
+    bottom:66px;
+    height:280px;
+  }
+  .hv-tier5-celebration .hv-celebrate-card{
+    min-width:260px;
+    max-width:calc(100vw - 44px);
+    margin-bottom:82px;
+    padding:13px 17px;
+    border-radius:15px;
+  }
 }
 @media(prefers-reduced-motion:reduce){
   .hv-tier5-celebration .hv-celebrate-card,
@@ -548,12 +573,42 @@ var HOOVALE_PRICING = {
 
 
 
+function playTier5CelebrationSound() {
+    try {
+        var AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        var ctx = window.__hvCelebrationAudio || new AudioCtx();
+        window.__hvCelebrationAudio = ctx;
+
+        var now = ctx.currentTime;
+        var gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.055, now + 0.018);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.34);
+        gain.connect(ctx.destination);
+
+        // Two-note bright "ding" — short, celebratory and not intrusive.
+        [880, 1174.66].forEach(function(freq, index) {
+            var osc = ctx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            osc.start(now + index * 0.075);
+            osc.stop(now + 0.24 + index * 0.075);
+        });
+    } catch (e) {
+        // Audio is optional; celebration still works if the browser blocks it.
+    }
+}
+
 function showTier5Celebration() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     // Remove a previous celebration if the user taps Tier 5 repeatedly.
     var old = document.querySelector('.hv-tier5-celebration');
     if (old) old.remove();
+
+    playTier5CelebrationSound();
 
     var layer = document.createElement('div');
     layer.className = 'hv-tier5-celebration';
@@ -574,15 +629,23 @@ function showTier5Celebration() {
     for (var i = 0; i < pieces; i++) {
         var piece = document.createElement('i');
         piece.className = 'hv-tier5-confetti';
-        piece.style.left = (35 + Math.random() * 30) + '%';
+        var fromLeft = i % 2 === 0;
+        piece.style.left = fromLeft ? (3 + Math.random() * 9) + '%' : (88 + Math.random() * 9) + '%';
         piece.style.width = (6 + Math.random() * 5) + 'px';
         piece.style.height = (9 + Math.random() * 9) + 'px';
         piece.style.borderRadius = shapes[i % shapes.length];
-        piece.style.background = ['#0051A3','#0ebc78','#C9A961','#FFB000','#ffffff'][i % 5];
-        piece.style.setProperty('--drift', ((Math.random() - .5) * 240) + 'px');
-        piece.style.setProperty('--delay', (Math.random() * .22) + 's');
-        piece.style.setProperty('--fall-time', (1.1 + Math.random() * .55) + 's');
-        piece.style.setProperty('--rise', (150 + Math.random() * 130) + 'px');
+        piece.style.background = ['#FFD43B','#FFC107','#F4B400','#FFB000','#0051A3','#0ebc78','#ffffff'][i % 7];
+        var direction = fromLeft ? 1 : -1;
+        var sideStart = fromLeft ? 0 : 0;
+        var mid = direction * (95 + Math.random() * 115);
+        var end = direction * (150 + Math.random() * 180);
+        piece.style.setProperty('--start-x', sideStart + 'px');
+        piece.style.setProperty('--mid-x', mid + 'px');
+        piece.style.setProperty('--end-x', end + 'px');
+        piece.style.setProperty('--rise', (125 + Math.random() * 80) + 'px');
+        piece.style.setProperty('--rise-end', (185 + Math.random() * 95) + 'px');
+        piece.style.setProperty('--delay', (Math.random() * .16) + 's');
+        piece.style.setProperty('--fall-time', (1.0 + Math.random() * .45) + 's');
         fragment.appendChild(piece);
     }
     layer.appendChild(fragment);
