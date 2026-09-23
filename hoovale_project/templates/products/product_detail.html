@@ -142,6 +142,85 @@
 .cta-call { background:linear-gradient(135deg,#FFA500,#FF8C00); color:#fff !important; }
 .cta-call:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,165,0,.35); }
 
+
+/* ── Tier 5 Celebration ─────────────────────────────────────────────────── */
+.hv-tier5-celebration{
+  position:fixed;
+  inset:0;
+  z-index:10050;
+  pointer-events:none;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hv-tier5-celebration .hv-celebrate-card{
+  position:relative;
+  z-index:2;
+  min-width:min(320px,82vw);
+  padding:20px 24px;
+  border-radius:18px;
+  text-align:center;
+  color:#fff;
+  background:linear-gradient(135deg,#0051A3,#0878d1);
+  box-shadow:0 18px 55px rgba(0,81,163,.30);
+  animation:hv-tier5-pop .55s cubic-bezier(.18,.9,.25,1.2) both;
+}
+.hv-tier5-celebration .hv-celebrate-icon{
+  display:block;
+  font-size:2.4rem;
+  line-height:1;
+  margin-bottom:7px;
+  animation:hv-trophy-bounce .8s ease-in-out both;
+}
+.hv-tier5-celebration strong{
+  display:block;
+  font-size:1.15rem;
+  font-weight:900;
+}
+.hv-tier5-celebration span{
+  display:block;
+  margin-top:3px;
+  font-size:.78rem;
+  opacity:.9;
+}
+.hv-tier5-confetti{
+  position:absolute;
+  top:-18px;
+  width:9px;
+  height:15px;
+  border-radius:2px;
+  opacity:0;
+  animation:hv-confetti-fall var(--fall-time) cubic-bezier(.15,.65,.25,1) var(--delay) forwards;
+}
+@keyframes hv-tier5-pop{
+  0%{opacity:0;transform:scale(.72) translateY(14px)}
+  65%{opacity:1;transform:scale(1.04) translateY(0)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes hv-trophy-bounce{
+  0%{transform:scale(.5) rotate(-12deg)}
+  55%{transform:scale(1.16) rotate(5deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+@keyframes hv-confetti-fall{
+  0%{opacity:1;transform:translate3d(0,-30px,0) rotate(0deg)}
+  100%{opacity:0;transform:translate3d(var(--drift),105vh,0) rotate(720deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hv-tier5-celebration .hv-celebrate-card,
+  .hv-tier5-celebration .hv-celebrate-icon,
+  .hv-tier5-confetti{animation:none!important}
+  .hv-tier5-celebration{display:none!important}
+}
+@media(max-width:600px){
+  .hv-tier5-celebration .hv-celebrate-card{
+    min-width:260px;
+    padding:17px 20px;
+    border-radius:16px;
+  }
+}
+
 /* Mobile tweaks */
 @media (max-width:600px) {
   .tier-row { grid-template-columns:1fr 80px; gap:4px; padding:10px 14px; }
@@ -456,6 +535,51 @@ var HOOVALE_PRICING = {
 };
 
 
+
+function showTier5Celebration() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Remove a previous celebration if the user taps Tier 5 repeatedly.
+    var old = document.querySelector('.hv-tier5-celebration');
+    if (old) old.remove();
+
+    var layer = document.createElement('div');
+    layer.className = 'hv-tier5-celebration';
+    layer.setAttribute('aria-hidden', 'true');
+
+    var card = document.createElement('div');
+    card.className = 'hv-celebrate-card';
+    card.innerHTML =
+        '<span class="hv-celebrate-icon">🏆</span>' +
+        '<strong>Best Price Unlocked!</strong>' +
+        '<span>500+ pieces · Wholesale / OEM</span>';
+    layer.appendChild(card);
+
+    // Pure CSS/DOM confetti — no external library required.
+    var pieces = 42;
+    var fragment = document.createDocumentFragment();
+    var shapes = ['2px','50%','2px','50%','2px'];
+    for (var i = 0; i < pieces; i++) {
+        var piece = document.createElement('i');
+        piece.className = 'hv-tier5-confetti';
+        piece.style.left = (2 + Math.random() * 96) + '%';
+        piece.style.width = (6 + Math.random() * 5) + 'px';
+        piece.style.height = (9 + Math.random() * 9) + 'px';
+        piece.style.borderRadius = shapes[i % shapes.length];
+        piece.style.background = ['#0051A3','#0ebc78','#C9A961','#FFB000','#ffffff'][i % 5];
+        piece.style.setProperty('--drift', ((Math.random() - .5) * 240) + 'px');
+        piece.style.setProperty('--delay', (Math.random() * .22) + 's');
+        piece.style.setProperty('--fall-time', (1.25 + Math.random() * .8) + 's');
+        fragment.appendChild(piece);
+    }
+    layer.appendChild(fragment);
+    document.body.appendChild(layer);
+
+    window.setTimeout(function () {
+        layer.remove();
+    }, 2300);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     var BASE_PRICE = HOOVALE_PRICING.basePrice;
@@ -509,11 +633,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    function update(qty) {
+    function update(qty, celebrateTier5) {
         qty = Math.max(1, parseInt(qty, 10) || 1);
 
         var tier  = getTierForQty(qty);
         var price = calcPrice(qty, tier);
+
+        if (celebrateTier5 && Number(tier.tier) === 5) {
+            showTier5Celebration();
+        }
 
         lpUnit.textContent      = '₹' + fmt(price.unit);
         lpQtyDisp.textContent   = qty;
@@ -604,11 +732,12 @@ document.addEventListener('DOMContentLoaded', function () {
     window.setQty = function (qty) {
         var inp = document.getElementById('qty-input');
         inp.value = qty;
-        update(qty);
+        update(qty, Number(getTierForQty(parseInt(qty, 10) || 1).tier) === 5);
     };
 
     window.onQtyInput = function (val) {
-        update(val);
+        var numericQty = parseInt(val, 10) || 1;
+        update(val, Number(getTierForQty(numericQty).tier) === 5);
     };
 
    
