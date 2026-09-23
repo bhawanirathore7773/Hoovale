@@ -631,7 +631,17 @@ function initializeProductEnquiry() {
         });
     });
 
-    const form = document.getElementById('enquiryForm');
+    // Bootstrap normally closes a modal from its backdrop, but keep an explicit
+    // fallback so taps outside the dialog always close it on mobile Safari.
+    if (modalEl.dataset.hvModalCloseBound !== '1') {
+        modalEl.dataset.hvModalCloseBound = '1';
+        modalEl.addEventListener('click', function (event) {
+            if (event.target === modalEl) {
+                bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            }
+        });
+    }
+
     if (form && form.dataset.hvEnquiryFormBound !== '1') {
         form.dataset.hvEnquiryFormBound = '1';
 
@@ -690,6 +700,17 @@ function initializeProductEnquiry() {
                 }
             }
         });
+    }
+
+    // Keep the dynamically-created Bootstrap backdrop clickable as a fallback.
+    if (!window.__hoovaleEnquiryBackdropBound) {
+        window.__hoovaleEnquiryBackdropBound = true;
+        document.addEventListener('click', function (event) {
+            if (event.target.classList?.contains('modal-backdrop') &&
+                document.getElementById('enquiryModal')?.classList.contains('show')) {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('enquiryModal')).hide();
+            }
+        }, true);
     }
 }
 
