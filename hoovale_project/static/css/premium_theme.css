@@ -2650,3 +2650,143 @@ body.modal-open .modal-backdrop.show {
         right: 16px !important;
     }
 }
+
+
+/* ============================================================
+   FINAL OVERRIDE — MOBILE HAMBURGER → X MORPH
+   Single 44px button, no drawer-close duplicate, deterministic
+   geometry to prevent the X from rendering as a chevron.
+   ============================================================ */
+@media (max-width: 991px) {
+    .hv-navbar .navbar-toggler.hv-menu-toggle,
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        max-width: 44px !important;
+        max-height: 44px !important;
+        flex: 0 0 44px !important;
+        padding: 0 !important;
+        margin: 0 0 0 auto !important;
+        border-radius: 11px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+        transform: none !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open {
+        position: fixed !important;
+        top: 10px !important;
+        right: 16px !important;
+        z-index: 10004 !important;
+        background: #fff !important;
+        border: 1px solid rgba(201,169,97,.65) !important;
+        box-shadow: 0 8px 24px rgba(10,10,10,.10) !important;
+    }
+
+    .hv-navbar .hv-menu-icon {
+        width: 22px !important;
+        height: 18px !important;
+        min-width: 22px !important;
+        min-height: 18px !important;
+        max-width: 22px !important;
+        max-height: 18px !important;
+        flex: 0 0 22px !important;
+        position: relative !important;
+        display: block !important;
+        overflow: visible !important;
+        margin: 0 !important;
+    }
+
+    .hv-navbar .hv-menu-icon span,
+    .hv-navbar .hv-menu-icon span:nth-child(1),
+    .hv-navbar .hv-menu-icon span:nth-child(2),
+    .hv-navbar .hv-menu-icon span:nth-child(3) {
+        position: absolute !important;
+        left: 0 !important;
+        width: 22px !important;
+        height: 2.5px !important;
+        min-height: 2.5px !important;
+        max-height: 2.5px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: #171717 !important;
+        transform-origin: 50% 50% !important;
+        transition:
+            top .30s cubic-bezier(.4,0,.2,1),
+            transform .30s cubic-bezier(.4,0,.2,1),
+            opacity .18s ease !important;
+        will-change: top, transform, opacity;
+    }
+
+    /* Closed: three perfectly centered horizontal lines. */
+    .hv-navbar .hv-menu-icon span:nth-child(1) {
+        top: 0 !important;
+        transform: rotate(0deg) !important;
+        opacity: 1 !important;
+    }
+
+    .hv-navbar .hv-menu-icon span:nth-child(2) {
+        top: 7.75px !important;
+        transform: rotate(0deg) !important;
+        opacity: 1 !important;
+    }
+
+    .hv-navbar .hv-menu-icon span:nth-child(3) {
+        top: 15.5px !important;
+        transform: rotate(0deg) !important;
+        opacity: 1 !important;
+    }
+
+    /* Open: the SAME two outer bars move to the centre and rotate,
+       producing a true X rather than a chevron. */
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open .hv-menu-icon span:nth-child(1) {
+        top: 7.75px !important;
+        transform: rotate(45deg) !important;
+        opacity: 1 !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open .hv-menu-icon span:nth-child(2) {
+        top: 7.75px !important;
+        transform: scaleX(.15) !important;
+        opacity: 0 !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open .hv-menu-icon span:nth-child(3) {
+        top: 7.75px !important;
+        transform: rotate(-45deg) !important;
+        opacity: 1 !important;
+    }
+
+    /* Never let an old drawer close control interfere. */
+    .hv-navbar .hv-drawer-close {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hv-navbar .navbar-toggler.hv-menu-toggle,
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        max-width: 44px !important;
+        max-height: 44px !important;
+        flex-basis: 44px !important;
+        border-radius: 11px !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open {
+        top: 10px !important;
+        right: 16px !important;
+    }
+}
