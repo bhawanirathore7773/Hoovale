@@ -301,8 +301,8 @@ class BannerAdmin(ModelAdmin):
             'fields': ('desktop_image', 'mobile_image', 'image', 'fallback_desktop', 'fallback_mobile'),
             'description': (
                 'Upload BOTH desktop and mobile artwork for the SAME campaign. '
-                'Recommended ratio is about 2.36:1 to match the homepage reference card. '
-                'Example: desktop 1920×814 and mobile 1080×458. '
+                'Recommended ratio is exactly 3:2 to match the homepage carousel. '
+                'Example: desktop 1200×800 and mobile 1080×720. '
                 'The mobile file is shown automatically on phones; desktop is shown on larger screens.'
             ),
         }),
