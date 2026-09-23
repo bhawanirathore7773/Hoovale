@@ -647,11 +647,11 @@ class Banner(models.Model):
     # Recommended: upload both sizes on ONE banner.
     desktop_image = models.ImageField(
         upload_to='banners/desktop/', blank=True, null=True,
-        help_text="Recommended 1920×600 (or 1600×500)."
+        help_text="Recommended 1920×814 (or 1600×678), approximately 2.36:1 to match the homepage banner card."
     )
     mobile_image = models.ImageField(
         upload_to='banners/mobile/', blank=True, null=True,
-        help_text="Recommended 800×1000 (or 600×750)."
+        help_text="Recommended 1080×458 (or 853×362), approximately 2.36:1 to match the homepage banner card."
     )
     fallback_desktop = models.CharField(
         max_length=300, blank=True,
