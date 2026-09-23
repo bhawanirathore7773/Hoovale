@@ -2431,3 +2431,80 @@ body.modal-open .modal-backdrop.show {
     .hv-navbar .hv-drawer-header .hv-drawer-close span,
     .hv-navbar .hv-mobile-drawer .hv-drawer-close span { width:20px !important; height:2.5px !important; }
 }
+
+
+/* FINAL NAV BEHAVIOUR: hamburger morphs into the X.
+   The separate drawer X is disabled so there can never be two close buttons. */
+@media (max-width: 991px) {
+    .hv-navbar .hv-menu-toggle {
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        z-index: 1405 !important;
+        transform: none !important;
+    }
+
+    .hv-navbar .hv-menu-toggle.is-open {
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        z-index: 1405 !important;
+    }
+
+    .hv-navbar .hv-menu-toggle.is-open:hover,
+    .hv-navbar .hv-menu-toggle.is-open:focus-visible {
+        transform: translateY(-1px) !important;
+    }
+
+    /* Hide the old separate rectangle-X control. */
+    .hv-navbar .hv-drawer-close {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Keep the hamburger icon transformation clean and centered. */
+    .hv-navbar .hv-menu-icon {
+        width: 25px !important;
+        height: 20px !important;
+        position: relative !important;
+    }
+
+    .hv-navbar .hv-menu-icon span {
+        position: absolute !important;
+        left: 0 !important;
+        width: 25px !important;
+        height: 2.5px !important;
+        margin: 0 !important;
+        transition:
+            transform .30s cubic-bezier(.4,0,.2,1),
+            opacity .18s ease !important;
+    }
+
+    .hv-navbar .hv-menu-icon span:nth-child(1) {
+        top: 0 !important;
+    }
+
+    .hv-navbar .hv-menu-icon span:nth-child(2) {
+        top: 8.75px !important;
+    }
+
+    .hv-navbar .hv-menu-icon span:nth-child(3) {
+        top: 17.5px !important;
+    }
+
+    .hv-navbar .hv-menu-toggle.is-open .hv-menu-icon span:nth-child(1) {
+        transform: translateY(8.75px) rotate(45deg) !important;
+    }
+
+    .hv-navbar .hv-menu-toggle.is-open .hv-menu-icon span:nth-child(2) {
+        opacity: 0 !important;
+        transform: scaleX(.2) !important;
+    }
+
+    .hv-navbar .hv-menu-toggle.is-open .hv-menu-icon span:nth-child(3) {
+        transform: translateY(-8.75px) rotate(-45deg) !important;
+    }
+}
