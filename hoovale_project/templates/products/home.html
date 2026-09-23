@@ -1317,13 +1317,7 @@
        <source media="(max-width: 767px)" srcset="{{ banner.mobile_url }}">
        <img src="{{ banner.desktop_url }}" alt="{{ banner.heading|default:banner.title }} — HOOVALE wall clocks" {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
       </picture>
-      {% if banner.is_dynamic %}
-      <div class="hv-banner-content">
-       {% if banner.heading %}<h2>{{ banner.heading }}</h2>{% endif %}
-       {% if banner.subheading %}<p>{{ banner.subheading }}</p>{% endif %}
-       {% if banner.cta_text %}<span>{{ banner.cta_text }} <i class="fas fa-arrow-right"></i></span>{% endif %}
-      </div>
-      {% endif %}
+      {# Banner artwork contains its own headline, supporting copy and CTA artwork. #}
      </a>
     </div>
     {% endfor %}
