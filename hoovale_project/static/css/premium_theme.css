@@ -2124,3 +2124,85 @@ body.modal-open .modal-backdrop.show {
     color: rgba(255,255,255,.92) !important;
     -webkit-text-fill-color: rgba(255,255,255,.92) !important;
 }
+
+
+/* ============================================================
+   BULK MODAL — SAME MOBILE-SAFE BEHAVIOUR AS ENQUIRY MODAL
+   ============================================================ */
+#bulkInquiryModal {
+    z-index: 200000 !important;
+}
+
+#bulkInquiryModal .modal-dialog {
+    max-height: calc(100dvh - 28px);
+}
+
+#bulkInquiryModal .modal-content {
+    max-height: calc(100dvh - 28px);
+    display: flex;
+    flex-direction: column;
+}
+
+#bulkInquiryModal .bulk-modal-header {
+    flex: 0 0 auto;
+}
+
+#bulkInquiryModal .bulk-modal-header .btn-close {
+    z-index: 20 !important;
+    width: 42px !important;
+    height: 42px !important;
+    padding: 10px !important;
+    opacity: 1 !important;
+    border-radius: 50% !important;
+    background-size: 18px !important;
+}
+
+#bulkInquiryModal .bulk-modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-bottom: 44px !important;
+}
+
+body.modal-open #bulkInquiryModal,
+body.modal-open #enquiryModal {
+    pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+    #bulkInquiryModal .modal-dialog {
+        width: calc(100vw - 20px);
+        max-width: none;
+        margin: 10px auto;
+    }
+
+    #bulkInquiryModal .modal-content {
+        max-height: calc(100dvh - 20px);
+        border-radius: 18px;
+    }
+
+    #bulkInquiryModal .bulk-modal-header {
+        padding: 22px 18px !important;
+        padding-right: 68px !important;
+    }
+
+    #bulkInquiryModal .bulk-modal-header .btn-close {
+        top: 14px !important;
+        right: 14px !important;
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    #bulkInquiryModal .bulk-modal-body {
+        max-height: calc(100dvh - 92px);
+        padding: 20px 18px 110px !important;
+    }
+}
+
+/* Any open modal gets a backdrop below the dialog but above all site UI. */
+body.modal-open .modal-backdrop,
+body.modal-open .modal-backdrop.show {
+    z-index: 199990 !important;
+}
