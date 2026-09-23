@@ -17,7 +17,96 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeProductFilters();
     initializeProductPriceRange();
     initializeProductCardLinks();
+    initializeCampaignCarousel();
 });
+
+
+/**
+ * Paytm-style mobile campaign carousel.
+ * Uses Bootstrap's horizontal slide transition, but handles the touch gesture
+ * ourselves so a swipe never competes with Bootstrap's touch handler.
+ */
+function initializeCampaignCarousel() {
+    const carousel = document.getElementById('hvHomeBanner');
+    if (!carousel || carousel.dataset.hvSwipeBound === 'true') return;
+
+    carousel.dataset.hvSwipeBound = 'true';
+
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    let didSwipe = false;
+
+    const getInstance = () => {
+        if (!window.bootstrap || !window.bootstrap.Carousel) return null;
+        return window.bootstrap.Carousel.getOrCreateInstance(carousel, {
+            interval: 5200,
+            pause: false,
+            touch: false,
+            wrap: true
+        });
+    };
+
+    carousel.addEventListener('touchstart', function(event) {
+        if (!event.touches || event.touches.length !== 1) return;
+
+        const touch = event.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        tracking = true;
+        didSwipe = false;
+    }, {passive: true});
+
+    carousel.addEventListener('touchend', function(event) {
+        if (!tracking || !event.changedTouches || event.changedTouches.length !== 1) {
+            tracking = false;
+            return;
+        }
+
+        const touch = event.changedTouches[0];
+        const dx = touch.clientX - startX;
+        const dy = touch.clientY - startY;
+        tracking = false;
+
+        // Ignore normal vertical page scrolling and tiny accidental movements.
+        if (Math.abs(dx) < 42 || Math.abs(dx) <= Math.abs(dy) * 1.15) return;
+
+        const instance = getInstance();
+        if (!instance) return;
+
+        didSwipe = true;
+
+        if (dx < 0) {
+            // Finger moves left -> current banner exits left, next enters right.
+            instance.next();
+        } else {
+            // Finger moves right -> current banner exits right, previous enters left.
+            instance.prev();
+        }
+    }, {passive: true});
+
+    // A swipe starts on the banner link, but it must not accidentally open the
+    // banner URL when the finger is released.
+    carousel.addEventListener('click', function(event) {
+        if (!didSwipe) return;
+        event.preventDefault();
+        event.stopPropagation();
+        didSwipe = false;
+    }, true);
+
+    // Keep the carousel paused while the finger is down, then resume autoplay.
+    carousel.addEventListener('touchstart', function() {
+        const instance = getInstance();
+        if (instance) instance.pause();
+    }, {passive: true});
+
+    carousel.addEventListener('touchend', function() {
+        window.setTimeout(function() {
+            const instance = getInstance();
+            if (instance) instance.cycle();
+        }, 80);
+    }, {passive: true});
+}
 
 /**
  * Highlight active menu item based on current page
