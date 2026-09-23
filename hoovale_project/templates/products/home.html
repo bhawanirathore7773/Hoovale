@@ -663,24 +663,11 @@
     backface-visibility:hidden;
     -webkit-backface-visibility:hidden;
 }
-.hv-home-banner.carousel-fade .carousel-item{
-    opacity:0;
-    transition:opacity .75s ease-in-out;
-    transform:none!important;
-}
-.hv-home-banner.carousel-fade .carousel-item.active,
-.hv-home-banner.carousel-fade .carousel-item-next.carousel-item-start,
-.hv-home-banner.carousel-fade .carousel-item-prev.carousel-item-end{
-    opacity:1;
-    transform:none!important;
-    z-index:1;
-}
-.hv-home-banner.carousel-fade .carousel-item-next,
-.hv-home-banner.carousel-fade .carousel-item-prev,
-.hv-home-banner.carousel-fade .active.carousel-item-start,
-.hv-home-banner.carousel-fade .active.carousel-item-end{
-    opacity:0;
-    transform:none!important;
+.hv-home-banner .carousel-item{
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    will-change:transform;
+    transition:transform .52s cubic-bezier(.22,.61,.36,1);
 }
 .hv-home-banner .carousel-control-prev,
 .hv-home-banner .carousel-control-next{
@@ -1228,9 +1215,42 @@
 .hv-banner-content span{display:inline-flex;align-items:center;gap:7px;width:max-content;max-width:68%;color:#fff;background:#b88b32;border-radius:999px;padding:9px 16px;font-size:.76rem;font-weight:800}
 .hv-home-banner .carousel-control-prev,.hv-home-banner .carousel-control-next{width:46px;height:46px;top:50%;transform:translateY(-50%);margin:0 12px;border:0;border-radius:50%;background:rgba(255,255,255,.96);opacity:1;box-shadow:0 5px 18px rgba(0,0,0,.12);z-index:6}
 .hv-home-banner .carousel-control-prev-icon,.hv-home-banner .carousel-control-next-icon{filter:invert(1);width:18px;height:18px}
-.hv-banner-indicators{position:absolute;z-index:7;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:999px;background:rgba(15,23,42,.34)}
-.hv-banner-indicators button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.68);opacity:1}
-.hv-banner-indicators button.active{width:22px;border-radius:999px;background:#c9a961}
+.hv-home-banner .hv-banner-indicators{
+    position:absolute;
+    z-index:7;
+    left:50%;
+    bottom:14px;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    width:max-content;
+    margin:0;
+    padding:5px 9px;
+    border-radius:999px;
+    background:rgba(15,23,42,.34);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+}
+.hv-home-banner .hv-banner-indicators button{
+    width:8px;
+    height:8px;
+    flex:0 0 8px;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.68);
+    opacity:1;
+    transition:width .25s ease,background-color .25s ease,transform .25s ease;
+}
+.hv-home-banner .hv-banner-indicators button.active{
+    width:22px;
+    flex-basis:22px;
+    border-radius:999px;
+    background:#c9a961;
+}
 @media(max-width:767px){
  .hv-home-banner-wrap{padding:12px 16px 8px}
  .hv-home-banner,.hv-banner-link{border-radius:14px}
@@ -1308,7 +1328,7 @@
 <!-- 3:2 ROTATING COLLECTION BANNER — directly below the Established/trust strip and before Explore Collection -->
 <section class="hv-home-banner-wrap hv-home-banner-after-trust" aria-label="HOOVALE featured collections">
  <div class="hv-home-banner">
-  <div id="hvHomeBanner" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5200" data-bs-pause="false" data-bs-touch="true">
+  <div id="hvHomeBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5200" data-bs-pause="false" data-bs-touch="true">
    <div class="carousel-inner">
     {% for banner in homepage_campaigns %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -1330,7 +1350,7 @@
     <span class="carousel-control-next-icon"></span>
    </button>
 
-   <div class="hv-banner-indicators" aria-label="Banner navigation">
+   <div class="carousel-indicators hv-banner-indicators" aria-label="Banner navigation">
     {% for banner in homepage_campaigns %}
     <button type="button" data-bs-target="#hvHomeBanner" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Go to banner {{ forloop.counter }}"></button>
     {% endfor %}
