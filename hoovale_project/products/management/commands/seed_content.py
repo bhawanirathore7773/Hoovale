@@ -1,10 +1,38 @@
 from django.core.management.base import BaseCommand
-from products.models import Blog, ServicePage
+from products.models import Banner, Blog, ServicePage
 
 class Command(BaseCommand):
     help = "Seed HOOVALE service pages and practical wall-clock guides."
 
     def handle(self, *args, **kwargs):
+        # Homepage carousel uses finished 3:2 artwork. Keep the database
+        # records, but clear uploaded-image overrides so the repository artwork
+        # is the single source of truth on Render and other ephemeral hosts.
+        banner_specs = [
+            ("wedding", "Wedding Gifts", "/static/images/banners/wedding-gifts-3x2.svg", 1),
+            ("corporate", "Corporate Gifts", "/static/images/banners/corporate-gifts-3x2.svg", 2),
+        ]
+        for keyword, title, artwork, order in banner_specs:
+            banner = (
+                Banner.objects.filter(slug__icontains=keyword).order_by("order", "id").first()
+                or Banner.objects.filter(title__icontains=keyword).order_by("order", "id").first()
+            )
+            if banner is None:
+                banner = Banner(title=title, slug=title.lower().replace(" ", "-"), order=order)
+            banner.title = title
+            banner.desktop_image = ""
+            banner.mobile_image = ""
+            banner.image = ""
+            banner.fallback_desktop = artwork
+            banner.fallback_mobile = artwork
+            banner.heading = ""
+            banner.subheading = ""
+            banner.cta_text = ""
+            banner.overlay_opacity = 0
+            banner.is_active = True
+            banner.order = order
+            banner.save()
+
         services = [
             ("Bulk Wall Clock Supply","fas fa-boxes-stacked","Bulk Wall Clock Supply for Retailers, Dealers & Businesses","Bulk supply for retailers, distributors, institutions and business buyers. Share quantity, preferred designs and delivery city for product and pricing guidance.","Bulk wall clock supply from Jaipur for retail and B2B requirements. HOOVALE helps buyers compare designs, quantities, branding options and delivery plans.","Share quantity and delivery city. Choose size, material and style. Review suitable products and pricing. Confirm packing, branding and dispatch details.","Product selection support; quantity-based pricing discussions; retail and B2B supply; branding discussions; delivery coordination.","Bulk Wall Clock Supply for Businesses | HOOVALE","Bulk wall clock supply from Jaipur for retailers, distributors, offices and business buyers. Discuss quantity, designs and delivery.","bulk wall clock supplier, wholesale wall clocks Jaipur, wall clock bulk order India",1),
             ("Custom Logo Printing","fas fa-pen-ruler","Custom Logo Wall Clocks for Brands & Corporate Gifting","Branded wall clocks for corporate gifting, dealer meets, promotional campaigns and branded spaces.","A useful branded wall clock should keep the dial readable while giving the logo a clear place. HOOVALE helps buyers discuss logo placement, artwork, clock size and quantity before production.","Share your logo and quantity. Select a clock format. Review branding layout. Confirm artwork, packing and delivery. Proceed with production.","Clear branding; useful corporate gifting; promotional visibility; artwork review; quantity planning.","Custom Logo Wall Clocks & Corporate Gifting | HOOVALE","Custom logo wall clocks for corporate gifts, dealer meets and promotions. Discuss artwork, clock size and quantity with HOOVALE Jaipur.","custom logo wall clock, corporate gifting clocks, branded wall clock India",2),
