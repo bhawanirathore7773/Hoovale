@@ -1813,3 +1813,169 @@
         height:7px !important;
     }
 }
+
+
+/* =========================================================
+   FINAL HOMEPAGE CAMPAIGN BANNER — EXACT 3:2
+   Keep the full 1200x800 artwork visible; no vertical crop.
+   ========================================================= */
+.hv-home-banner-wrap{
+    width:100%;
+    padding:16px 24px 12px !important;
+    background:#fff;
+    box-sizing:border-box;
+}
+.hv-home-banner{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:16px;
+    position:relative;
+}
+.hv-home-banner .carousel,
+.hv-home-banner .carousel-inner,
+.hv-home-banner .carousel-item{
+    width:100%;
+}
+.hv-banner-link{
+    display:block;
+    position:relative;
+    width:100%;
+    aspect-ratio:3 / 2 !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:hidden;
+    background:#f3f4f6;
+    border-radius:16px;
+}
+.hv-banner-link picture{
+    display:block;
+    width:100%;
+    height:100%;
+}
+.hv-banner-link img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+}
+.hv-banner-content{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    box-sizing:border-box;
+    max-width:100%;
+    overflow:hidden;
+    padding:clamp(22px,4vw,52px);
+    background:linear-gradient(90deg,rgba(0,0,0,.56),rgba(0,0,0,.02) 78%);
+    pointer-events:none;
+}
+.hv-banner-content h2,
+.hv-banner-content p,
+.hv-banner-content span{
+    max-width:min(62%,720px);
+    box-sizing:border-box;
+}
+.hv-banner-content h2{
+    margin:0 0 8px;
+    line-height:1.08;
+    color:#fff !important;
+    font-family:"Playfair Display",serif;
+    font-size:clamp(1.45rem,3.2vw,2.8rem);
+}
+.hv-banner-content p{
+    margin:0 0 12px;
+    color:rgba(255,255,255,.94);
+    font-size:clamp(.78rem,1.55vw,1rem);
+    line-height:1.4;
+}
+.hv-banner-content span{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    width:max-content;
+    max-width:62%;
+    padding:9px 16px;
+    border-radius:999px;
+    background:#b88b32;
+    color:#fff;
+    font-size:.78rem;
+    font-weight:800;
+}
+.hv-home-banner .carousel-control-prev,
+.hv-home-banner .carousel-control-next{
+    z-index:5;
+    width:44px;
+    height:44px;
+    top:50%;
+    transform:translateY(-50%);
+    margin:0 14px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.94);
+    opacity:.96;
+}
+.hv-home-banner .carousel-control-prev-icon,
+.hv-home-banner .carousel-control-next-icon{
+    width:18px;
+    height:18px;
+    filter:invert(1);
+}
+.hv-banner-indicators{
+    z-index:6;
+}
+
+@media(max-width:767px){
+    .hv-home-banner-wrap{
+        padding:12px 16px 8px !important;
+    }
+    .hv-home-banner{
+        width:100%;
+        border-radius:14px;
+    }
+    .hv-banner-link{
+        aspect-ratio:3 / 2 !important;
+        height:auto !important;
+        border-radius:14px;
+    }
+    .hv-banner-content{
+        padding:18px 20px;
+        background:linear-gradient(90deg,rgba(0,0,0,.58),rgba(0,0,0,.04) 82%);
+    }
+    .hv-banner-content h2,
+    .hv-banner-content p,
+    .hv-banner-content span{
+        max-width:60%;
+    }
+    .hv-banner-content h2{
+        font-size:clamp(1.15rem,5.2vw,1.55rem);
+        line-height:1.08;
+        margin-bottom:5px;
+    }
+    .hv-banner-content p{
+        font-size:.68rem;
+        line-height:1.3;
+        margin-bottom:7px;
+    }
+    .hv-banner-content span{
+        padding:7px 11px;
+        font-size:.62rem;
+    }
+    .hv-home-banner .carousel-control-prev,
+    .hv-home-banner .carousel-control-next{
+        width:32px;
+        height:32px;
+        margin:0 7px;
+    }
+    .hv-home-banner .carousel-control-prev-icon,
+    .hv-home-banner .carousel-control-next-icon{
+        width:13px;
+        height:13px;
+    }
+}
+
