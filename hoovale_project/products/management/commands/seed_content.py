@@ -9,8 +9,8 @@ class Command(BaseCommand):
         # records, but clear uploaded-image overrides so the repository artwork
         # is the single source of truth on Render and other ephemeral hosts.
         banner_specs = [
-            ("wedding", "Wedding Gifts", "/static/images/banners/wedding-gifts-3x2.svg", 1),
-            ("corporate", "Corporate Gifts", "/static/images/banners/corporate-gifts-3x2.svg", 2),
+            ("wedding", "Wedding Gifts", "/static/images/banners/wedding-desktop.svg", 1),
+            ("corporate", "Corporate Gifts", "/static/images/banners/corporate-desktop.svg", 2),
         ]
         for keyword, title, artwork, order in banner_specs:
             banner = (
