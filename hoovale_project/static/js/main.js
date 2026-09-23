@@ -245,6 +245,20 @@ function setupResponsiveNav() {
         if (!isMobile()) setMenu(false);
     });
 
+    // The drawer owns the close button state. Do not rebuild/toggle it on
+    // scroll, so the rectangle X remains stable after scrolling.
+    const syncDrawerCloseButton = () => {
+        if (!closeButton) return;
+        closeButton.hidden = false;
+        closeButton.style.removeProperty('display');
+        closeButton.style.removeProperty('visibility');
+        closeButton.style.removeProperty('opacity');
+    };
+
+    syncDrawerCloseButton();
+    drawer.addEventListener('scroll', syncDrawerCloseButton, {passive: true});
+    window.addEventListener('scroll', syncDrawerCloseButton, {passive: true});
+
     setMenu(false);
 }
 
