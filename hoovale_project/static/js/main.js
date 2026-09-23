@@ -707,9 +707,11 @@ function initializeProductEnquiry() {
     if (!window.__hoovaleEnquiryBackdropBound) {
         window.__hoovaleEnquiryBackdropBound = true;
         document.addEventListener('click', function (event) {
-            if (event.target.classList?.contains('modal-backdrop') &&
-                document.getElementById('enquiryModal')?.classList.contains('show')) {
-                bootstrap.Modal.getOrCreateInstance(document.getElementById('enquiryModal')).hide();
+            if (!event.target.classList?.contains('modal-backdrop')) return;
+
+            const openModal = document.querySelector('.modal.show');
+            if (openModal) {
+                bootstrap.Modal.getOrCreateInstance(openModal).hide();
             }
         }, true);
     }
