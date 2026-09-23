@@ -2790,3 +2790,50 @@ body.modal-open .modal-backdrop.show {
         right: 16px !important;
     }
 }
+
+
+/* ============================================================
+   FINAL ALIGNMENT — CLOSED HAMBURGER MUST MATCH OPEN X MARGIN
+   The open X uses right:16px, so the closed hamburger gets the
+   exact same 16px right edge. This also neutralizes Bootstrap
+   container/max-width/margin overrides on small screens.
+   ============================================================ */
+@media (max-width: 991px) {
+    .hv-navbar > .container-lg {
+        width: 100% !important;
+        max-width: none !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle:not(.is-open) {
+        position: relative !important;
+        right: auto !important;
+        left: auto !important;
+        margin-left: auto !important;
+        margin-right: 0 !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open {
+        right: 16px !important;
+        left: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hv-navbar > .container-lg {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle:not(.is-open) {
+        margin-right: 0 !important;
+    }
+
+    .hv-navbar .navbar-toggler.hv-menu-toggle.is-open {
+        right: 16px !important;
+    }
+}
