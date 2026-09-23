@@ -327,8 +327,8 @@ class BannerAdmin(ModelAdmin):
         mobile = obj.homepage_mobile_url
         return format_html(
             '<div style="display:flex;gap:8px;align-items:center;">'
-            '<img src="{}" title="Desktop" style="width:160px;height:68px;object-fit:cover;border-radius:6px;">'
-            '<img src="{}" title="Mobile" style="width:108px;height:46px;object-fit:cover;border-radius:6px;">'
+            '<img src="{}" title="Desktop" style="width:120px;height:80px;object-fit:cover;border-radius:8px;">'
+            '<img src="{}" title="Mobile" style="width:108px;height:72px;object-fit:cover;border-radius:8px;">'
             '</div>',
             desktop, mobile
         )
