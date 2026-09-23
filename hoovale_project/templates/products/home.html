@@ -1264,6 +1264,97 @@
  .hv-banner-indicators{bottom:10px;gap:6px;padding:4px 8px}
 }
 
+
+/* =========================================================
+   MOBILE CAMPAIGN CAROUSEL — AUTHORITATIVE FINAL OVERRIDE
+   Paytm-style horizontal swipe:
+   current banner exits in the swipe direction while the next
+   banner enters from the opposite side. Keep the banner gutter
+   outside the carousel so it can never be lost to overrides.
+   ========================================================= */
+.hv-home-banner-wrap.hv-home-banner-after-trust{
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 !important;
+    padding:16px 16px 12px !important;
+    box-sizing:border-box !important;
+    background:#fff !important;
+    overflow:hidden !important;
+}
+
+.hv-home-banner-wrap.hv-home-banner-after-trust > .hv-home-banner{
+    width:100% !important;
+    max-width:1200px !important;
+    margin:0 auto !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+}
+
+.hv-home-banner-wrap.hv-home-banner-after-trust .carousel-inner{
+    width:100% !important;
+    overflow:hidden !important;
+    touch-action:pan-y !important;
+}
+
+.hv-home-banner-wrap.hv-home-banner-after-trust .carousel-item{
+    width:100% !important;
+    backface-visibility:hidden !important;
+    -webkit-backface-visibility:hidden !important;
+    will-change:transform !important;
+    transition:transform .42s cubic-bezier(.22,.61,.36,1) !important;
+}
+
+.hv-home-banner-wrap.hv-home-banner-after-trust .hv-banner-link{
+    width:100% !important;
+    aspect-ratio:3 / 2 !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+    border-radius:16px !important;
+}
+
+.hv-home-banner-wrap.hv-home-banner-after-trust .hv-banner-link img{
+    width:100% !important;
+    height:100% !important;
+    display:block !important;
+    object-fit:cover !important;
+    object-position:center !important;
+}
+
+/* Desktop arrows remain available. */
+.hv-home-banner-wrap.hv-home-banner-after-trust .carousel-control-prev,
+.hv-home-banner-wrap.hv-home-banner-after-trust .carousel-control-next{
+    display:flex;
+}
+
+/* Mobile: swipe only — no overlapping arrow controls. */
+@media(max-width:767px){
+    .hv-home-banner-wrap.hv-home-banner-after-trust{
+        padding:12px 16px 10px !important;
+    }
+
+    .hv-home-banner-wrap.hv-home-banner-after-trust > .hv-home-banner,
+    .hv-home-banner-wrap.hv-home-banner-after-trust .carousel-inner,
+    .hv-home-banner-wrap.hv-home-banner-after-trust .hv-banner-link{
+        border-radius:14px !important;
+    }
+
+    .hv-home-banner-wrap.hv-home-banner-after-trust .carousel-control-prev,
+    .hv-home-banner-wrap.hv-home-banner-after-trust .carousel-control-next{
+        display:none !important;
+    }
+
+    .hv-home-banner-wrap.hv-home-banner-after-trust .hv-banner-indicators{
+        position:static !important;
+        width:100% !important;
+        height:24px !important;
+        margin:4px 0 0 !important;
+        padding:0 !important;
+        transform:none !important;
+        background:transparent !important;
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -1328,7 +1419,7 @@
 <!-- 3:2 ROTATING COLLECTION BANNER — directly below the Established/trust strip and before Explore Collection -->
 <section class="hv-home-banner-wrap hv-home-banner-after-trust" aria-label="HOOVALE featured collections">
  <div class="hv-home-banner">
-  <div id="hvHomeBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5200" data-bs-pause="false" data-bs-touch="true">
+  <div id="hvHomeBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5200" data-bs-pause="false" data-bs-touch="false">
    <div class="carousel-inner">
     {% for banner in homepage_campaigns %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
