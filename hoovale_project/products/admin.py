@@ -301,8 +301,8 @@ class BannerAdmin(ModelAdmin):
             'fields': ('desktop_image', 'mobile_image', 'image', 'fallback_desktop', 'fallback_mobile'),
             'description': (
                 'Upload BOTH desktop and mobile artwork for the SAME campaign. '
-                'Recommended ratio is about 2.55:1 so both versions stay short and wide. '
-                'Example: desktop 1920×750 and mobile 1080×425. '
+                'Recommended ratio is about 2.36:1 to match the homepage reference card. '
+                'Example: desktop 1920×814 and mobile 1080×458. '
                 'The mobile file is shown automatically on phones; desktop is shown on larger screens.'
             ),
         }),
@@ -327,8 +327,8 @@ class BannerAdmin(ModelAdmin):
         mobile = obj.homepage_mobile_url
         return format_html(
             '<div style="display:flex;gap:8px;align-items:center;">'
-            '<img src="{}" title="Desktop" style="width:160px;height:62px;object-fit:cover;border-radius:6px;">'
-            '<img src="{}" title="Mobile" style="width:92px;height:62px;object-fit:cover;border-radius:6px;">'
+            '<img src="{}" title="Desktop" style="width:160px;height:68px;object-fit:cover;border-radius:6px;">'
+            '<img src="{}" title="Mobile" style="width:108px;height:46px;object-fit:cover;border-radius:6px;">'
             '</div>',
             desktop, mobile
         )
