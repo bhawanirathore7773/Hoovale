@@ -4,8 +4,8 @@
 {# ================================================== #}
 {# DYNAMIC SEO META — pulled from CityPage model       #}
 {# ================================================== #}
-{% block meta_title %}{{ city.meta_title }}{% endblock %}
-{% block meta_description %}{{ city.meta_description }}{% endblock %}
+{% block meta_title %}{{ city.meta_title|default:city.h1_heading }}{% endblock %}
+{% block meta_description %}{{ city.meta_description|default:city.hero_subheading }}{% endblock %}
 {% block meta_keywords %}{{ city.meta_keywords }}{% endblock %}
 {% block og_title %}{{ city.meta_title }}{% endblock %}
 {% block og_description %}{{ city.meta_description }}{% endblock %}
