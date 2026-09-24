@@ -1862,3 +1862,36 @@ body.hv-page-leaving main {
 body.hv-page-ready main {
     opacity: 1;
 }
+
+/* ============================================================
+   HOOVALE PRODUCT CARD LINK — reliable native navigation
+   ============================================================ */
+.product-card-main-link {
+    display: block;
+    color: inherit !important;
+    text-decoration: none !important;
+    flex: 1 1 auto;
+}
+.product-card-main-link:focus-visible {
+    outline: 3px solid rgba(0,81,163,.25);
+    outline-offset: -3px;
+    border-radius: 10px;
+}
+.product-card-main-link .product-info {
+    color: inherit;
+}
+.product-card-main-link .product-name {
+    color: var(--text-color);
+}
+.product-card-main-link .product-description {
+    color: var(--text-light);
+}
+.product-card-main-link .price-tag {
+    color: var(--primary-color);
+}
+@media (prefers-reduced-motion: reduce) {
+    .product-card,
+    .product-card .product-image {
+        transition: none !important;
+    }
+}
