@@ -90,10 +90,11 @@ def organization_schema():
         "@type": "Organization",
         "@id": "https://hoovale.com/#organization",
         "name": s.business_name,
-        "url": "https://hoovale.com",
+        "alternateName": "HOOVALE",
+        "url": "https://hoovale.com/",
         "logo": {
             "@type": "ImageObject",
-            "url": "https://hoovale.com/static/images/logo.png",
+            "url": "https://hoovale.com/static/images/hoovale-mark.svg",
             "width": 600,
             "height": 200
         },
@@ -250,16 +251,9 @@ def website_schema():
     data = {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "url": "https://hoovale.com",
+        "url": "https://hoovale.com/",
         "name": "HOOVALE",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": "https://hoovale.com/products/?q={search_term_string}"
-            },
-            "query-input": "required name=search_term_string"
-        }
+        "alternateName": "HOOVALE Wall Clocks"
     }
     return render_jsonld(data)
 
