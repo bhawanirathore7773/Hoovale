@@ -32,16 +32,15 @@ function initializeCampaignCarousel() {
 
     const track = root.querySelector('.carousel-inner');
     const originals = Array.from(track ? track.querySelectorAll(':scope > .carousel-item') : []);
-    const indicators = Array.from(root.querySelectorAll('.hv-banner-indicators [data-bs-slide-to]'));
-    if (!track || originals.length < 1) return;
+    const indicators = Array.from(root.querySelectorAll('.hv-banner-indicators button'));
+    if (!track || originals.length < 2) return;
 
     root.dataset.hvTrackBound = 'true';
 
-    // Bootstrap's data attributes are no longer used for movement. Keep the
-    // existing markup/ARIA, but own the track ourselves.
     const prevButton = root.querySelector('.carousel-control-prev');
     const nextButton = root.querySelector('.carousel-control-next');
 
+    // Clone first/last for a seamless infinite loop.
     const firstClone = originals[0].cloneNode(true);
     const lastClone = originals[originals.length - 1].cloneNode(true);
     firstClone.classList.remove('active');
@@ -51,31 +50,31 @@ function initializeCampaignCarousel() {
     track.appendChild(firstClone);
 
     const slides = Array.from(track.children);
-    let index = 1; // first real slide; clones live at 0 and last
+    const realCount = originals.length;
+
+    let index = 1;
     let width = 0;
     let dragging = false;
     let horizontal = null;
     let startX = 0;
     let startY = 0;
-    let startOffset = 0;
-    let currentOffset = 0;
+    let startTranslate = 0;
     let moved = false;
     let autoplay = null;
     let transitionTimer = null;
 
-    const realCount = originals.length;
-
     const measure = () => {
         width = root.getBoundingClientRect().width;
-        currentOffset = -index * width;
-        slides.forEach((slide, slideIndex) => {
-            const relativeX = (slideIndex - index) * width;
-            slide.style.transform = `translate3d(${relativeX}px,0,0)`;
+        if (!width) return;
+        track.style.width = (slides.length * width) + 'px';
+        slides.forEach(slide => {
+            slide.style.width = width + 'px';
+            slide.style.flex = '0 0 ' + width + 'px';
         });
+        setTrack(-index * width, false);
     };
 
     const updateIndicators = () => {
-        if (!indicators.length) return;
         let realIndex = index - 1;
         if (realIndex < 0) realIndex = realCount - 1;
         if (realIndex >= realCount) realIndex = 0;
@@ -87,25 +86,13 @@ function initializeCampaignCarousel() {
         });
     };
 
-    const setTrack = (offset, animated) => {
-        currentOffset = offset;
-
-        // IMPORTANT: every slide has its own position relative to the
-        // currently selected slide. The previous implementation applied the
-        // same transform to every slide, causing all banners to overlap and
-        // making only the indicator appear to move.
-        const dragDelta = offset + (index * width);
-
-        slides.forEach((slide, slideIndex) => {
-            const relativeX = ((slideIndex - index) * width) + dragDelta;
-
-            slide.classList.toggle('hv-track-animated', animated);
-            slide.classList.toggle('hv-track-dragging', !animated);
-            slide.style.transform = `translate3d(${relativeX}px,0,0)`;
-        });
+    const setTrack = (translate, animated) => {
+        track.classList.toggle('hv-track-animated', animated);
+        track.classList.toggle('hv-track-dragging', !animated);
+        track.style.transform = `translate3d(${translate}px, 0, 0)`;
     };
 
-    const finishCloneJump = () => {
+    const jumpFromClone = () => {
         if (index === 0) {
             index = realCount;
             setTrack(-index * width, false);
@@ -121,8 +108,8 @@ function initializeCampaignCarousel() {
         updateIndicators();
         setTrack(-index * width, animated);
 
-        if (transitionTimer) window.clearTimeout(transitionTimer);
-        transitionTimer = window.setTimeout(finishCloneJump, animated ? 370 : 0);
+        if (transitionTimer) clearTimeout(transitionTimer);
+        transitionTimer = setTimeout(jumpFromClone, animated ? 380 : 0);
     };
 
     const next = () => {
@@ -137,19 +124,18 @@ function initializeCampaignCarousel() {
 
     const stopAutoplay = () => {
         if (autoplay) {
-            window.clearInterval(autoplay);
+            clearInterval(autoplay);
             autoplay = null;
         }
     };
 
     const restartAutoplay = () => {
         stopAutoplay();
-        autoplay = window.setInterval(next, 5200);
+        autoplay = setInterval(next, 5200);
     };
 
-    // Keep the indicator tap behavior, but route it through the same track.
     indicators.forEach((button, i) => {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', event => {
             event.preventDefault();
             event.stopPropagation();
             goTo(i + 1, true);
@@ -158,41 +144,40 @@ function initializeCampaignCarousel() {
     });
 
     if (nextButton) {
-        nextButton.removeAttribute('data-bs-slide');
-        nextButton.addEventListener('click', function(event) {
+        nextButton.addEventListener('click', event => {
             event.preventDefault();
             next();
         });
     }
 
     if (prevButton) {
-        prevButton.removeAttribute('data-bs-slide');
-        prevButton.addEventListener('click', function(event) {
+        prevButton.addEventListener('click', event => {
             event.preventDefault();
             prev();
         });
     }
 
-    // Pointer events give the same continuous drag behavior to touch and
-    // mouse. The page can still scroll vertically when the gesture is vertical.
-    track.addEventListener('pointerdown', function(event) {
+    track.addEventListener('pointerdown', event => {
         if (event.pointerType === 'mouse' && event.button !== 0) return;
 
         width = root.getBoundingClientRect().width;
+        if (!width) return;
+
         dragging = true;
         horizontal = null;
         moved = false;
         startX = event.clientX;
         startY = event.clientY;
-        startOffset = -index * width;
-        currentOffset = startOffset;
-        stopAutoplay();
+        startTranslate = -index * width;
 
+        stopAutoplay();
+        setTrack(startTranslate, false);
         track.classList.add('hv-is-dragging');
+
         try { track.setPointerCapture(event.pointerId); } catch (_) {}
     });
 
-    track.addEventListener('pointermove', function(event) {
+    track.addEventListener('pointermove', event => {
         if (!dragging) return;
 
         const dx = event.clientX - startX;
@@ -208,35 +193,31 @@ function initializeCampaignCarousel() {
         moved = Math.abs(dx) > 8;
         event.preventDefault();
 
-        // Small resistance at the cloned edges keeps the gesture natural.
-        let offset = startOffset + dx;
-        if (index === 0 || index === realCount + 1) offset = startOffset + (dx * 0.45);
-
-        setTrack(offset, false);
+        // THIS is the Paytm-style part:
+        // the entire track follows the finger continuously, so the next
+        // banner enters from the opposite side by exactly the same distance.
+        setTrack(startTranslate + dx, false);
     });
 
-    const release = function(event) {
+    const release = event => {
         if (!dragging) return;
 
         const dx = event.clientX - startX;
-        const elapsed = Math.max(1, performance.now() - (event.timeStamp || performance.now()));
-        const velocity = Math.abs(dx) / elapsed;
-
         dragging = false;
         track.classList.remove('hv-is-dragging');
 
         if (!horizontal) {
             restartAutoplay();
+            horizontal = null;
             return;
         }
 
-        // Complete a slide when the user drags ~15% of the banner, or makes
-        // a fast flick. Otherwise smoothly return to the current banner.
-        const shouldChange = Math.abs(dx) > width * 0.15 || velocity > 0.55;
+        const threshold = width * 0.12;
 
-        if (shouldChange) {
-            if (dx < 0) next();
-            else prev();
+        if (dx < -threshold) {
+            next();
+        } else if (dx > threshold) {
+            prev();
         } else {
             setTrack(-index * width, true);
             restartAutoplay();
@@ -248,16 +229,14 @@ function initializeCampaignCarousel() {
     track.addEventListener('pointerup', release);
     track.addEventListener('pointercancel', release);
 
-    track.addEventListener('click', function(event) {
+    track.addEventListener('click', event => {
         if (!moved) return;
         event.preventDefault();
         event.stopPropagation();
         moved = false;
     }, true);
 
-    window.addEventListener('resize', function() {
-        measure();
-    }, {passive: true});
+    window.addEventListener('resize', measure, {passive: true});
 
     measure();
     updateIndicators();
