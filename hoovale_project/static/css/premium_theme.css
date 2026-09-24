@@ -3502,49 +3502,61 @@ body.modal-open .modal-backdrop.show {
 }
 
 /* ============================================================
-   MOBILE HEADER / BOTTOM NAV HEIGHT MATCH
-   Keep the top mobile header visually equal to the fixed
-   bottom navigation area. Do not change desktop header.
+   FINAL MOBILE HEADER — MATCH FIXED BOTTOM NAV
+   Keep the header compact. Both bars use the same 64px CSS
+   height; no extra mobile header override is applied.
    ============================================================ */
 @media (max-width: 991px) {
     .navbar.hv-navbar {
-        height: 116px !important;
-        min-height: 116px !important;
-        max-height: 116px !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
         padding: 0 !important;
+        margin: 0 !important;
         box-sizing: border-box !important;
     }
 
     .navbar.hv-navbar > .container,
     .navbar.hv-navbar > .container-fluid,
     .navbar.hv-navbar > .container-lg {
-        height: 100% !important;
-        min-height: 116px !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
         display: flex !important;
         align-items: center !important;
         box-sizing: border-box !important;
     }
 
     main {
-        padding-top: 116px !important;
+        padding-top: 64px !important;
+    }
+
+    .hv-navbar .navbar-brand {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
 }
 
 @media (max-width: 480px) {
-    .navbar.hv-navbar {
-        height: 116px !important;
-        min-height: 116px !important;
-        max-height: 116px !important;
-    }
-
+    .navbar.hv-navbar,
     .navbar.hv-navbar > .container,
     .navbar.hv-navbar > .container-fluid,
     .navbar.hv-navbar > .container-lg {
-        height: 116px !important;
-        min-height: 116px !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
     }
 
     main {
-        padding-top: 116px !important;
+        padding-top: 64px !important;
     }
 }
