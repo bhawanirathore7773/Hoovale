@@ -46,7 +46,7 @@ def local_business_schema():
         "@type": "LocalBusiness",
         "@id": "https://hoovale.com/#business",
         "name": s.business_name,
-        "image": "https://hoovale.com/static/images/logo.png",
+        "image": "https://hoovale.com/static/images/favicon/android-chrome-512x512.png",
         "description": s.default_meta_description,
         "url": "https://hoovale.com",
         "telephone": s.primary_phone,
