@@ -1447,6 +1447,46 @@
     }
 }
 
+
+/* FINAL CAROUSEL TRACK OVERRIDE — one moving track, not individual slides */
+#hvHomeBanner .carousel-inner{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    position:relative !important;
+    overflow:hidden !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    transform:translate3d(0,0,0);
+    touch-action:pan-y !important;
+}
+#hvHomeBanner .carousel-inner.hv-track-animated{
+    transition:transform .38s cubic-bezier(.22,.61,.36,1) !important;
+}
+#hvHomeBanner .carousel-inner.hv-track-dragging{
+    transition:none !important;
+}
+#hvHomeBanner .carousel-item,
+#hvHomeBanner .carousel-item.active,
+#hvHomeBanner .carousel-item-next,
+#hvHomeBanner .carousel-item-prev{
+    display:block !important;
+    position:relative !important;
+    float:none !important;
+    flex:0 0 100% !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    transform:none !important;
+    opacity:1 !important;
+    visibility:visible !important;
+    transition:none !important;
+}
+#hvHomeBanner .carousel-item > .hv-banner-link{
+    display:block !important;
+    width:100% !important;
+}
+
 </style>
 {% endblock %}
 
