@@ -3500,3 +3500,51 @@ body.modal-open .modal-backdrop.show {
         max-height: 64px !important;
     }
 }
+
+/* ============================================================
+   MOBILE HEADER / BOTTOM NAV HEIGHT MATCH
+   Keep the top mobile header visually equal to the fixed
+   bottom navigation area. Do not change desktop header.
+   ============================================================ */
+@media (max-width: 991px) {
+    .navbar.hv-navbar {
+        height: 116px !important;
+        min-height: 116px !important;
+        max-height: 116px !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .navbar.hv-navbar > .container,
+    .navbar.hv-navbar > .container-fluid,
+    .navbar.hv-navbar > .container-lg {
+        height: 100% !important;
+        min-height: 116px !important;
+        display: flex !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+    }
+
+    main {
+        padding-top: 116px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar.hv-navbar {
+        height: 116px !important;
+        min-height: 116px !important;
+        max-height: 116px !important;
+    }
+
+    .navbar.hv-navbar > .container,
+    .navbar.hv-navbar > .container-fluid,
+    .navbar.hv-navbar > .container-lg {
+        height: 116px !important;
+        min-height: 116px !important;
+    }
+
+    main {
+        padding-top: 116px !important;
+    }
+}
