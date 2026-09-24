@@ -3423,3 +3423,131 @@ body.modal-open .modal-backdrop.show {
         min-height: 64px !important;
     }
 }
+
+
+/* ============================================================
+   FINAL MOBILE SHELL — FIXED HEADER + TRUE BOTTOM NAV
+   Header stays visible while scrolling. Bottom navigation is
+   fixed to the visual viewport without creating a scroll tail.
+   ============================================================ */
+@media (max-width: 991px) {
+    html {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    body {
+        overflow-x: hidden !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .navbar.hv-navbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 84px !important;
+        min-height: 84px !important;
+        margin: 0 !important;
+        z-index: 10003 !important;
+        background: rgba(255,255,255,.98) !important;
+        box-shadow: 0 1px 0 rgba(15,23,42,.08), 0 5px 20px rgba(15,23,42,.06) !important;
+        transform: translate3d(0,0,0) !important;
+        -webkit-transform: translate3d(0,0,0) !important;
+        will-change: transform;
+    }
+
+    /* Reserve only the header's real height; never reserve bottom-nav space. */
+    main {
+        padding-top: 84px !important;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        min-height: 0 !important;
+    }
+
+    .hv-footer {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .mobile-cta-bar {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        inset-block-end: 0 !important;
+        width: 100vw !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: grid !important;
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        box-sizing: border-box !important;
+        background: #fff !important;
+        border-top: 1px solid rgba(15,23,42,.10) !important;
+        border-bottom: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: 0 -8px 24px rgba(15,23,42,.10) !important;
+        z-index: 12000 !important;
+        transform: translate3d(0,0,0) !important;
+        -webkit-transform: translate3d(0,0,0) !important;
+        isolation: isolate !important;
+        overflow: hidden !important;
+    }
+
+    .mobile-cta-item {
+        width: 100% !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* iOS Safari: don't let safe-area padding enlarge the bar or create
+       an apparent white tail underneath it. */
+    @supports (-webkit-touch-callout: none) {
+        .mobile-cta-bar {
+            bottom: 0 !important;
+            height: 64px !important;
+            min-height: 64px !important;
+            max-height: 64px !important;
+            padding-bottom: 0 !important;
+        }
+
+        .mobile-cta-item {
+            height: 64px !important;
+            min-height: 64px !important;
+            max-height: 64px !important;
+        }
+    }
+
+    .sticky-whatsapp {
+        bottom: 78px !important;
+        z-index: 12001 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar.hv-navbar {
+        height: 76px !important;
+        min-height: 76px !important;
+    }
+
+    main {
+        padding-top: 76px !important;
+    }
+
+    .mobile-cta-bar,
+    .mobile-cta-item {
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+    }
+}
