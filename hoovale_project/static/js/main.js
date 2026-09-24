@@ -68,8 +68,9 @@ function initializeCampaignCarousel() {
     const measure = () => {
         width = root.getBoundingClientRect().width;
         currentOffset = -index * width;
-        slides.forEach(slide => {
-            slide.style.transform = `translate3d(${currentOffset}px,0,0)`;
+        slides.forEach((slide, slideIndex) => {
+            const relativeX = (slideIndex - index) * width;
+            slide.style.transform = `translate3d(${relativeX}px,0,0)`;
         });
     };
 
@@ -88,10 +89,19 @@ function initializeCampaignCarousel() {
 
     const setTrack = (offset, animated) => {
         currentOffset = offset;
-        slides.forEach(slide => {
+
+        // IMPORTANT: every slide has its own position relative to the
+        // currently selected slide. The previous implementation applied the
+        // same transform to every slide, causing all banners to overlap and
+        // making only the indicator appear to move.
+        const dragDelta = offset + (index * width);
+
+        slides.forEach((slide, slideIndex) => {
+            const relativeX = ((slideIndex - index) * width) + dragDelta;
+
             slide.classList.toggle('hv-track-animated', animated);
             slide.classList.toggle('hv-track-dragging', !animated);
-            slide.style.transform = `translate3d(${offset}px,0,0)`;
+            slide.style.transform = `translate3d(${relativeX}px,0,0)`;
         });
     };
 
