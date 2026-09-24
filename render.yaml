@@ -51,8 +51,10 @@ services:
         sync: false
 
       # Production security
+      # Render terminates HTTPS at the edge. Do not redirect HTTPS again
+      # inside Django, otherwise a proxy/header mismatch can create a redirect loop.
       - key: SECURE_SSL_REDIRECT
-        value: "True"
+        value: "False"
       - key: SESSION_COOKIE_SECURE
         value: "True"
       - key: CSRF_COOKIE_SECURE
