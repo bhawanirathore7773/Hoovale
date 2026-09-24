@@ -27,85 +27,231 @@ document.addEventListener('DOMContentLoaded', function() {
  * ourselves so a swipe never competes with Bootstrap's touch handler.
  */
 function initializeCampaignCarousel() {
-    const carousel = document.getElementById('hvHomeBanner');
-    if (!carousel || carousel.dataset.hvSwipeBound === 'true') return;
+    const root = document.getElementById('hvHomeBanner');
+    if (!root || root.dataset.hvTrackBound === 'true') return;
 
-    carousel.dataset.hvSwipeBound = 'true';
+    const track = root.querySelector('.carousel-inner');
+    const originals = Array.from(track ? track.querySelectorAll(':scope > .carousel-item') : []);
+    const indicators = Array.from(root.querySelectorAll('.hv-banner-indicators [data-bs-slide-to]'));
+    if (!track || originals.length < 1) return;
 
+    root.dataset.hvTrackBound = 'true';
+
+    // Bootstrap's data attributes are no longer used for movement. Keep the
+    // existing markup/ARIA, but own the track ourselves.
+    const prevButton = root.querySelector('.carousel-control-prev');
+    const nextButton = root.querySelector('.carousel-control-next');
+
+    const firstClone = originals[0].cloneNode(true);
+    const lastClone = originals[originals.length - 1].cloneNode(true);
+    firstClone.classList.remove('active');
+    lastClone.classList.remove('active');
+
+    track.insertBefore(lastClone, originals[0]);
+    track.appendChild(firstClone);
+
+    const slides = Array.from(track.children);
+    let index = 1; // first real slide; clones live at 0 and last
+    let width = 0;
+    let dragging = false;
+    let horizontal = null;
     let startX = 0;
     let startY = 0;
-    let tracking = false;
-    let didSwipe = false;
+    let startOffset = 0;
+    let currentOffset = 0;
+    let moved = false;
+    let autoplay = null;
+    let transitionTimer = null;
 
-    const getInstance = () => {
-        if (!window.bootstrap || !window.bootstrap.Carousel) return null;
-        return window.bootstrap.Carousel.getOrCreateInstance(carousel, {
-            interval: 5200,
-            pause: false,
-            touch: false,
-            wrap: true
+    const realCount = originals.length;
+
+    const measure = () => {
+        width = root.getBoundingClientRect().width;
+        currentOffset = -index * width;
+        slides.forEach(slide => {
+            slide.style.transform = `translate3d(${currentOffset}px,0,0)`;
         });
     };
 
-    carousel.addEventListener('touchstart', function(event) {
-        if (!event.touches || event.touches.length !== 1) return;
+    const updateIndicators = () => {
+        if (!indicators.length) return;
+        let realIndex = index - 1;
+        if (realIndex < 0) realIndex = realCount - 1;
+        if (realIndex >= realCount) realIndex = 0;
 
-        const touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-        tracking = true;
-        didSwipe = false;
-    }, {passive: true});
+        indicators.forEach((button, i) => {
+            const active = i === realIndex;
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-current', active ? 'true' : 'false');
+        });
+    };
 
-    carousel.addEventListener('touchend', function(event) {
-        if (!tracking || !event.changedTouches || event.changedTouches.length !== 1) {
-            tracking = false;
+    const setTrack = (offset, animated) => {
+        currentOffset = offset;
+        slides.forEach(slide => {
+            slide.classList.toggle('hv-track-animated', animated);
+            slide.classList.toggle('hv-track-dragging', !animated);
+            slide.style.transform = `translate3d(${offset}px,0,0)`;
+        });
+    };
+
+    const finishCloneJump = () => {
+        if (index === 0) {
+            index = realCount;
+            setTrack(-index * width, false);
+        } else if (index === realCount + 1) {
+            index = 1;
+            setTrack(-index * width, false);
+        }
+        updateIndicators();
+    };
+
+    const goTo = (target, animated = true) => {
+        index = target;
+        updateIndicators();
+        setTrack(-index * width, animated);
+
+        if (transitionTimer) window.clearTimeout(transitionTimer);
+        transitionTimer = window.setTimeout(finishCloneJump, animated ? 370 : 0);
+    };
+
+    const next = () => {
+        goTo(index + 1, true);
+        restartAutoplay();
+    };
+
+    const prev = () => {
+        goTo(index - 1, true);
+        restartAutoplay();
+    };
+
+    const stopAutoplay = () => {
+        if (autoplay) {
+            window.clearInterval(autoplay);
+            autoplay = null;
+        }
+    };
+
+    const restartAutoplay = () => {
+        stopAutoplay();
+        autoplay = window.setInterval(next, 5200);
+    };
+
+    // Keep the indicator tap behavior, but route it through the same track.
+    indicators.forEach((button, i) => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            goTo(i + 1, true);
+            restartAutoplay();
+        });
+    });
+
+    if (nextButton) {
+        nextButton.removeAttribute('data-bs-slide');
+        nextButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            next();
+        });
+    }
+
+    if (prevButton) {
+        prevButton.removeAttribute('data-bs-slide');
+        prevButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            prev();
+        });
+    }
+
+    // Pointer events give the same continuous drag behavior to touch and
+    // mouse. The page can still scroll vertically when the gesture is vertical.
+    track.addEventListener('pointerdown', function(event) {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+        width = root.getBoundingClientRect().width;
+        dragging = true;
+        horizontal = null;
+        moved = false;
+        startX = event.clientX;
+        startY = event.clientY;
+        startOffset = -index * width;
+        currentOffset = startOffset;
+        stopAutoplay();
+
+        track.classList.add('hv-is-dragging');
+        try { track.setPointerCapture(event.pointerId); } catch (_) {}
+    });
+
+    track.addEventListener('pointermove', function(event) {
+        if (!dragging) return;
+
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+
+        if (horizontal === null) {
+            if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+            horizontal = Math.abs(dx) > Math.abs(dy);
+        }
+
+        if (!horizontal) return;
+
+        moved = Math.abs(dx) > 8;
+        event.preventDefault();
+
+        // Small resistance at the cloned edges keeps the gesture natural.
+        let offset = startOffset + dx;
+        if (index === 0 || index === realCount + 1) offset = startOffset + (dx * 0.45);
+
+        setTrack(offset, false);
+    });
+
+    const release = function(event) {
+        if (!dragging) return;
+
+        const dx = event.clientX - startX;
+        const elapsed = Math.max(1, performance.now() - (event.timeStamp || performance.now()));
+        const velocity = Math.abs(dx) / elapsed;
+
+        dragging = false;
+        track.classList.remove('hv-is-dragging');
+
+        if (!horizontal) {
+            restartAutoplay();
             return;
         }
 
-        const touch = event.changedTouches[0];
-        const dx = touch.clientX - startX;
-        const dy = touch.clientY - startY;
-        tracking = false;
+        // Complete a slide when the user drags ~15% of the banner, or makes
+        // a fast flick. Otherwise smoothly return to the current banner.
+        const shouldChange = Math.abs(dx) > width * 0.15 || velocity > 0.55;
 
-        // Ignore normal vertical page scrolling and tiny accidental movements.
-        if (Math.abs(dx) < 42 || Math.abs(dx) <= Math.abs(dy) * 1.15) return;
-
-        const instance = getInstance();
-        if (!instance) return;
-
-        didSwipe = true;
-
-        if (dx < 0) {
-            // Finger moves left -> current banner exits left, next enters right.
-            instance.next();
+        if (shouldChange) {
+            if (dx < 0) next();
+            else prev();
         } else {
-            // Finger moves right -> current banner exits right, previous enters left.
-            instance.prev();
+            setTrack(-index * width, true);
+            restartAutoplay();
         }
-    }, {passive: true});
 
-    // A swipe starts on the banner link, but it must not accidentally open the
-    // banner URL when the finger is released.
-    carousel.addEventListener('click', function(event) {
-        if (!didSwipe) return;
+        horizontal = null;
+    };
+
+    track.addEventListener('pointerup', release);
+    track.addEventListener('pointercancel', release);
+
+    track.addEventListener('click', function(event) {
+        if (!moved) return;
         event.preventDefault();
         event.stopPropagation();
-        didSwipe = false;
+        moved = false;
     }, true);
 
-    // Keep the carousel paused while the finger is down, then resume autoplay.
-    carousel.addEventListener('touchstart', function() {
-        const instance = getInstance();
-        if (instance) instance.pause();
+    window.addEventListener('resize', function() {
+        measure();
     }, {passive: true});
 
-    carousel.addEventListener('touchend', function() {
-        window.setTimeout(function() {
-            const instance = getInstance();
-            if (instance) instance.cycle();
-        }, 80);
-    }, {passive: true});
+    measure();
+    updateIndicators();
+    restartAutoplay();
 }
 
 /**
