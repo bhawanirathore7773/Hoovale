@@ -14,3 +14,193 @@
     {% product_schema product %}
     {% breadcrumb_schema breadcrumb_items %}
 {% endblock %}
+
+{% block content %}
+<section class="hv-product-detail">
+    <div class="container-lg">
+        <nav class="hv-product-breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span>/</span>
+            <a href="{% url 'products_list' %}">Wall Clocks</a>
+            <span>/</span>
+            <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+            <span>/</span>
+            <strong>{{ product.name }}</strong>
+        </nav>
+
+        <div class="hv-product-main">
+            <div class="hv-product-gallery">
+                <div class="hv-product-image-wrap">
+                    {% if product.is_featured %}
+                    <span class="hv-product-badge">Featured</span>
+                    {% endif %}
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }} - HOOVALE wall clock" class="hv-product-main-image">
+                    {% else %}
+                    <img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} - HOOVALE wall clock" class="hv-product-main-image">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="hv-product-info">
+                <p class="hv-product-category">{{ product.category.name }}</p>
+                <h1>{{ product.name }}</h1>
+
+                {% if product.short_description %}
+                <p class="hv-product-short">{{ product.short_description }}</p>
+                {% endif %}
+
+                <div class="hv-product-price-box">
+                    {% if product.price %}
+                    <span class="hv-product-price">₹{{ product.price }}</span>
+                    <span class="hv-product-price-note">Starting price</span>
+                    {% else %}
+                    <span class="hv-product-price-note">Price available on enquiry</span>
+                    {% endif %}
+                </div>
+
+                <div class="hv-product-meta">
+                    {% if product.sku %}<div><span>SKU</span><strong>{{ product.sku }}</strong></div>{% endif %}
+                    <div><span>Availability</span><strong>{{ product.get_availability_display }}</strong></div>
+                    <div><span>MOQ</span><strong>{{ product.moq }} pcs</strong></div>
+                </div>
+
+                <div class="hv-product-actions">
+                    <button type="button" class="hv-product-primary" data-bs-toggle="modal" data-bs-target="#bulkInquiryModal">
+                        <i class="fas fa-file-invoice"></i> Get Bulk Quote
+                    </button>
+                    <a class="hv-product-whatsapp" href="https://wa.me/919462207356?text=Hello%20HOOVALE%20Team%2C%20I%20am%20interested%20in%20{{ product.name|urlencode }}." target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Enquiry
+                    </a>
+                </div>
+
+                <div class="hv-product-trust">
+                    <span><i class="fas fa-industry"></i> Direct from Jaipur</span>
+                    <span><i class="fas fa-boxes-stacked"></i> Bulk Supply</span>
+                    <span><i class="fas fa-paint-brush"></i> Custom Branding</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hv-product-lower">
+            <article class="hv-product-description">
+                <h2>Product Details</h2>
+                <div class="hv-rich-copy">{{ product.description|linebreaks }}</div>
+
+                {% if specifications %}
+                <h2>Specifications</h2>
+                <div class="hv-spec-grid">
+                    {% for item in specifications %}
+                    <div class="hv-spec-row">
+                        <span>{{ item.key }}</span>
+                        <strong>{{ item.value }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </article>
+
+            <aside class="hv-product-pricing">
+                <h2>Bulk Pricing</h2>
+                <p>Ask our team for quantity-based pricing, custom branding and wholesale requirements.</p>
+                {% for tier in pricing_tiers %}
+                <div class="hv-price-tier">
+                    <div>
+                        <strong>{{ tier.label }}</strong>
+                        <small>{{ tier.min_qty }}{% if tier.max_qty < 99999 %}–{{ tier.max_qty }}{% else %}+{% endif %} pcs</small>
+                    </div>
+                    <strong>₹{{ tier.unit_price }}</strong>
+                </div>
+                {% endfor %}
+            </aside>
+        </div>
+
+        {% if related_products %}
+        <section class="hv-related-products">
+            <div class="hv-section-heading">
+                <div>
+                    <p>YOU MAY ALSO LIKE</p>
+                    <h2>Related Wall Clocks</h2>
+                </div>
+                <a href="{% url 'products_list' %}">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="hv-related-grid">
+                {% for related in related_products %}
+                <a class="hv-related-card" href="{{ related.get_absolute_url }}">
+                    <div class="hv-related-image">
+                        {% if related.image %}
+                        <img src="{{ related.image.url }}" alt="{{ related.name }}" loading="lazy">
+                        {% else %}
+                        <img src="{% static 'images/product-placeholder.svg' %}" alt="{{ related.name }}" loading="lazy">
+                        {% endif %}
+                    </div>
+                    <div class="hv-related-info">
+                        <span>{{ related.category.name }}</span>
+                        <h3>{{ related.name }}</h3>
+                        {% if related.price %}<strong>From ₹{{ related.price }}</strong>{% endif %}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.hv-product-detail{background:#f8fafc;padding:28px 0 100px;min-height:70vh;color:#111}
+.hv-product-breadcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.82rem;color:#697386;margin-bottom:24px}
+.hv-product-breadcrumb a{color:#6d5620;text-decoration:none}
+.hv-product-breadcrumb strong{font-weight:600;color:#111}
+.hv-product-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:48px;align-items:start}
+.hv-product-gallery,.hv-product-image-wrap{min-width:0}
+.hv-product-image-wrap{position:relative;background:#fff;border:1px solid #e8e8e8;border-radius:18px;min-height:520px;padding:35px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 35px rgba(15,23,42,.06)}
+.hv-product-main-image{width:100%;height:450px;object-fit:contain;display:block}
+.hv-product-badge{position:absolute;top:18px;left:18px;background:#111;color:#fff;border-radius:999px;padding:8px 13px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;z-index:2}
+.hv-product-info{padding:10px 0}
+.hv-product-category{color:#a27b2d;text-transform:uppercase;font-size:.76rem;font-weight:800;letter-spacing:1.5px;margin:0 0 10px}
+.hv-product-info h1{font-family:var(--ff-heading,Georgia,serif);font-size:clamp(2rem,4vw,3.25rem);line-height:1.08;margin:0 0 18px;color:#111}
+.hv-product-short{font-size:1.02rem;line-height:1.75;color:#667085;margin:0 0 24px}
+.hv-product-price-box{border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:20px 0;margin-bottom:20px;display:flex;align-items:baseline;gap:12px}
+.hv-product-price{font-size:2rem;font-weight:800;color:#111}
+.hv-product-price-note{color:#667085;font-size:.88rem}
+.hv-product-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.hv-product-meta div{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:12px}
+.hv-product-meta span{display:block;color:#7a8493;font-size:.7rem;text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px}
+.hv-product-meta strong{font-size:.84rem;color:#111;word-break:break-word}
+.hv-product-actions{display:grid;gap:10px}
+.hv-product-primary,.hv-product-whatsapp{width:100%;min-height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:800;text-decoration:none;cursor:pointer}
+.hv-product-primary{border:0;background:linear-gradient(135deg,#111,#2a2a2a);color:#fff}
+.hv-product-whatsapp{border:1px solid #20b85a;background:#fff;color:#168b43}
+.hv-product-primary:hover,.hv-product-whatsapp:hover{transform:translateY(-1px)}
+.hv-product-trust{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.hv-product-trust span{font-size:.76rem;color:#667085}
+.hv-product-trust i{color:#b88b32;margin-right:5px}
+.hv-product-lower{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.6fr);gap:28px;margin-top:48px}
+.hv-product-description,.hv-product-pricing{background:#fff;border:1px solid #e8e8e8;border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(15,23,42,.04)}
+.hv-product-description h2,.hv-product-pricing h2{font-family:var(--ff-heading,Georgia,serif);font-size:1.55rem;margin:0 0 18px;color:#111}
+.hv-rich-copy{color:#596273;line-height:1.85;font-size:.98rem;margin-bottom:28px}
+.hv-rich-copy p:last-child{margin-bottom:0}
+.hv-spec-grid{border:1px solid #e8e8e8;border-radius:10px;overflow:hidden}
+.hv-spec-row{display:grid;grid-template-columns:1fr 1.2fr;padding:13px 15px;border-bottom:1px solid #eee;gap:15px}
+.hv-spec-row:last-child{border-bottom:0}
+.hv-spec-row span{color:#727b89}.hv-spec-row strong{color:#111}
+.hv-product-pricing>p{color:#697386;line-height:1.6;font-size:.9rem}
+.hv-price-tier{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #eee}
+.hv-price-tier:last-child{border-bottom:0}
+.hv-price-tier strong{font-size:.9rem;color:#111}.hv-price-tier small{display:block;color:#7a8493;margin-top:3px}
+.hv-related-products{margin-top:58px}
+.hv-section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}
+.hv-section-heading p{margin:0 0 6px;color:#a27b2d;font-size:.72rem;font-weight:800;letter-spacing:1.6px}
+.hv-section-heading h2{margin:0;font-family:var(--ff-heading,Georgia,serif);font-size:2rem}
+.hv-section-heading>a{color:#8b6a27;text-decoration:none;font-weight:700;font-size:.85rem}
+.hv-related-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.hv-related-card{background:#fff;border:1px solid #e8e8e8;border-radius:14px;overflow:hidden;color:inherit;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease}
+.hv-related-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(15,23,42,.09);color:inherit}
+.hv-related-image{height:220px;background:#f8f8f8;display:flex;align-items:center;justify-content:center;padding:15px}
+.hv-related-image img{width:100%;height:100%;object-fit:contain}
+.hv-related-info{padding:15px}.hv-related-info>span{font-size:.68rem;text-transform:uppercase;color:#a27b2d;font-weight:800;letter-spacing:1px}.hv-related-info h3{font-size:1rem;line-height:1.35;margin:6px 0 9px;color:#111}.hv-related-info strong{font-size:.86rem;color:#333}
+@media(max-width:991px){.hv-product-main{grid-template-columns:1fr;gap:28px}.hv-product-image-wrap{min-height:380px}.hv-product-main-image{height:330px}.hv-product-lower{grid-template-columns:1fr}.hv-related-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:575px){.hv-product-detail{padding:18px 0 92px}.hv-product-breadcrumb{font-size:.72rem;margin-bottom:15px}.hv-product-main{gap:18px}.hv-product-image-wrap{min-height:300px;padding:20px;border-radius:14px}.hv-product-main-image{height:270px}.hv-product-info h1{font-size:2rem}.hv-product-meta{grid-template-columns:1fr 1fr}.hv-product-meta div:last-child{grid-column:1/-1}.hv-product-lower{margin-top:28px}.hv-product-description,.hv-product-pricing{padding:20px;border-radius:13px}.hv-spec-row{grid-template-columns:1fr;gap:4px}.hv-related-grid{grid-template-columns:1fr 1fr;gap:10px}.hv-related-image{height:150px}.hv-related-info{padding:11px}.hv-related-info h3{font-size:.86rem}.hv-section-heading h2{font-size:1.55rem}.hv-section-heading>a{font-size:.75rem}.hv-product-trust{display:grid;grid-template-columns:1fr 1fr}}
+</style>
+{% endblock %}
