@@ -28,32 +28,27 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initializeCampaignCarousel() {
     const root = document.getElementById('hvHomeBanner');
-    if (!root || root.dataset.hvTrackBound === 'true') return;
+    if (!root || root.dataset.hvCampaignBound === 'true') return;
 
-    const track = root.querySelector('.carousel-inner');
-    const originals = Array.from(track ? track.querySelectorAll(':scope > .carousel-item') : []);
+    const viewport = root.querySelector('.hv-campaign-viewport');
+    const track = root.querySelector('.hv-campaign-track');
+    const originalSlides = Array.from(track ? track.children : []);
     const indicators = Array.from(root.querySelectorAll('.hv-banner-indicators button'));
-    if (!track || originals.length < 2) return;
+    const prevButton = root.querySelector('.hv-campaign-prev');
+    const nextButton = root.querySelector('.hv-campaign-next');
 
-    root.dataset.hvTrackBound = 'true';
-    if (!document.querySelector('.hv-mobile-drawer.is-open')) {
-        document.body.classList.remove('hv-menu-open');
-    }
+    if (!viewport || !track || originalSlides.length < 2) return;
 
-    const prevButton = root.querySelector('.carousel-control-prev');
-    const nextButton = root.querySelector('.carousel-control-next');
+    root.dataset.hvCampaignBound = 'true';
 
-    // Clone first/last for a seamless infinite loop.
-    const firstClone = originals[0].cloneNode(true);
-    const lastClone = originals[originals.length - 1].cloneNode(true);
-    firstClone.classList.remove('active');
-    lastClone.classList.remove('active');
-
-    track.insertBefore(lastClone, originals[0]);
+    // Build a true infinite strip: [last] [1] [2] ... [last] [first].
+    const firstClone = originalSlides[0].cloneNode(true);
+    const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+    track.insertBefore(lastClone, originalSlides[0]);
     track.appendChild(firstClone);
 
     const slides = Array.from(track.children);
-    const realCount = originals.length;
+    const count = originalSlides.length;
 
     let index = 1;
     let width = 0;
@@ -61,52 +56,52 @@ function initializeCampaignCarousel() {
     let horizontal = null;
     let startX = 0;
     let startY = 0;
-    let startTranslate = 0;
     let moved = false;
     let autoplay = null;
-    let transitionTimer = null;
+    let correctionTimer = null;
 
-    const measure = () => {
-        width = root.getBoundingClientRect().width;
-        if (!width) return;
-
-        // Keep the viewport at 100%. Each slide occupies exactly one
-        // viewport. The TRACK moves; the slides themselves never get
-        // translated individually.
-        track.style.width = '100%';
-        slides.forEach(slide => {
-            slide.style.width = '100%';
-            slide.style.flex = '0 0 100%';
-        });
-
-        setTrack(-index * width, false);
+    const realIndex = () => {
+        if (index === 0) return count - 1;
+        if (index === count + 1) return 0;
+        return index - 1;
     };
 
     const updateIndicators = () => {
-        let realIndex = index - 1;
-        if (realIndex < 0) realIndex = realCount - 1;
-        if (realIndex >= realCount) realIndex = 0;
-
+        const active = realIndex();
         indicators.forEach((button, i) => {
-            const active = i === realIndex;
-            button.classList.toggle('active', active);
-            button.setAttribute('aria-current', active ? 'true' : 'false');
+            const selected = i === active;
+            button.classList.toggle('active', selected);
+            button.setAttribute('aria-current', selected ? 'true' : 'false');
         });
     };
 
-    const setTrack = (translate, animated) => {
-        track.classList.toggle('hv-track-animated', animated);
-        track.classList.toggle('hv-track-dragging', !animated);
-        track.style.transform = `translate3d(${translate}px, 0, 0)`;
+    const render = (translate, animated) => {
+        track.classList.toggle('hv-animated', animated);
+        track.style.transform = 'translate3d(' + translate + 'px,0,0)';
     };
 
-    const jumpFromClone = () => {
+    const measure = () => {
+        width = viewport.getBoundingClientRect().width;
+        if (!width) return;
+
+        // Every slide is exactly one viewport. Only the track moves.
+        track.style.width = (slides.length * width) + 'px';
+        slides.forEach(slide => {
+            slide.style.width = width + 'px';
+            slide.style.minWidth = width + 'px';
+            slide.style.flex = '0 0 ' + width + 'px';
+        });
+
+        render(-index * width, false);
+    };
+
+    const normalize = () => {
         if (index === 0) {
-            index = realCount;
-            setTrack(-index * width, false);
-        } else if (index === realCount + 1) {
+            index = count;
+            render(-index * width, false);
+        } else if (index === count + 1) {
             index = 1;
-            setTrack(-index * width, false);
+            render(-index * width, false);
         }
         updateIndicators();
     };
@@ -114,10 +109,26 @@ function initializeCampaignCarousel() {
     const goTo = (target, animated = true) => {
         index = target;
         updateIndicators();
-        setTrack(-index * width, animated);
+        render(-index * width, animated);
 
-        if (transitionTimer) clearTimeout(transitionTimer);
-        transitionTimer = setTimeout(jumpFromClone, animated ? 380 : 0);
+        if (correctionTimer) clearTimeout(correctionTimer);
+        if (animated) {
+            correctionTimer = setTimeout(normalize, 420);
+        } else {
+            normalize();
+        }
+    };
+
+    const stopAutoplay = () => {
+        if (autoplay) {
+            clearInterval(autoplay);
+            autoplay = null;
+        }
+    };
+
+    const restartAutoplay = () => {
+        stopAutoplay();
+        autoplay = setInterval(() => goTo(index + 1, true), 5200);
     };
 
     const next = () => {
@@ -130,18 +141,6 @@ function initializeCampaignCarousel() {
         restartAutoplay();
     };
 
-    const stopAutoplay = () => {
-        if (autoplay) {
-            clearInterval(autoplay);
-            autoplay = null;
-        }
-    };
-
-    const restartAutoplay = () => {
-        stopAutoplay();
-        autoplay = setInterval(next, 5200);
-    };
-
     indicators.forEach((button, i) => {
         button.addEventListener('click', event => {
             event.preventDefault();
@@ -151,24 +150,20 @@ function initializeCampaignCarousel() {
         });
     });
 
-    if (nextButton) {
-        nextButton.addEventListener('click', event => {
-            event.preventDefault();
-            next();
-        });
-    }
+    nextButton?.addEventListener('click', event => {
+        event.preventDefault();
+        next();
+    });
 
-    if (prevButton) {
-        prevButton.addEventListener('click', event => {
-            event.preventDefault();
-            prev();
-        });
-    }
+    prevButton?.addEventListener('click', event => {
+        event.preventDefault();
+        prev();
+    });
 
-    track.addEventListener('pointerdown', event => {
+    viewport.addEventListener('pointerdown', event => {
         if (event.pointerType === 'mouse' && event.button !== 0) return;
 
-        width = root.getBoundingClientRect().width;
+        width = viewport.getBoundingClientRect().width;
         if (!width) return;
 
         dragging = true;
@@ -176,16 +171,15 @@ function initializeCampaignCarousel() {
         moved = false;
         startX = event.clientX;
         startY = event.clientY;
-        startTranslate = -index * width;
 
         stopAutoplay();
-        setTrack(startTranslate, false);
-        track.classList.add('hv-is-dragging');
+        render(-index * width, false);
+        viewport.classList.add('hv-is-dragging');
 
-        try { track.setPointerCapture(event.pointerId); } catch (_) {}
+        try { viewport.setPointerCapture(event.pointerId); } catch (_) {}
     });
 
-    track.addEventListener('pointermove', event => {
+    viewport.addEventListener('pointermove', event => {
         if (!dragging) return;
 
         const dx = event.clientX - startX;
@@ -198,13 +192,13 @@ function initializeCampaignCarousel() {
 
         if (!horizontal) return;
 
-        moved = Math.abs(dx) > 8;
+        moved = Math.abs(dx) > 6;
+
+        // Do not preventDefault until the gesture is known to be horizontal.
+        // This keeps normal page scrolling working.
         event.preventDefault();
 
-        // THIS is the Paytm-style part:
-        // the entire track follows the finger continuously, so the next
-        // banner enters from the opposite side by exactly the same distance.
-        setTrack(startTranslate + dx, false);
+        render((-index * width) + dx, false);
     });
 
     const release = event => {
@@ -212,39 +206,43 @@ function initializeCampaignCarousel() {
 
         const dx = event.clientX - startX;
         dragging = false;
-        track.classList.remove('hv-is-dragging');
+        viewport.classList.remove('hv-is-dragging');
 
         if (!horizontal) {
             restartAutoplay();
-            horizontal = null;
             return;
         }
 
-        const threshold = width * 0.12;
+        const threshold = Math.max(45, width * 0.12);
 
         if (dx < -threshold) {
             next();
         } else if (dx > threshold) {
             prev();
         } else {
-            setTrack(-index * width, true);
+            render(-index * width, true);
             restartAutoplay();
         }
 
         horizontal = null;
     };
 
-    track.addEventListener('pointerup', release);
-    track.addEventListener('pointercancel', release);
+    viewport.addEventListener('pointerup', release);
+    viewport.addEventListener('pointercancel', release);
 
-    track.addEventListener('click', event => {
+    viewport.addEventListener('click', event => {
         if (!moved) return;
         event.preventDefault();
         event.stopPropagation();
         moved = false;
     }, true);
 
-    window.addEventListener('resize', measure, {passive: true});
+    window.addEventListener('resize', measure, { passive: true });
+
+    // Never leave the whole page locked because of a stale mobile-menu class.
+    if (!document.querySelector('.hv-mobile-drawer.is-open')) {
+        document.body.classList.remove('hv-menu-open');
+    }
 
     measure();
     updateIndicators();
