@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static seo_tags %}
 {% include 'components/catalogue_download.html' %}
+
+{% block meta_title %}Wall Clocks | Custom, Wholesale & Bulk Wall Clock Supplier | HOOVALE{% endblock %}
+{% block meta_description %}Browse HOOVALE wall clocks for homes, offices, retailers and businesses. Explore custom logo clocks, promotional designs, wholesale pricing and bulk-order options from Jaipur.{% endblock %}
+{% block meta_keywords %}wall clocks, wall clock manufacturer Jaipur, wholesale wall clocks, custom logo wall clocks, bulk wall clocks, promotional clocks{% endblock %}
+{% block og_title %}Wall Clocks | Custom, Wholesale & Bulk Wall Clock Supplier | HOOVALE{% endblock %}
+{% block og_description %}Explore HOOVALE wall clocks, custom logo designs, promotional clocks and wholesale bulk-order options from Jaipur.{% endblock %}
+{% block page_schema %}{% breadcrumb_schema breadcrumb_items %}{% endblock %}
 {% block content %}
 <section class="products-page py-5">
     <div class="container-lg">
         <!-- Page Header -->
         <div class="row mb-4 products-toolbar" data-aos="fade-up">
             <div class="col-12 col-lg-7">
-                <h1 class="page-title mb-1">Our Products</h1>
-                <p class="text-muted mb-0">Browse our premium collection of customized wall clocks</p>
+                <h1 class="page-title mb-1">Wall Clocks &amp; Custom Designs</h1>
+                <p class="text-muted mb-0">Browse wall clocks for homes, offices, retailers and bulk buyers — with custom logo and wholesale options from Jaipur.</p>
             </div>
             <div class="col-12 col-lg-5">
                 <form class="search-form" method="get">
