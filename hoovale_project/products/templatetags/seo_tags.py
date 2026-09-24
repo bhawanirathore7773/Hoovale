@@ -243,17 +243,52 @@ def aggregate_rating_schema(testimonials):
 
 
 # ============================================================
-# 7. WEBSITE SCHEMA (with sitelinks search box)
+# 7. WEBSITE SCHEMA
 # ============================================================
 @register.simple_tag
 def website_schema():
-    """Outputs WebSite schema with search action."""
+    """Outputs WebSite entity markup for site identity."""
     data = {
         "@context": "https://schema.org",
         "@type": "WebSite",
+        "@id": "https://hoovale.com/#website",
         "url": "https://hoovale.com/",
         "name": "HOOVALE",
-        "alternateName": "HOOVALE Wall Clocks"
+        "alternateName": "HOOVALE Wall Clocks",
+        "publisher": {"@id": "https://hoovale.com/#organization"}
+    }
+    return render_jsonld(data)
+
+
+# ============================================================
+# 8. SITE NAVIGATION SCHEMA
+# ============================================================
+@register.simple_tag
+def site_navigation_schema():
+    """Outputs navigation links so crawlers can understand site hierarchy."""
+    links = [
+        ("Home", "/"),
+        ("Wall Clocks", "/products/"),
+        ("Categories", "/categories/"),
+        ("Services", "/services/"),
+        ("About HOOVALE", "/about/"),
+        ("Wall Clock Guides", "/blog/"),
+        ("Contact", "/contact/"),
+    ]
+    base_url = "https://hoovale.com"
+    data = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "HOOVALE site navigation",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": i + 1,
+                "name": name,
+                "url": base_url + url
+            }
+            for i, (name, url) in enumerate(links)
+        ]
     }
     return render_jsonld(data)
 
