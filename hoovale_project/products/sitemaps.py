@@ -120,7 +120,8 @@ class BannerSitemap(Sitemap):
         return Banner.objects.filter(is_active=True, is_page_published=True)
 
     def lastmod(self, obj):
-        return obj.updated_at
+        # Banner has created_at only; use it for sitemap lastmod.
+        return getattr(obj, 'updated_at', None) or getattr(obj, 'created_at', None)
 
 # Combined dict — register in main urls.py
 sitemaps = {
