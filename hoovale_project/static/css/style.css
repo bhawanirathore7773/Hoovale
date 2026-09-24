@@ -1895,3 +1895,23 @@ body.hv-page-ready main {
         transition: none !important;
     }
 }
+
+/* ============================================================
+   MOBILE SCROLL SAFETY
+   Keep the document itself as the vertical scroll container.
+   Never disable touch scrolling globally.
+   ============================================================ */
+html {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: clip;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
