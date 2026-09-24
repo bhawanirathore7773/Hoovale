@@ -1491,6 +1491,7 @@ img[loading="lazy"][src] {
         box-shadow: 0 10px 24px rgba(255,140,0,.18);
     }
 
+    html.hv-menu-open,
     body.hv-menu-open {
         overflow: hidden !important;
     }
@@ -3378,16 +3379,29 @@ body.modal-open .modal-backdrop.show {
    fixed to the visual viewport without creating a scroll tail.
    ============================================================ */
 @media (max-width: 991px) {
+    /*
+     * MOBILE SCROLL SAFETY
+     * Do not turn html/body into a nested scroll container.
+     * overflow-x:hidden can create a separate scrolling context on
+     * some Android/Chromium combinations. Use clip for horizontal
+     * clipping and leave vertical scrolling to the document.
+     */
     html {
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
+        overflow-x: clip !important;
+        overflow-y: visible !important;
+        height: auto !important;
+        min-height: 100% !important;
+        touch-action: auto !important;
     }
 
     body {
-        overflow-x: hidden !important;
-        min-height: 0 !important;
+        overflow-x: clip !important;
+        overflow-y: visible !important;
+        min-height: 100% !important;
+        height: auto !important;
         margin: 0 !important;
         padding-bottom: 0 !important;
+        touch-action: auto !important;
     }
 
     .navbar.hv-navbar {
