@@ -1909,8 +1909,9 @@ body.modal-open{padding-right:0 !important;}
 
 /* Keep mobile content clear of the fixed bottom navigation */
 @media(max-width:767px){
-    main{padding-bottom:72px;}
-    .hv-footer{padding-bottom:82px !important;}
+    /* Bottom navigation is fixed and overlays the page. */
+    main{padding-bottom:0 !important;}
+    .hv-footer{padding-bottom:0 !important; margin-bottom:0 !important;}
 }
 
 /* Product enquiry modal */
@@ -3371,58 +3372,6 @@ body.modal-open .modal-backdrop.show {
     }
 }
 
-
-/* ============================================================
-   MOBILE FIX — NO BLANK SPACE AFTER FOOTER
-   The bottom navigation is viewport-fixed and must not increase
-   document height. This also normalizes iOS Safari safe-area
-   behavior so scrolling ends at the actual footer.
-   ============================================================ */
-@media (max-width: 768px) {
-    html {
-        min-height: 0 !important;
-        height: auto !important;
-        overflow-x: hidden !important;
-    }
-
-    body {
-        min-height: 0 !important;
-        height: auto !important;
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
-        overflow-x: hidden !important;
-    }
-
-    main {
-        min-height: 0 !important;
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    .hv-footer {
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    .mobile-cta-bar {
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
-        min-height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
-        padding: 0 0 env(safe-area-inset-bottom, 0px) !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-        z-index: 12000 !important;
-    }
-
-    .mobile-cta-item {
-        height: 64px !important;
-        min-height: 64px !important;
-    }
-}
 
 
 /* ============================================================
