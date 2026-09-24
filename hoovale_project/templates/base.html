@@ -59,8 +59,10 @@
     {# ================================================== #}
     {# FAVICONS                                            #}
     {# ================================================== #}
-    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
 
     {# ================================================== #}
     {# PRELOAD CRITICAL RESOURCES (Core Web Vitals)        #}
@@ -145,9 +147,11 @@
             </div>
             <ul class="navbar-nav ms-auto" style="gap:8px;">
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'products_list' %}">Products</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'blog_list' %}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'products_list' %}">Wall Clocks</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'categories_index' %}">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'services_index' %}">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About HOOVALE</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'blog_list' %}">Wall Clock Guides</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
                 <li class="nav-item">
                     <button
