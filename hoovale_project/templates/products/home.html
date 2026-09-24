@@ -2,9 +2,28 @@
 {% load static seo_tags %}
 {% include 'components/bulk_inquiry.html' %}
 
-{% block meta_title %}HOOVALE | Custom & Wholesale Wall Clocks in Jaipur{% endblock %}
-{% block meta_description %}HOOVALE is a Jaipur-based wall clock manufacturer offering retail, wholesale, custom logo and promotional clocks for homes, offices, retailers and businesses across India.{% endblock %}
-{% block meta_keywords %}wall clocks Jaipur, custom wall clocks, wholesale wall clocks, promotional wall clocks, wall clock supplier Jaipur, corporate wall clocks{% endblock %}
+{% block meta_title %}HOOVALE | Wall Clock Manufacturer in Jaipur | Wholesale & Custom Clocks{% endblock %}
+{% block meta_description %}HOOVALE manufactures and supplies wall clocks in Jaipur for homes, offices, retailers and businesses. Explore wholesale, custom logo, corporate and promotional wall clocks across India.{% endblock %}
+{% block meta_keywords %}wall clock manufacturer in Jaipur, wall clock supplier Jaipur, wholesale wall clocks, custom logo wall clocks, corporate wall clocks, promotional wall clocks{% endblock %}
+
+{% block site_navigation_schema %}
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SiteNavigationElement",
+  "name":["Home","Wall Clocks","Categories","Services","About HOOVALE","Wall Clock Guides","Contact"],
+  "url":[
+    "https://hoovale.com/",
+    "https://hoovale.com/products/",
+    "https://hoovale.com/categories/",
+    "https://hoovale.com/services/",
+    "https://hoovale.com/about/",
+    "https://hoovale.com/blog/",
+    "https://hoovale.com/contact/"
+  ]
+}
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/premium_theme.css' %}">
