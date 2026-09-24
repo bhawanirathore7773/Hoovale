@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static seo_tags %}
 
-{% block meta_title %}{{ blog.meta_title|default:blog.title }}{% endblock %}
+{% block meta_title %}{{ blog.meta_title|default:blog.title }} | HOOVALE{% endblock %}
 {% block meta_description %}{{ blog.meta_description|default:blog.description|truncatechars:155 }}{% endblock %}
 {% block meta_keywords %}{{ blog.meta_keywords }}{% endblock %}
 {% block og_title %}{{ blog.meta_title|default:blog.title }}{% endblock %}
