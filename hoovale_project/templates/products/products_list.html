@@ -75,34 +75,33 @@
                 <div class="row g-4 mb-5">
                     {% for product in products %}
                     <div class="col-md-6 col-lg-4">
-                        <div class="product-card h-100 product-card-link" role="link" tabindex="0"
-                             data-product-url="{{ product.get_absolute_url }}"
-                             aria-label="View {{ product.name }}"
-                             onclick="if(!event.target.closest('a,button')) window.location.href=this.dataset.productUrl;">
-                            <div class="product-image-container">
-                                {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" class="product-image" loading="lazy">{% endif %}
-                                {% if product.is_featured %}
-                                <span class="badge bg-danger position-absolute top-0 end-0 m-3">Featured</span>
-                                {% endif %}
-                            </div>
-                            <div class="product-info">
-                                <h5 class="product-name">{{ product.name }}</h5>
-                                <p class="product-description">{{ product.description|truncatewords:12 }}</p>
-                                {% if product.price %}
-                                <div class="product-price mb-3">
-                                    <span class="price-tag">From ₹{{ product.price }}</span>
+                        <div class="product-card h-100">
+                            <a href="{{ product.get_absolute_url }}" class="product-card-main-link" aria-label="View {{ product.name }}">
+                                <div class="product-image-container">
+                                    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image" loading="lazy">{% else %}<img src="{% static 'images/product-placeholder.svg' %}" alt="{{ product.name }} — product image coming soon" class="product-image" loading="lazy">{% endif %}
+                                    {% if product.is_featured %}
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-3">Featured</span>
+                                    {% endif %}
                                 </div>
-                                {% endif %}
-                                <div class="product-actions d-grid gap-2" onclick="event.stopPropagation();">
-                                    <a href="#" class="btn btn-sm btn-outline-primary enquiry-btn" 
-                                       data-product-id="{{ product.id }}" data-product-name="{{ product.name }}">
-                                        <i class="fas fa-envelope"></i> Enquiry
-                                    </a>
-                                    <a href="https://wa.me/919462207356?text=Hello%20Hoovale%20Team%2C%20I%20am%20interested%20in%20{{ product.name }}." 
-                                       class="btn btn-sm btn-success" target="_blank">
-                                        <i class="fab fa-whatsapp"></i> WhatsApp
-                                    </a>
+                                <div class="product-info">
+                                    <h5 class="product-name">{{ product.name }}</h5>
+                                    <p class="product-description">{{ product.description|truncatewords:12 }}</p>
+                                    {% if product.price %}
+                                    <div class="product-price mb-3">
+                                        <span class="price-tag">From ₹{{ product.price }}</span>
+                                    </div>
+                                    {% endif %}
                                 </div>
+                            </a>
+                            <div class="product-actions d-grid gap-2">
+                                <a href="#" class="btn btn-sm btn-outline-primary enquiry-btn"
+                                   data-product-id="{{ product.id }}" data-product-name="{{ product.name }}">
+                                    <i class="fas fa-envelope"></i> Enquiry
+                                </a>
+                                <a href="https://wa.me/919462207356?text=Hello%20Hoovale%20Team%2C%20I%20am%20interested%20in%20{{ product.name|urlencode }}."
+                                   class="btn btn-sm btn-success" target="_blank" rel="noopener">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </a>
                             </div>
                         </div>
                     </div>
