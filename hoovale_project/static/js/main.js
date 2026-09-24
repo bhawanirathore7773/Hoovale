@@ -462,9 +462,11 @@ function setupResponsiveNav() {
     // Recover from a stale scroll lock after Android browser restore/BFCache.
     const clearStalePageLocks = () => {
         if (!drawer.classList.contains('is-open')) {
+            document.documentElement.classList.remove('hv-menu-open');
             document.body.classList.remove('hv-menu-open');
         }
         if (!document.querySelector('.modal.show')) {
+            document.documentElement.classList.remove('modal-open');
             document.body.classList.remove('modal-open');
             document.body.style.removeProperty('padding-right');
         }
@@ -487,6 +489,7 @@ function setupResponsiveNav() {
         toggler.setAttribute('aria-expanded', String(open));
         toggler.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
         overlay?.setAttribute('aria-hidden', String(!open));
+        document.documentElement.classList.toggle('hv-menu-open', open);
         document.body.classList.toggle('hv-menu-open', open);
     }
 
