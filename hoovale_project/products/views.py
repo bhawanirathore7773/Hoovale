@@ -499,7 +499,14 @@ def blog_detail(request, slug):
 def about(request):
     site = SiteSettings.load()
     testimonials = Testimonial.objects.filter(is_active=True)[:6]
-    return render(request, 'products/about.html', {'site': site, 'testimonials': testimonials})
+    return render(request, 'products/about.html', {
+        'site': site,
+        'testimonials': testimonials,
+        'breadcrumb_items': [
+            ('Home', '/'),
+            ('About HOOVALE', None),
+        ],
+    })
 
 
 def contact(request):
