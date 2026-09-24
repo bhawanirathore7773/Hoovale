@@ -89,7 +89,9 @@ function initializeCampaignCarousel() {
         // Paytm-style "peek": each card is slightly narrower than the
         // viewport and has a small gap before the next card.
         gap = window.matchMedia('(min-width: 768px)').matches ? 10 : 8;
-        const horizontalPadding = window.matchMedia('(min-width: 768px)').matches ? 24 : 16;
+        // The banner itself fills the white carousel container edge-to-edge.
+        // The small gap remains between adjacent slides while swiping.
+        const horizontalPadding = 0;
         slideWidth = Math.max(1, width - horizontalPadding);
 
         track.style.width = ((slides.length * slideWidth) + ((slides.length - 1) * gap)) + 'px';
