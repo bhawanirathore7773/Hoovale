@@ -108,7 +108,7 @@ function initializeCampaignCarousel() {
             render(-(index * (slideWidth + gap)), false);
         } else if (index === count + 1) {
             index = 1;
-            render(-index * width, false);
+            render(-(index * (slideWidth + gap)), false);
         }
         updateIndicators();
     };
