@@ -5,7 +5,7 @@ URL: /sitemap.xml
 """
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from products.models import Product, Category, CityPage, IndustryPage, ServicePage, Blog
+from products.models import Product, Category, CityPage, IndustryPage, ServicePage, Blog, Banner
 
 
 class StaticViewSitemap(Sitemap):
@@ -15,7 +15,17 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['home', 'about', 'contact', 'products_list', 'blog_list']
+        return [
+            'home',
+            'about',
+            'contact',
+            'products_list',
+            'categories_index',
+            'services_index',
+            'cities_index',
+            'industries_index',
+            'blog_list',
+        ]
 
     def location(self, item):
         return reverse(item)
@@ -99,6 +109,19 @@ class BlogSitemap(Sitemap):
         return obj.updated_at
 
 
+
+class BannerSitemap(Sitemap):
+    """Published collection landing pages linked from homepage campaigns."""
+    changefreq = 'monthly'
+    priority = 0.7
+    protocol = 'https'
+
+    def items(self):
+        return Banner.objects.filter(is_active=True, is_page_published=True)
+
+    def lastmod(self, obj):
+        return obj.updated_at
+
 # Combined dict — register in main urls.py
 sitemaps = {
     'static': StaticViewSitemap,
@@ -107,5 +130,6 @@ sitemaps = {
     'cities': CityPageSitemap,
     'industries': IndustryPageSitemap,
     'services': ServicePageSitemap,
+    'banners': BannerSitemap,
     'blog': BlogSitemap,
 }
