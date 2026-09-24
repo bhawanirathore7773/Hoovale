@@ -459,6 +459,19 @@ function setupResponsiveNav() {
 
     if (!toggler || !drawer) return;
 
+    // Recover from a stale scroll lock after Android browser restore/BFCache.
+    const clearStalePageLocks = () => {
+        if (!drawer.classList.contains('is-open')) {
+            document.body.classList.remove('hv-menu-open');
+        }
+        if (!document.querySelector('.modal.show')) {
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('padding-right');
+        }
+    };
+
+    clearStalePageLocks();
+
     // Keep Bootstrap's collapse class from fighting the custom drawer.
     drawer.classList.remove('show');
 
@@ -502,6 +515,13 @@ function setupResponsiveNav() {
     });
 
     setMenu(false);
+
+    // Some Android browsers restore DOM/CSS state from BFCache.
+    // Re-check when the page is restored or becomes visible again.
+    window.addEventListener('pageshow', clearStalePageLocks);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') clearStalePageLocks();
+    });
 }
 
 // Initialize responsive navigation when DOM is ready
