@@ -242,6 +242,10 @@ def products_list(request):
         'availability': availability,
         'badge': badge,
         'sort': sort,
+        'breadcrumb_items': [
+            ('Home', '/'),
+            ('Wall Clocks', None),
+        ],
         'current_page': int(page_number) if str(page_number).isdigit() else 1,
         'total_pages': paginator.num_pages,
     }
