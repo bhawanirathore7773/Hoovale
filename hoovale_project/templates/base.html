@@ -104,9 +104,10 @@
     {% organization_schema %}
     {% local_business_schema %}
     {% website_schema %}
+    {% site_navigation_schema %}
 
-    {# Site navigation / hierarchy for search engines and crawlers #}
-    {% block site_navigation_schema %}{% endblock %}
+    {# Per-page schema #}
+    {% block page_schema %}{% endblock %}
 
     {# Per-page schema #}
     {% block page_schema %}{% endblock %}
