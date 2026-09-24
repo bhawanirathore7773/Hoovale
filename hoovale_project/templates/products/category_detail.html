@@ -2,7 +2,7 @@
 {% load static seo_tags %}
 
 {% block meta_title %}{{ category.meta_title|default:category.name }}{% endblock %}
-{% block meta_description %}{{ category.meta_description|default:category.description|truncatechars:160 }}{% endblock %}
+{% block meta_description %}{{ category.meta_description|default:category.description|truncatechars:155 }}{% endblock %}
 {% block meta_keywords %}{{ category.meta_keywords|default:category.name|lower }}, wall clock manufacturer, bulk wall clocks, wholesale {{ category.name|lower }}{% endblock %}
 
 {% block og_title %}{{ category.meta_title|default:category.name }}{% endblock %}
