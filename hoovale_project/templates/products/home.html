@@ -1355,6 +1355,98 @@
     }
 }
 
+
+/* =========================================================
+   FINAL PAYTM-STYLE TRACK CAROUSEL
+   The slide follows the finger 1:1 while dragging.
+   ========================================================= */
+.hv-home-banner-after-trust .carousel-inner{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    align-items:stretch !important;
+    overflow:hidden !important;
+    position:relative !important;
+    touch-action:pan-y !important;
+    cursor:grab;
+}
+.hv-home-banner-after-trust .carousel-inner.hv-is-dragging{
+    cursor:grabbing;
+}
+.hv-home-banner-after-trust .carousel-item{
+    flex:0 0 100% !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 !important;
+    position:relative !important;
+    display:block !important;
+    float:none !important;
+    backface-visibility:hidden !important;
+    -webkit-backface-visibility:hidden !important;
+    transform:none !important;
+    opacity:1 !important;
+    transition:none !important;
+}
+.hv-home-banner-after-trust .carousel-item.hv-track-animated{
+    transition:transform .34s cubic-bezier(.22,.61,.36,1) !important;
+}
+.hv-home-banner-after-trust .carousel-item.hv-track-dragging{
+    transition:none !important;
+}
+.hv-home-banner-after-trust .hv-banner-link{
+    user-select:none;
+    -webkit-user-select:none;
+    -webkit-touch-callout:none;
+}
+.hv-home-banner-after-trust .hv-banner-link img{
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-drag:none;
+}
+
+/* Indicators remain visible on white mobile space. */
+.hv-home-banner-after-trust .hv-banner-indicators button{
+    background:#aab2bf !important;
+    opacity:1 !important;
+    border:0 !important;
+}
+.hv-home-banner-after-trust .hv-banner-indicators button.active{
+    background:#c9a961 !important;
+}
+@media(max-width:767px){
+    .hv-home-banner-after-trust .hv-banner-indicators{
+        position:static !important;
+        left:auto !important;
+        bottom:auto !important;
+        transform:none !important;
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        gap:7px !important;
+        width:100% !important;
+        height:28px !important;
+        margin:2px 0 0 !important;
+        padding:0 !important;
+        border-radius:0 !important;
+        background:transparent !important;
+        backdrop-filter:none !important;
+        -webkit-backdrop-filter:none !important;
+    }
+    .hv-home-banner-after-trust .hv-banner-indicators button{
+        width:8px !important;
+        height:8px !important;
+        flex:0 0 8px !important;
+        border-radius:50% !important;
+        padding:0 !important;
+        margin:0 !important;
+        transition:width .2s ease,background-color .2s ease !important;
+    }
+    .hv-home-banner-after-trust .hv-banner-indicators button.active{
+        width:22px !important;
+        flex-basis:22px !important;
+        border-radius:999px !important;
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -1419,7 +1511,7 @@
 <!-- 3:2 ROTATING COLLECTION BANNER — directly below the Established/trust strip and before Explore Collection -->
 <section class="hv-home-banner-wrap hv-home-banner-after-trust" aria-label="HOOVALE featured collections">
  <div class="hv-home-banner">
-  <div id="hvHomeBanner" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5200" data-bs-pause="false" data-bs-touch="false">
+  <div id="hvHomeBanner" class="carousel slide">
    <div class="carousel-inner">
     {% for banner in homepage_campaigns %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
