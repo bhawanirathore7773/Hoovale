@@ -183,8 +183,10 @@
         overscroll-behavior-y: none;
     }
 
+    /* The bottom bar is fixed and overlays the page; do not add
+       document-height padding that creates a blank scroll area after footer. */
     body {
-        padding-bottom: 64px;
+        padding-bottom: 0 !important;
     }
 
     .sticky-whatsapp {
