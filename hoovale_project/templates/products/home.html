@@ -1448,45 +1448,95 @@
 }
 
 
-/* FINAL CAROUSEL TRACK OVERRIDE — one moving track, not individual slides */
-#hvHomeBanner .carousel-inner{
-    display:flex !important;
-    flex-wrap:nowrap !important;
-    position:relative !important;
-    overflow:hidden !important;
-    width:100% !important;
-    margin:0 !important;
-    padding:0 !important;
-    transform:translate3d(0,0,0);
-    touch-action:pan-y !important;
+/* Paytm-style campaign carousel: dedicated classes, no Bootstrap carousel interference */
+#hvHomeBanner.hv-campaign-carousel{
+  position:relative;
+  width:100%;
+  overflow:hidden;
 }
-#hvHomeBanner .carousel-inner.hv-track-animated{
-    transition:transform .38s cubic-bezier(.22,.61,.36,1) !important;
+#hvHomeBanner .hv-campaign-viewport{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  touch-action:pan-y;
+  border-radius:24px;
 }
-#hvHomeBanner .carousel-inner.hv-track-dragging{
-    transition:none !important;
+#hvHomeBanner .hv-campaign-track{
+  display:flex;
+  flex-wrap:nowrap;
+  width:100%;
+  margin:0;
+  padding:0;
+  transform:translate3d(0,0,0);
+  will-change:transform;
 }
-#hvHomeBanner .carousel-item,
-#hvHomeBanner .carousel-item.active,
-#hvHomeBanner .carousel-item-next,
-#hvHomeBanner .carousel-item-prev{
-    display:block !important;
-    position:relative !important;
-    float:none !important;
-    flex:0 0 100% !important;
-    width:100% !important;
-    max-width:none !important;
-    margin:0 !important;
-    transform:none !important;
-    opacity:1 !important;
-    visibility:visible !important;
-    transition:none !important;
+#hvHomeBanner .hv-campaign-track.hv-animated{
+  transition:transform .38s cubic-bezier(.22,.61,.36,1);
 }
-#hvHomeBanner .carousel-item > .hv-banner-link{
-    display:block !important;
-    width:100% !important;
+#hvHomeBanner .hv-campaign-slide{
+  position:relative;
+  flex:0 0 100%;
+  width:100%;
+  min-width:100%;
+  margin:0;
+  padding:0;
+  opacity:1;
+  visibility:visible;
 }
-
+#hvHomeBanner .hv-campaign-slide .hv-banner-link,
+#hvHomeBanner .hv-campaign-slide picture,
+#hvHomeBanner .hv-campaign-slide img{
+  display:block;
+  width:100%;
+}
+#hvHomeBanner .hv-campaign-slide img{
+  height:auto;
+  aspect-ratio:3/2;
+  object-fit:cover;
+}
+#hvHomeBanner .hv-campaign-prev,
+#hvHomeBanner .hv-campaign-next{
+  display:none;
+}
+#hvHomeBanner .hv-banner-indicators{
+  position:absolute;
+  left:50%;
+  bottom:14px;
+  transform:translateX(-50%);
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:auto;
+  margin:0;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.88);
+}
+#hvHomeBanner .hv-banner-indicators button{
+  width:10px;
+  height:10px;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:50%;
+  background:#aeb7c5;
+  opacity:1;
+  flex:0 0 10px;
+}
+#hvHomeBanner .hv-banner-indicators button.active{
+  width:46px;
+  flex-basis:46px;
+  border-radius:999px;
+  background:#c9a24e;
+}
+@media(max-width:767px){
+  #hvHomeBanner .hv-campaign-viewport{border-radius:24px;}
+  #hvHomeBanner .hv-banner-indicators{bottom:14px;gap:9px;padding:7px 11px;}
+  #hvHomeBanner .hv-banner-indicators button{width:10px;height:10px;flex-basis:10px;}
+  #hvHomeBanner .hv-banner-indicators button.active{width:46px;flex-basis:46px;}
+}
 </style>
 {% endblock %}
 
@@ -1551,31 +1601,32 @@
 <!-- 3:2 ROTATING COLLECTION BANNER — directly below the Established/trust strip and before Explore Collection -->
 <section class="hv-home-banner-wrap hv-home-banner-after-trust" aria-label="HOOVALE featured collections">
  <div class="hv-home-banner">
-  <div id="hvHomeBanner" class="carousel slide">
-   <div class="carousel-inner">
-    {% for banner in homepage_campaigns %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-     <a href="{{ banner.url }}" class="hv-banner-link" aria-label="{{ banner.title }}">
-      <picture>
-       <source media="(max-width: 767px)" srcset="{{ banner.mobile_url }}">
-       <img src="{{ banner.desktop_url }}" alt="{{ banner.heading|default:banner.title }} — HOOVALE wall clocks" {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
-      </picture>
-      {# Banner artwork contains its own headline, supporting copy and CTA artwork. #}
-     </a>
+  <div id="hvHomeBanner" class="hv-campaign-carousel">
+   <div class="hv-campaign-viewport">
+    <div class="hv-campaign-track">
+     {% for banner in homepage_campaigns %}
+     <div class="hv-campaign-slide">
+      <a href="{{ banner.url }}" class="hv-banner-link" aria-label="{{ banner.title }}">
+       <picture>
+        <source media="(max-width: 767px)" srcset="{{ banner.mobile_url }}">
+        <img src="{{ banner.desktop_url }}" alt="{{ banner.heading|default:banner.title }} — HOOVALE wall clocks" {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+       </picture>
+      </a>
+     </div>
+     {% endfor %}
     </div>
-    {% endfor %}
    </div>
 
-   <button class="carousel-control-prev" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="prev" aria-label="Previous banner">
-    <span class="carousel-control-prev-icon"></span>
+   <button class="hv-campaign-prev" type="button" aria-label="Previous banner">
+    <span aria-hidden="true">‹</span>
    </button>
-   <button class="carousel-control-next" type="button" data-bs-target="#hvHomeBanner" data-bs-slide="next" aria-label="Next banner">
-    <span class="carousel-control-next-icon"></span>
+   <button class="hv-campaign-next" type="button" aria-label="Next banner">
+    <span aria-hidden="true">›</span>
    </button>
 
-   <div class="carousel-indicators hv-banner-indicators" aria-label="Banner navigation">
+   <div class="hv-banner-indicators" aria-label="Banner navigation">
     {% for banner in homepage_campaigns %}
-    <button type="button" data-bs-target="#hvHomeBanner" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Go to banner {{ forloop.counter }}"></button>
+    <button type="button" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Go to banner {{ forloop.counter }}"></button>
     {% endfor %}
    </div>
   </div>
