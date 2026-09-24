@@ -11,9 +11,14 @@
     {# ================================================== #}
     {% get_site_settings as site %}
 
+    {# ================================================== #}
+    {# SEARCH RESULT METADATA                            #}
+    {# Google may rewrite title/snippet, but clear page- #}
+    {# specific metadata gives it a strong source.      #}
+    {# ================================================== #}
     <title>{% block meta_title %}{{ site.default_meta_title }}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{{ site.default_meta_description }}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}wall clock manufacturer in jaipur, wall clock supplier, wholesale wall clocks, customized logo clocks, bulk wall clocks india{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}wall clock manufacturer in Jaipur, wall clock supplier Jaipur, wholesale wall clocks, custom wall clocks, corporate wall clocks{% endblock %}">
 
     {# Authorship & business info (EEAT) #}
     <meta name="author" content="{{ site.business_name }}">
@@ -99,6 +104,9 @@
     {% organization_schema %}
     {% local_business_schema %}
     {% website_schema %}
+
+    {# Site navigation / hierarchy for search engines and crawlers #}
+    {% block site_navigation_schema %}{% endblock %}
 
     {# Per-page schema #}
     {% block page_schema %}{% endblock %}
