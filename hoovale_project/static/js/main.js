@@ -59,6 +59,7 @@ function initializeCampaignCarousel() {
     let startX = 0;
     let startY = 0;
     let moved = false;
+    let dragBaseTranslate = 0;
     let autoplay = null;
     let correctionTimer = null;
 
@@ -182,7 +183,22 @@ function initializeCampaignCarousel() {
         startY = event.clientY;
 
         stopAutoplay();
-        render(-index * width, false);
+
+        // Do NOT move the carousel on pointer-down. A normal tap/click must
+        // leave the banner visually locked in place. Capture the exact
+        // on-screen transform so a real horizontal drag starts from where
+        // the banner is currently rendered (including an in-progress autoplay).
+        const currentTransform = window.getComputedStyle(track).transform;
+        const matrixMatch = currentTransform && currentTransform !== 'none'
+            ? currentTransform.match(/matrix\(([^)]+)\)/)
+            : null;
+        if (matrixMatch) {
+            const values = matrixMatch[1].split(',').map(Number);
+            dragBaseTranslate = Number.isFinite(values[4]) ? values[4] : -(index * (slideWidth + gap));
+        } else {
+            dragBaseTranslate = -(index * (slideWidth + gap));
+        }
+
         viewport.classList.add('hv-is-dragging');
 
         try { viewport.setPointerCapture(event.pointerId); } catch (_) {}
@@ -207,7 +223,10 @@ function initializeCampaignCarousel() {
         // This keeps normal page scrolling working.
         event.preventDefault();
 
-        render(-(index * (slideWidth + gap)) + dx, false);
+        // Freeze the exact position only after the gesture is confirmed as
+        // horizontal. This prevents the tiny jump seen when simply tapping
+        // a banner.
+        render(dragBaseTranslate + dx, false);
     });
 
     const release = event => {
