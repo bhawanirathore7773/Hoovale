@@ -405,6 +405,35 @@
         min-height: 76px;
     }
 }
+
+/* =========================================================
+   MOBILE END-OF-PAGE LOCK
+   ========================================================= */
+@media (max-width: 768px) {
+    html,
+    body {
+        overscroll-behavior-y: none !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-cta-bar {
+        position: fixed !important;
+        top: auto !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: translate3d(0,0,0) !important;
+        -webkit-transform: translate3d(0,0,0) !important;
+        z-index: 2147483000 !important;
+    }
+}
+
 </style>
 
 {# Desktop sticky buttons #}
@@ -451,3 +480,58 @@
 </nav>
 
 
+
+
+<script>
+(function () {
+    function installMobileEndLock() {
+        var nav = document.querySelector('.mobile-cta-bar');
+        if (!nav || window.innerWidth > 768) return;
+
+        function pinNav() {
+            nav.style.position = 'fixed';
+            nav.style.top = 'auto';
+            nav.style.left = '0';
+            nav.style.right = '0';
+            nav.style.bottom = '0';
+            nav.style.width = '100vw';
+            nav.style.height = '64px';
+            nav.style.minHeight = '64px';
+            nav.style.maxHeight = '64px';
+            nav.style.transform = 'translate3d(0,0,0)';
+        }
+
+        pinNav();
+        window.addEventListener('resize', pinNav, { passive: true });
+        window.addEventListener('orientationchange', pinNav, { passive: true });
+
+        var touchStartY = 0;
+
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length === 1) {
+                touchStartY = event.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchmove', function (event) {
+            if (event.touches.length !== 1) return;
+
+            var currentY = event.touches[0].clientY;
+            var movingDown = currentY > touchStartY;
+            var root = document.documentElement;
+            var maxScroll = Math.max(0, root.scrollHeight - window.innerHeight);
+
+            /* Stop iOS rubber-band after the real footer. */
+            if (window.scrollY >= maxScroll - 2 && movingDown) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', installMobileEndLock);
+    } else {
+        installMobileEndLock();
+    }
+})();
+</script>
