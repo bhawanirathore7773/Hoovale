@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static seo_tags %}
 
-{% block meta_title %}{{ industry.meta_title }}{% endblock %}
-{% block meta_description %}{{ industry.meta_description|default:industry.hero_subheading }}{% endblock %}
+{% block meta_title %}{{ industry.meta_title|default:industry.h1_heading }}{% endblock %}
+{% block meta_description %}{{ industry.meta_description|default:industry.hero_subheading|truncatechars:155 }}{% endblock %}
 {% block meta_keywords %}{{ industry.meta_keywords }}{% endblock %}
 {% block og_title %}{{ industry.meta_title }}{% endblock %}
 {% block og_description %}{{ industry.meta_description|default:industry.hero_subheading }}{% endblock %}
