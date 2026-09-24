@@ -1492,6 +1492,7 @@ img[loading="lazy"][src] {
     }
 
     html.hv-menu-open,
+    html.hv-menu-open,
     body.hv-menu-open {
         overflow: hidden !important;
     }
@@ -2623,6 +2624,7 @@ body.modal-open .modal-backdrop.show {
         transform: translateY(0) rotate(-45deg) !important;
     }
 
+    html.hv-menu-open,
     body.hv-menu-open {
         overflow: hidden !important;
     }
