@@ -144,7 +144,6 @@ def product_schema(product, request=None):
             "url": base_url + product.get_absolute_url(),
             "priceCurrency": "INR",
             "price": str(product.price),
-            "priceValidUntil": "2026-12-31",
             "availability": f"https://schema.org/{product.availability}",
             "seller": {
                 "@type": "Organization",
