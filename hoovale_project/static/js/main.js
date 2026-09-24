@@ -36,6 +36,9 @@ function initializeCampaignCarousel() {
     if (!track || originals.length < 2) return;
 
     root.dataset.hvTrackBound = 'true';
+    if (!document.querySelector('.hv-mobile-drawer.is-open')) {
+        document.body.classList.remove('hv-menu-open');
+    }
 
     const prevButton = root.querySelector('.carousel-control-prev');
     const nextButton = root.querySelector('.carousel-control-next');
@@ -66,11 +69,16 @@ function initializeCampaignCarousel() {
     const measure = () => {
         width = root.getBoundingClientRect().width;
         if (!width) return;
-        track.style.width = (slides.length * width) + 'px';
+
+        // Keep the viewport at 100%. Each slide occupies exactly one
+        // viewport. The TRACK moves; the slides themselves never get
+        // translated individually.
+        track.style.width = '100%';
         slides.forEach(slide => {
-            slide.style.width = width + 'px';
-            slide.style.flex = '0 0 ' + width + 'px';
+            slide.style.width = '100%';
+            slide.style.flex = '0 0 100%';
         });
+
         setTrack(-index * width, false);
     };
 
