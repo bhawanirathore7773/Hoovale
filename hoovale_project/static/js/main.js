@@ -52,6 +52,8 @@ function initializeCampaignCarousel() {
 
     let index = 1;
     let width = 0;
+    let slideWidth = 0;
+    let gap = 8;
     let dragging = false;
     let horizontal = null;
     let startX = 0;
@@ -84,21 +86,26 @@ function initializeCampaignCarousel() {
         width = viewport.getBoundingClientRect().width;
         if (!width) return;
 
-        // Every slide is exactly one viewport. Only the track moves.
-        track.style.width = (slides.length * width) + 'px';
+        // Paytm-style "peek": each card is slightly narrower than the
+        // viewport and has a small gap before the next card.
+        gap = window.matchMedia('(min-width: 768px)').matches ? 10 : 8;
+        const horizontalPadding = window.matchMedia('(min-width: 768px)').matches ? 24 : 16;
+        slideWidth = Math.max(1, width - horizontalPadding);
+
+        track.style.width = ((slides.length * slideWidth) + ((slides.length - 1) * gap)) + 'px';
         slides.forEach(slide => {
-            slide.style.width = width + 'px';
-            slide.style.minWidth = width + 'px';
-            slide.style.flex = '0 0 ' + width + 'px';
+            slide.style.width = slideWidth + 'px';
+            slide.style.minWidth = slideWidth + 'px';
+            slide.style.flex = '0 0 ' + slideWidth + 'px';
         });
 
-        render(-index * width, false);
+        render(-(index * (slideWidth + gap)), false);
     };
 
     const normalize = () => {
         if (index === 0) {
             index = count;
-            render(-index * width, false);
+            render(-(index * (slideWidth + gap)), false);
         } else if (index === count + 1) {
             index = 1;
             render(-index * width, false);
@@ -109,7 +116,7 @@ function initializeCampaignCarousel() {
     const goTo = (target, animated = true) => {
         index = target;
         updateIndicators();
-        render(-index * width, animated);
+        render(-(index * (slideWidth + gap)), animated);
 
         if (correctionTimer) clearTimeout(correctionTimer);
         if (animated) {
@@ -198,7 +205,7 @@ function initializeCampaignCarousel() {
         // This keeps normal page scrolling working.
         event.preventDefault();
 
-        render((-index * width) + dx, false);
+        render(-(index * (slideWidth + gap)) + dx, false);
     });
 
     const release = event => {
@@ -213,14 +220,14 @@ function initializeCampaignCarousel() {
             return;
         }
 
-        const threshold = Math.max(45, width * 0.12);
+        const threshold = Math.max(45, slideWidth * 0.12);
 
         if (dx < -threshold) {
             next();
         } else if (dx > threshold) {
             prev();
         } else {
-            render(-index * width, true);
+            render(-(index * (slideWidth + gap)), true);
             restartAutoplay();
         }
 
