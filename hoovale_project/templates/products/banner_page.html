@@ -84,12 +84,15 @@
   </section>
   {% endif %}
 
-  <section class="hv-home-section tinted">
+  <section class="hv-home-section tinted hv-campaign-enquiry">
     <div class="container-lg text-center">
       <div class="hv-home-kicker">Need a custom requirement?</div>
       <h2>Share your quantity, design or branding requirement</h2>
       <p class="text-muted">For bulk, logo printing, promotional or personalized orders, contact HOOVALE for the current product options, pricing and delivery details.</p>
-      <a class="btn btn-dark px-4 py-2" href="{% url 'contact' %}">Send Enquiry <i class="fas fa-arrow-right ms-1"></i></a>
+      <a class="hv-campaign-enquiry-btn" href="{% url 'contact' %}">
+        <span>Send Enquiry</span>
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
     </div>
   </section>
 </div>
@@ -107,6 +110,91 @@
 .hv-campaign-copy{max-width:900px;margin:0 auto;color:#667085;line-height:1.8}
 .hv-campaign-copy p{margin-bottom:16px}
 .hv-campaign-products{padding-top:28px}
+
+.hv-campaign-enquiry{
+  margin:44px auto 0;
+  padding:68px 24px 74px !important;
+  background:linear-gradient(180deg,#f8f9fb 0%,#ffffff 100%);
+  border-top:1px solid #e8ebef;
+  border-bottom:1px solid #e8ebef;
+}
+.hv-campaign-enquiry .container-lg{
+  max-width:920px;
+}
+.hv-campaign-enquiry .hv-home-kicker{
+  margin-bottom:14px;
+}
+.hv-campaign-enquiry h2{
+  max-width:850px;
+  margin:0 auto 20px;
+  color:#111318;
+  font-family:"Playfair Display",serif;
+  font-size:clamp(2rem,4vw,3.35rem);
+  line-height:1.08;
+  letter-spacing:-.02em;
+}
+.hv-campaign-enquiry p{
+  max-width:760px;
+  margin:0 auto 30px !important;
+  color:#667085 !important;
+  font-size:clamp(1rem,2vw,1.2rem);
+  line-height:1.7;
+}
+.hv-campaign-enquiry-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  min-width:230px;
+  min-height:56px;
+  padding:0 26px;
+  border-radius:14px;
+  background:#17191c;
+  color:#fff !important;
+  text-decoration:none !important;
+  font-size:1.05rem;
+  font-weight:700;
+  letter-spacing:.01em;
+  box-shadow:0 10px 24px rgba(15,23,42,.14);
+  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+.hv-campaign-enquiry-btn i{
+  font-size:1rem;
+  transition:transform .2s ease;
+}
+.hv-campaign-enquiry-btn:hover{
+  background:#0b63b6;
+  color:#fff !important;
+  transform:translateY(-2px);
+  box-shadow:0 14px 28px rgba(11,99,182,.20);
+}
+.hv-campaign-enquiry-btn:hover i{
+  transform:translateX(4px);
+}
+.hv-campaign-enquiry-btn:active{
+  transform:translateY(0);
+}
+@media(max-width:767px){
+ .hv-campaign-enquiry{
+   margin-top:28px;
+   padding:48px 18px 56px !important;
+ }
+ .hv-campaign-enquiry h2{
+   font-size:2rem;
+   line-height:1.12;
+ }
+ .hv-campaign-enquiry p{
+   margin-bottom:26px !important;
+   font-size:1rem;
+   line-height:1.65;
+ }
+ .hv-campaign-enquiry-btn{
+   width:min(100%,320px);
+   min-height:54px;
+   border-radius:13px;
+   font-size:1rem;
+ }
+}
 @media(max-width:767px){
  .hv-campaign-hero{min-height:430px}
  .hv-campaign-hero-content{padding:80px 22px 60px}
