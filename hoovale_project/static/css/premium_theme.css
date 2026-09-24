@@ -1493,7 +1493,6 @@ img[loading="lazy"][src] {
 
     body.hv-menu-open {
         overflow: hidden !important;
-        touch-action: none;
     }
 }
 
@@ -2625,7 +2624,6 @@ body.modal-open .modal-backdrop.show {
 
     body.hv-menu-open {
         overflow: hidden !important;
-        touch-action: none !important;
     }
 
     body.hv-menu-open .hv-navbar .navbar-toggler.hv-menu-toggle {
