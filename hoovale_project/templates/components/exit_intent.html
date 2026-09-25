@@ -4,8 +4,8 @@
 
 <div class="hv-exit-popup-overlay" id="hvExitPopup">
     <div class="hv-exit-popup">
-        <button class="hv-exit-popup-close" onclick="hvHideExitPopup()" aria-label="Close">
-            <i class="fas fa-times"></i>
+        <button type="button" class="hv-exit-popup-close" onclick="hvHideExitPopup()" aria-label="Close catalogue popup">
+            <span aria-hidden="true">&times;</span>
         </button>
 
         <div class="hv-exit-popup-header">
@@ -15,7 +15,7 @@
             <h3 style="font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:800; color:white; margin:0 0 8px; line-height:1.2;">
                 Get Our <span style="background:linear-gradient(135deg,#C9A961,#D4B97A); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Wholesale Catalogue</span>
             </h3>
-            <p style="margin:0; opacity:0.9; font-size:0.95rem;">Free PDF with 500+ designs &amp; bulk pricing slabs.</p>
+            <p class="hv-exit-popup-subtitle">Free PDF with 500+ designs &amp; bulk pricing slabs.</p>
         </div>
 
         <div style="padding:30px;">
@@ -102,19 +102,10 @@
             if (e.clientY <= 0) showPopup();
         });
     } else {
-        // Mobile: show after 30 seconds OR scroll up gesture
-        setTimeout(showPopup, 30000);
-
-        let lastScrollTop = 0;
-        let scrollUpCount = 0;
-        window.addEventListener('scroll', function() {
-            const st = window.pageYOffset;
-            if (st < lastScrollTop && st < 200) {
-                scrollUpCount++;
-                if (scrollUpCount >= 3) showPopup();
-            }
-            lastScrollTop = st;
-        });
+        // Mobile: show once after 60 seconds on the first eligible visit.
+        // Do not trigger from scroll gestures; this avoids interrupting reading
+        // and keeps the popup timing predictable on Android/iOS.
+        setTimeout(showPopup, 60000);
     }
 
     // ESC key to close
