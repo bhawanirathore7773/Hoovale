@@ -771,21 +771,98 @@ a:hover { color: var(--hv-gold); }
 }
 
 .hv-exit-popup-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: transparent;
-    border: none;
-    color: var(--hv-white);
-    font-size: 1.4rem;
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    z-index: 20 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255,255,255,.08) !important;
+    border: 1px solid rgba(255,255,255,.28) !important;
+    color: #ffffff !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 28px !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    transition: background var(--tr-fast);
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    transition: background .2s ease, transform .2s ease;
 }
 
-.hv-exit-popup-close:hover { background: rgba(255,255,255,0.1); }
+.hv-exit-popup-close:hover,
+.hv-exit-popup-close:focus-visible {
+    background: rgba(255,255,255,.18) !important;
+    transform: scale(1.04);
+    outline: none;
+}
+
+/* Keep popup typography readable even when global theme rules override
+   paragraph/heading colours. */
+.hv-exit-popup-header h3 {
+    color: #ffffff !important;
+}
+
+.hv-exit-popup-header h3 span {
+    color: #d4b97a !important;
+    background: none !important;
+    -webkit-text-fill-color: #d4b97a !important;
+}
+
+.hv-exit-popup-subtitle {
+    color: rgba(255,255,255,.82) !important;
+    opacity: 1 !important;
+    font-size: .95rem !important;
+    line-height: 1.55 !important;
+    margin: 0 !important;
+}
+
+@media (max-width: 600px) {
+    .hv-exit-popup-overlay {
+        padding: 12px !important;
+        align-items: center !important;
+    }
+
+    .hv-exit-popup {
+        width: min(100%, 520px) !important;
+        max-height: calc(100dvh - 24px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 22px !important;
+    }
+
+    .hv-exit-popup-header {
+        padding: 58px 22px 24px !important;
+    }
+
+    .hv-exit-popup-header h3 {
+        font-size: clamp(1.65rem, 7vw, 2.15rem) !important;
+        line-height: 1.12 !important;
+        margin-bottom: 12px !important;
+    }
+
+    .hv-exit-popup-subtitle {
+        font-size: 1rem !important;
+        line-height: 1.5 !important;
+        max-width: 360px;
+        margin-inline: auto !important;
+    }
+
+    .hv-exit-popup > div:not(.hv-exit-popup-header) {
+        padding: 22px !important;
+    }
+
+    .hv-exit-popup-close {
+        top: 12px !important;
+        right: 12px !important;
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 30px !important;
+    }
+}
 
 @keyframes hv-fade-in {
     from { opacity: 0; }
