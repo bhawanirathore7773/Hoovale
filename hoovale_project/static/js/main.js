@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSmoothScroll();
     initializeFormValidation();
     initializeFastNavigation();
-    initializePageTransitions();
+    // Native browser navigation + CSS View Transitions handle page changes.
+    // Avoid applying an opacity fade to <main>; it caused a white/blink flash on mobile.
     initializeProductEnquiry();
     initializeContactForm();
     initializeProductFilters();
@@ -601,29 +602,15 @@ function initializeFastNavigation() {
  * of showing a sudden white flash while the next Django page loads.
  */
 function initializePageTransitions() {
+    // Kept as a compatibility hook for older cached pages.
+    // Do not fade the current document before navigation: mobile browsers can
+    // briefly paint the faded page/white background and create a visible blink.
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    document.addEventListener('click', function(event) {
-        const link = event.target.closest('a[href]');
-        if (!link || event.defaultPrevented) return;
-        if (link.target === '_blank' || link.hasAttribute('download')) return;
-        if (link.href.startsWith('mailto:') || link.href.startsWith('tel:')) return;
-
-        let url;
-        try {
-            url = new URL(link.href, window.location.href);
-        } catch (error) {
-            return;
-        }
-
-        if (url.origin !== window.location.origin) return;
-        if (url.pathname === window.location.pathname && !url.hash) return;
-        if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/media/')) return;
-
-        document.body.classList.add('hv-page-leaving');
-    }, { passive: true });
+    window.addEventListener('pageshow', function () {
+        document.body.classList.remove('hv-page-leaving', 'hv-page-ready');
+    }, { once: false });
 }
-
 
 /**
  * Price formatter for display
